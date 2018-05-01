@@ -6,7 +6,7 @@ Encore
    .cleanupOutputBeforeBuild()
    .enableSourceMaps(!Encore.isProduction())
    .addEntry('js/app', './assets/js/app.js')
-   // .addStyleEntry('css/app', './assets/css/app.scss')
+   // .addStyleEntry('css/app', './assets/css/app.css')
    // .enableSassLoader()
    // .autoProvidejQuery()
 

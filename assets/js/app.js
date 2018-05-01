@@ -1,12 +1,12 @@
 import Vue from 'vue';
-import Example from './components/Example';
 import Vuex from 'vuex';
+import Router from './router'
 
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
     state:{
-        title: "This is a component"
+        articles: []
     },
     mutations: {
 
@@ -18,8 +18,5 @@ const Store = new Vuex.Store({
 
 new Vue({
     el: "#app",
-    components: {
-        Example
-    },
-    store: Store
+    router: Router
 });

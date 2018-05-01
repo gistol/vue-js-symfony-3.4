@@ -1,0 +1,26 @@
+AppBundle\Entity\Article:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\ArticleRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        content:
+            type: text
+            nullable: true
+        date:
+            type: datetime
+
+    oneToMany:
+        images:
+            targetEntity: AppBundle\Entity\Image
+            mappedBy: article
+
+    lifecycleCallbacks: {  }
