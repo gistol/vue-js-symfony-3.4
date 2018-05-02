@@ -20,10 +20,12 @@
 
         methods: {
             getArticles() {
-                fetch('/vue-symfony-3.4/web/app_dev.php/articles')
+                fetch('/vue-js-symfony-3.4/web/app_dev.php/articles')
                     .then((res) => res.json())
                     .then((data) => {
-                        this.articles = data;
+                        if (data.length > 0) {
+                            this.articles = data;
+                        }
                     })
             }
         },

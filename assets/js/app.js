@@ -12,11 +12,30 @@ const Store = new Vuex.Store({
 
     },
     actions: {
+        postData(context, data) {
 
+            const req = new XMLHttpRequest();
+
+            req.open("POST", data.url, true);
+            req.addEventListener("load", () => {
+                if (req.status >= 200 && req.status < 400) {
+                    console.log(req.responseText)
+                }
+            });
+
+            if (false !== data.contentType) {
+                req.setRequestHeader("Content-Type", data.contentType);
+            }
+
+            req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+            req.send(data.value);
+        }
     }
 });
 
 new Vue({
     el: "#app",
-    router: Router
+    router: Router,
+    store: Store
 });

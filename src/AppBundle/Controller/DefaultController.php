@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Image;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -42,5 +43,42 @@ class DefaultController extends Controller
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    /**
+     * @Route("/admin/article", name="create_article")
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function createArticleAction(Request $request, ObjectManager $manager)
+    {
+        if ($request->isXmlHttpRequest()) {
+
+            $article = new Article();
+
+            foreach ($request->request as $field => $value) {
+                $method = 'set'. ucfirst($field);
+                $article->$method(htmlspecialchars($value));
+            }
+
+            $article->setDate(new \DateTime());
+
+            $file = $request->files->get('image');
+            $filename = uniqid() . '.' . $file->guessExtension();
+
+            $image = new Image();
+            $image->setSrc($filename);
+            $image->setTitle($article->getTitle());
+            $image->setArticle($article);
+            $article->addImage($image);
+
+            $file->move($this->getParameter('images_directory'), $filename);
+
+            $manager->persist($article);
+            $manager->flush();
+
+            return new Response("created");
+        }
     }
 }
