@@ -1,20 +1,57 @@
 <template>
-    <div id="article">
-        <div v-for='article in articles'>
+    <div class="container">
+        <div v-for='article in articles' class="article">
             <h1> {{ article.title }} </h1>
             <p> {{ article.content }} </p>
-            <router-link v-bind:to="{name: 'article', params: {id: article.id} }">Accéder à l'article</router-link>
+            <router-link v-bind:to="{name: 'article', params: {id: article.id} }">
+                <img v-for="image in article.images" v-bind:src="'./images/' + image.src"/>
+                Accéder à l'article
+            </router-link>
         </div>
     </div>
 </template>
 
+<style scoped>
+
+    .container *{
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .container {
+        width: 80%;
+        display: flex;
+        display: -webkit-flex;
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+        margin: 0 auto;
+        justify-content: space-around;
+        -webkit-justify-content: space-around;
+    }
+
+    .article {
+        width: 30%;
+        padding: 5px;
+        border: 1px solid #d8d8d8;
+        margin-top: 5px;
+    }
+
+    img{
+        width: 100%;
+    }
+
+</style>
+
 <script>
+
     export default {
         name: 'homepage',
 
         data(){
             return {
                 articles: undefined,
+                image: undefined
             }
         },
 
@@ -30,7 +67,7 @@
             }
         },
 
-        created() {
+        mounted() {
             this.getArticles();
         },
     }

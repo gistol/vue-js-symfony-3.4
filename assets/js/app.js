@@ -14,21 +14,22 @@ const Store = new Vuex.Store({
     actions: {
         postData(context, data) {
 
-            const req = new XMLHttpRequest();
+            const req = window.XMLHttpRequest?
+                new XMLHttpRequest() :
+                new ActiveXObject("Microsoft.XMLHTTP");
 
             req.open("POST", data.url, true);
             req.addEventListener("load", () => {
                 if (req.status >= 200 && req.status < 400) {
-                    console.log(req.responseText)
+                    alert(req.responseText)
                 }
             });
 
-            if (false !== data.contentType) {
+            if (data.contentType) {
                 req.setRequestHeader("Content-Type", data.contentType);
             }
 
             req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
             req.send(data.value);
         }
     }

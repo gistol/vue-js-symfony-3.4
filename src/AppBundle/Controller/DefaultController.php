@@ -5,10 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Image;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -20,7 +19,7 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         // replace this example code with whatever you need
         return $this->render('default/index.html.twig');
@@ -36,8 +35,13 @@ class DefaultController extends Controller
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();
 
+        $normalizer->setCircularReferenceHandler(function($object) {
+            return $object->getId();
+        });
+
         $serializer = new Serializer([$normalizer], [$encoder]);
         $jsonArticles = $serializer->serialize($articles, 'json');
+
 
         $response = new Response($jsonArticles);
         $response->headers->set('Content-Type', 'application/json');
@@ -58,8 +62,11 @@ class DefaultController extends Controller
             $article = new Article();
 
             foreach ($request->request as $field => $value) {
-                $method = 'set'. ucfirst($field);
-                $article->$method(htmlspecialchars($value));
+                if (method_exists($article, $method = 'set'. ucfirst($field))) {
+                    $article->$method(htmlspecialchars($value));
+                } else {
+                    return new Response("Invalid Method name.");
+                }
             }
 
             $article->setDate(new \DateTime());

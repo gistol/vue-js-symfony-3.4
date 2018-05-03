@@ -6,12 +6,14 @@ Encore
    .cleanupOutputBeforeBuild()
    .enableSourceMaps(!Encore.isProduction())
    .addEntry('js/app', './assets/js/app.js')
-   // .addStyleEntry('css/app', './assets/css/app.css')
+   .addStyleEntry('css/app', './assets/css/app.css')
    // .enableSassLoader()
    // .autoProvidejQuery()
 
    // Enable Vue loader
    .enableVueLoader()
+
+    // .enablePostCssLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();
