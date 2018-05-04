@@ -16,6 +16,7 @@
 </template>
 
 <script>
+
     export default {
         name: 'admin',
 
@@ -30,15 +31,50 @@
 
                 if (this.title.length < 3) {
                     alert("Le titre doit contenir au moins 3 caractères.");
-                    return;
+                }
+            },
+        },
+
+        beforeRouteEnter(to, from, next) {
+
+            function userAuthenticated() {
+                if (!localStorage.token) {
+                    return false;
                 }
 
-                this.$store.dispatch('postData', {
-                    url: '/vue-js-symfony-3.4/web/app_dev.php/admin/article',
-                    value: new FormData(this.$el.querySelector('form')),
-                    contentType: false
-                })
+                return new Promise((resolve, reject) => {
+                    const req = window.XMLHttpRequest ?
+                        new XMLHttpRequest() :
+                        new ActiveXObject("Microsoft.XMLHTTP");
+
+                    req.open("POST", '/vue-js-symfony-3.4/web/app_dev.php/checkToken');
+                    req.addEventListener("load", () => {
+                        if (req.status >= 200 && req.status < 400) {
+                            resolve(JSON.parse(req.responseText));
+                        } else {
+                            reject(req.statusText);
+                        }
+                    });
+
+                    req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                    req.send("token=" + localStorage.token);
+                });
             }
+
+            if(to.meta.requiresAuth){
+                userAuthenticated().then((data) => {
+                    if (!data) {
+                        next('/login');
+                    } else {
+                        next();
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }
+
+            next();
         },
     }
 </script>
