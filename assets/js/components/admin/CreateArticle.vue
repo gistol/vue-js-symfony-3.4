@@ -20,11 +20,11 @@
 <script>
 
     export default {
-        name: 'admin',
+        name: 'CreateArticle',
 
         data() {
             return {
-                title: undefined,
+                title: '',
             }
         },
 
@@ -37,7 +37,7 @@
                     alert("Le titre doit contenir au moins 3 caractères.");
                 } else {
                     this.$store.dispatch('postData', {
-                        url: '/vue-js-symfony-3.4/web/app_dev.php/admin/article',
+                        url: '/vue-js-symfony-3.4/web/app_dev.php/admin/create',
                         value: new FormData(this.$el.querySelector('form'))
                     }).then((data) => {
                         console.log(data);

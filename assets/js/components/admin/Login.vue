@@ -16,9 +16,11 @@
 
 <script>
 
-    import Mixins from '../mixins';
+    import Mixins from '../../mixins/index';
 
     export default {
+        name: 'Login',
+
         data() {
             return {
                 username: undefined,
@@ -44,6 +46,7 @@
 
                     if (data.token) {
                         localStorage.setItem('token', data.token);
+                        this.$router.push({name: 'home_admin'});
                     }
 
                 }).catch((err) => {

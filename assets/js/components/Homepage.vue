@@ -46,7 +46,7 @@
 <script>
 
     export default {
-        name: 'homepage',
+        name: 'Homepage',
 
         data(){
             return {
@@ -64,10 +64,13 @@
                             this.articles = data;
                         }
                     })
+                    .catch((err) => {
+                        console.log('Erreur : ' + err)
+                    })
             }
         },
 
-        mounted() {
+        beforeMount() {
             this.getArticles();
         },
     }

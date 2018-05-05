@@ -6,6 +6,8 @@
 
 <script>
     export default {
+        name: 'Article',
+
         data() {
             return {
                 article: undefined
