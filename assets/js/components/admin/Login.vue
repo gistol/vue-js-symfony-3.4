@@ -7,7 +7,7 @@
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password"/>
 
-            <input type="hidden" name="csrf_token" />
+            <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
             <input type="submit"/>
         </form>
@@ -25,6 +25,8 @@
                 password: undefined
             }
         },
+
+        props: ['csrf_token'],
 
         mixins: [Mixins],
 

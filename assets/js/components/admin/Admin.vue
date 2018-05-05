@@ -10,6 +10,8 @@
             <label for="image">Image</label>
             <input type="file" id="image" name="image"/>
 
+            <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
+
             <input type="submit"/>
         </form>
     </div>
@@ -22,9 +24,11 @@
 
         data() {
             return {
-                title: ""
+                title: undefined,
             }
         },
+
+        props: ['csrf_token'],
 
         methods: {
             handleSubmit() {
@@ -32,6 +36,14 @@
                 if (this.title.length < 3) {
                     alert("Le titre doit contenir au moins 3 caractères.");
                 } else {
+                    this.$store.dispatch('postData', {
+                        url: '/vue-js-symfony-3.4/web/app_dev.php/admin/article',
+                        value: new FormData(this.$el.querySelector('form'))
+                    }).then((data) => {
+                        console.log(data);
+                    }).catch((err) => {
+                        console.log('Erreur : ' + err)
+                    });
 
                 }
             },
@@ -42,10 +54,10 @@
             if(to.meta.requiresAuth) {
 
                 userAuthenticated().then((data) => {
-                    console.log(data);
+                    console.log('Succès : ' + data);
                     next();
                 }).catch((err) => {
-                    console.log(err);
+                    console.log('Erreur : ' + err);
                     next('/login');
                 });
 
@@ -60,7 +72,7 @@
         return new Promise((resolve, reject) => {
 
             if (!localStorage.getItem('token')) {
-                resolve(false);
+                reject('Token inexistant.');
             }
 
             const req = window.XMLHttpRequest ?
@@ -71,7 +83,9 @@
             req.addEventListener("load", () => {
 
                 if (req.status >= 200 && req.status < 400) {
+
                     const resp = JSON.parse(req.responseText);
+
                     if (localStorage.getItem('token') === resp) {
                         resolve('Identification réussie');
                     } else if (resp.err) {
@@ -79,6 +93,7 @@
                     } else {
                         reject('Token invalide.');
                     }
+
                 } else {
                     reject(req.statusText);
                 }
