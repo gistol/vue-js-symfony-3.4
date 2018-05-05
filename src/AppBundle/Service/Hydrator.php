@@ -4,6 +4,8 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Image;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Hydrator extends MetaService
 {
@@ -61,17 +63,6 @@ class Hydrator extends MetaService
         if ($object instanceof Article) {
             $article = &$object;
             $article->setDate(new \DateTime());
-
-            if (!is_null($file = $this->request->files->get('image'))) {
-                $filename = uniqid() . '.' . $file->guessExtension();
-
-                $image = new Image();
-                $image->setSrc($filename);
-                $image->setTitle($article->getTitle());
-                $image->setArticle($article);
-                $article->addImage($image);
-                $file->move($this->container->getParameter('images_directory'), $filename);
-            }
         }
 
         return $object;
