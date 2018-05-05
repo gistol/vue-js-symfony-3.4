@@ -57,42 +57,40 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/admin/article", name="create_article")
+     * @Route("/admin/create", name="create_article")
      * @param Request $request
      * @param ObjectManager $manager
      * @return JsonResponse
      */
-    public function createArticleAction(Request $request, ObjectManager $manager)
+    public function createArticleAction(Request $request, ObjectManager $manager, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
 
-            $article = new Article();
-
-            foreach ($request->request as $field => $value) {
-                if (method_exists($article, $method = 'set'. ucfirst($field))) {
-                    $article->$method(htmlspecialchars($value));
-                } else {
-                    return new JsonResponse("Invalid Method name.");
-                }
+            if ($hydrator->isFormValid(Article::class)) {
+                $article = $hydrator->hydrateObject();
+            } else {
+                return new JsonResponse('Formulaire invalide');
             }
 
-            $article->setDate(new \DateTime());
+            if (!empty($request->files)) {
 
-            $file = $request->files->get('image');
-            $filename = uniqid() . '.' . $file->guessExtension();
+                $file = $request->files->get('image');
+                $filename = uniqid() . '.' . $file->guessExtension();
 
-            $image = new Image();
-            $image->setSrc($filename);
-            $image->setTitle($article->getTitle());
-            $image->setArticle($article);
-            $article->addImage($image);
-
-            $file->move($this->getParameter('images_directory'), $filename);
+                $image = new Image();
+                $image->setSrc($filename);
+                $image->setTitle($article->getTitle());
+                $image->setArticle($article);
+                $article->addImage($image);
+                $file->move($this->container->getParameter('images_directory'), $filename);
+            }
 
             $manager->persist($article);
             $manager->flush();
 
             return new JsonResponse("created");
+        } else {
+            return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
         }
     }
 
