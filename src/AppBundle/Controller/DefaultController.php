@@ -103,6 +103,7 @@ class DefaultController extends Controller
     public function loginAction(ObjectManager $manager, Request $request, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
+
             if ($hydrator->isFormValid(User::class)) {
 
                 $user = $manager->getRepository(User::class)->findOneBy([
@@ -131,15 +132,22 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/checkToken", name="check_token")
-     * @return JsonResponse|Response
+     * @Route("/getSessionToken", name="get_token")
+     * @return Response|JsonResponse
      */
     public function checkTokenAction(Request $request)
     {
-        if ($request->isXmlHttpRequest()) {
-            return new JsonResponse($this->get("session")->get("token") === $request->get('token'));
+        if (!$request->isXmlHttpRequest()) {
+            return new Response("Requête non autorisée.", Response::HTTP_BAD_REQUEST);
         }
 
-        return new Response("Requête non autorisée", Response::HTTP_BAD_REQUEST);
+        if (is_null($token = $request->getSession()->get('token'))) {
+
+            $msg = "Le token n'existe pas en session. L'authentification a échoué.";
+            $this->get('logger')->crit($msg);
+            return new JsonResponse(["err" => $msg]);
+        }
+
+        return new JsonResponse($token);
     }
 }

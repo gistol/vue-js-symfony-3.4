@@ -19,3 +19,4 @@
 ./idea
 /web/build
 /web/images
+/src/AppBundle/token
