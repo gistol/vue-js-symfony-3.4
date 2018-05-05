@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+
+/* Components */
 import Homepage from '../components/Homepage';
 import Article from '../components/Article';
 import Admin from '../components/admin/Admin';
@@ -16,6 +18,7 @@ const Router = new VueRouter({
     routes: [
         {
             path: '/',
+            name: 'home_user',
             component: Homepage,
         },
         {
@@ -32,7 +35,10 @@ const Router = new VueRouter({
                 {
                     path: 'create',
                     name: 'createArticle',
-                    component: CreateArticle
+                    component: CreateArticle,
+                    props: {
+                        'csrf_token': csrf_token,
+                    },
                 },
                 {
                     path: 'newsletter',
@@ -45,9 +51,6 @@ const Router = new VueRouter({
                     component: Comment
                 }
             ],
-            props: {
-                'csrf_token': csrf_token,
-            },
             meta: {
                 requiresAuth: true,
             }
