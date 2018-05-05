@@ -14,11 +14,13 @@ const Store = new Vuex.Store({
         postData(context, data) {
 
             return new Promise((resolve, reject) => {
+
                 const req = window.XMLHttpRequest ?
                     new XMLHttpRequest() :
                     new ActiveXObject("Microsoft.XMLHTTP");
 
                 req.open("POST", data.url, true);
+
                 req.addEventListener("load", () => {
                     if (req.status >= 200 && req.status < 400) {
                         resolve(JSON.parse(req.responseText));
