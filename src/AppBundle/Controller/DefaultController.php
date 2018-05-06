@@ -97,7 +97,7 @@ class DefaultController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            if ($hydrator->isFormValid(User::class)) {
+            if ($hydrator->isFormValid([User::class])) {
 
                 $user = $manager->getRepository(User::class)->findOneBy([
                     'username' => $request->request->get('username')
