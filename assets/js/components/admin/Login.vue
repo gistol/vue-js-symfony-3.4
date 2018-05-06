@@ -24,11 +24,10 @@
         data() {
             return {
                 username: undefined,
-                password: undefined
+                password: undefined,
+                csrf_token: undefined
             }
         },
-
-        props: ['csrf_token'],
 
         mixins: [Mixins],
 
@@ -54,5 +53,14 @@
                 });
             }
         },
+
+        created() {
+            this.$store.dispatch('getCsrfToken').then((data) => {
+                this.csrf_token = data
+            }).catch((err) => {
+                console.log(err);
+                this.$store.push({name: 'login'})
+            })
+        }
     }
 </script>

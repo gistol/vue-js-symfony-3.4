@@ -109,4 +109,62 @@ class Image
     {
         return $this->article;
     }
+    /**
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @var \DateTime
+     */
+    private $updateAt;
+
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return Image
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set updateAt
+     *
+     * @param \DateTime $updateAt
+     *
+     * @return Image
+     */
+    public function setUpdateAt($updateAt)
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updateAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
+    }
 }

@@ -21,16 +21,23 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @return Response
      */
-    public function indexAction(TokenGeneratorInterface $generator)
+    public function indexAction()
+    {
+        // replace this example code with whatever you need
+        return $this->render('default/index.html.twig');
+    }
+
+    /**
+     * @Route("/csrf_token", name="csrf_token")
+     */
+    public function getCsrfToken(TokenGeneratorInterface $generator)
     {
         $csrf_token = $generator->generateToken();
         $this->get('session')->set('csrf_token', $csrf_token);
 
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'csrf_token' => $csrf_token
-        ]);
+        return new JsonResponse(['csrf_token' => $csrf_token]);
     }
 
     /**
@@ -66,23 +73,11 @@ class DefaultController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            if ($hydrator->isFormValid(Article::class)) {
-                $article = $hydrator->hydrateObject();
+            if ($hydrator->isFormValid([Article::class, Image::class])) {
+
+                $article = $hydrator->hydrateObject(Article::class);
             } else {
                 return new JsonResponse('Formulaire invalide');
-            }
-
-            if (!empty($request->files)) {
-
-                $file = $request->files->get('image');
-                $filename = uniqid() . '.' . $file->guessExtension();
-
-                $image = new Image();
-                $image->setSrc($filename);
-                $image->setTitle($article->getTitle());
-                $image->setArticle($article);
-                $article->addImage($image);
-                $file->move($this->container->getParameter('images_directory'), $filename);
             }
 
             $manager->persist($article);

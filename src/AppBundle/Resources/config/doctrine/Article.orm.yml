@@ -12,9 +12,6 @@ AppBundle\Entity\Article:
         title:
             type: string
             length: 255
-        content:
-            type: text
-            nullable: true
         date:
             type: datetime
 

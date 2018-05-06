@@ -227,44 +227,5 @@ class User implements AdvancedUserInterface
     {
         return $this->salt;
     }
-
-    /**
-     * Get isEnabled
-     *
-     * @return boolean
-     */
-    public function getIsEnabled()
-    {
-        return $this->isEnabled;
-    }
-
-    /**
-     * Get isAccountNonExpired
-     *
-     * @return boolean
-     */
-    public function getIsAccountNonExpired()
-    {
-        return $this->isAccountNonExpired;
-    }
-
-    /**
-     * Get isAccountNonLocked
-     *
-     * @return boolean
-     */
-    public function getIsAccountNonLocked()
-    {
-        return $this->isAccountNonLocked;
-    }
-
-    /**
-     * Get isCredentialsNonExpired
-     *
-     * @return boolean
-     */
-    public function getIsCredentialsNonExpired()
-    {
-        return $this->isCredentialsNonExpired;
-    }
 }
+

@@ -25,10 +25,9 @@
         data() {
             return {
                 title: '',
+                csrf_token: undefined
             }
         },
-
-        props: ['csrf_token'],
 
         methods: {
             handleSubmit() {
@@ -48,5 +47,11 @@
                 }
             },
         },
+
+        created() {
+            this.$store.dispatch('getCsrfToken').then((data) => {
+                this.csrf_token = data
+            });
+        }
     }
 </script>

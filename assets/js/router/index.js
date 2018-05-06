@@ -36,9 +36,6 @@ const Router = new VueRouter({
                     path: 'create',
                     name: 'createArticle',
                     component: CreateArticle,
-                    props: {
-                        'csrf_token': csrf_token,
-                    },
                 },
                 {
                     path: 'newsletter',
@@ -59,9 +56,6 @@ const Router = new VueRouter({
             path: '/login',
             name: 'login',
             component: Login,
-            props: {
-                'csrf_token': csrf_token,
-            },
         },
         {
             path: '*',
