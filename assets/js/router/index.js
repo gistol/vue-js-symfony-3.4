@@ -22,7 +22,7 @@ const Router = new VueRouter({
             component: Homepage,
         },
         {
-            path: '/article/:id',
+            path: '/article/:slug',
             name: 'article',
             component: Article,
             props: true

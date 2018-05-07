@@ -43,10 +43,19 @@ class DefaultController extends Controller
     /**
      * @Route("/articles", name="articles")
      */
-    public function articleAction(ObjectManager $manager)
+    public function getArticlesAction(ObjectManager $manager)
     {
         $articles = $manager->getRepository(Article::class)->findAll();
 
+        return $this->getJson($articles);
+    }
+
+    /**
+     * @param $arg
+     * @return Response
+     */
+    private function getJson($arg)
+    {
         $encoder = new JsonEncoder();
         $normalizer = new ObjectNormalizer();
 
@@ -55,12 +64,22 @@ class DefaultController extends Controller
         });
 
         $serializer = new Serializer([$normalizer], [$encoder]);
-        $jsonArticles = $serializer->serialize($articles, 'json');
+        $json = $serializer->serialize($arg, 'json');
 
-        $response = new Response($jsonArticles);
+        $response = new Response($json);
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+
+    /**
+     * @Route("/article/{slug}", name="article")
+     * @param string $slug
+     * @return Response
+     */
+    public function getArticleAction($slug, ObjectManager $manager)
+    {
+        return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
     }
 
     /**
@@ -74,16 +93,10 @@ class DefaultController extends Controller
         if ($request->isXmlHttpRequest()) {
 
             if ($hydrator->isFormValid([Article::class, Image::class])) {
-
-                $article = $hydrator->hydrateObject(Article::class);
+                return $hydrator->hydrateObject(Article::class);
             } else {
                 return new JsonResponse('Formulaire invalide');
             }
-
-            $manager->persist($article);
-            $manager->flush();
-
-            return new JsonResponse("created");
         } else {
             return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
         }

@@ -16,8 +16,6 @@
 
 <script>
 
-    import Mixins from '../../mixins/index';
-
     export default {
         name: 'Login',
 
@@ -29,8 +27,6 @@
             }
         },
 
-        mixins: [Mixins],
-
         methods: {
             handleSubmit() {
                 this.$store.dispatch('postData', {
@@ -39,15 +35,14 @@
                     contentType: false
 
                 }).then((data) => {
+
                     if (!data.token) {
                         alert(data);
-                    }
-
-                    if (data.token) {
+                    } else {
                         localStorage.setItem('token', data.token);
                         this.$router.push({name: 'home_admin'});
                     }
-
+                    
                 }).catch((err) => {
                     console.log(err);
                 });

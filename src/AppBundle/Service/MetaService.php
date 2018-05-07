@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -48,23 +49,78 @@ class MetaService
         return $this->container->get('session');
     }
 
+    /**
+     * @param $msg
+     * @param array $context
+     * @return bool
+     */
     public function err($msg, array $context)
     {
         return $this->container->get('logger')->err($msg, $context);
     }
 
+    /**
+     * @param $msg
+     * @param array $context
+     * @return bool
+     */
     public function info($msg, array $context)
     {
         return $this->container->get('logger')->info($msg, $context);
     }
 
+    /**
+     * @param $msg
+     * @param array $context
+     * @return bool
+     */
     public function crit($msg, array $context)
     {
         return $this->container->get('logger')->crit($msg, $context);
     }
 
+    /**
+     * @param $msg
+     * @param array $context
+     * @return bool
+     */
     public function warn($msg, array $context)
     {
         return $this->container->get('logger')->warn($msg, $context);
+    }
+
+    public function getEntityManager()
+    {
+        return $this->container->get('doctrine.orm.entity_manager');
+    }
+
+    public function persist($entity)
+    {
+        $this->getEntityManager()->persist($entity);
+    }
+
+    public function flush()
+    {
+        try {
+            $this->getEntityManager()->flush();
+        } catch (OptimisticLockException $exception) {
+            $this->warn($exception->getMessage(), ["MetaService" => "flush()"]);
+        }
+
+    }
+
+    /**
+     * @param array $entities
+     */
+    public function persistAndFlush(array $entities = [])
+    {
+        foreach ($entities as $entity)
+        {
+            if (is_object($entity)) {
+                $this->persist($entity);
+            }
+        }
+
+        $this->flush();
     }
 }

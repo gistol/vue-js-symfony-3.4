@@ -12,6 +12,9 @@ AppBundle\Entity\Article:
         title:
             type: string
             length: 255
+        slug:
+            type: string
+            length: 255
         date:
             type: datetime
 

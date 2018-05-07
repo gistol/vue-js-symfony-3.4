@@ -4,7 +4,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Image;
-use Doctrine\ORM\Tools\Export\ExportException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class Hydrator extends MetaService
 {
@@ -41,8 +41,6 @@ class Hydrator extends MetaService
 
                 /* If not in array => the form has been modified before sending it */
                 if (!in_array($method = 'get' . ucfirst($field), $this->methods)) {
-                    dump($method);
-                    dump($this->methods);
                     return false;
                 }
             }
@@ -58,10 +56,9 @@ class Hydrator extends MetaService
 
     /**
      * Function to hydrate the specified object
-     * Not need to validate fields as already done
-     *
+     * No need to validate fields as already done
+     * @return JsonResponse
      * @param $class
-     * @return object
      */
     public function hydrateObject($class)
     {
@@ -69,6 +66,11 @@ class Hydrator extends MetaService
 
         foreach ($this->getRequest()->request as $field => $value) {
             if ($field !== "csrf_token" && method_exists($object, $method = 'set' . ucfirst($field))) {
+                if ($object instanceof Article && $field === 'title') {
+                    $slug = AppTools::slugify($value);
+                    $object->setSlug($slug);
+                }
+
                 $object->$method(htmlspecialchars($value));
             }
         }
@@ -84,7 +86,7 @@ class Hydrator extends MetaService
 
                     $image = new Image();
                     $image->setSrc($filename);
-                    $image->setTitle($article->getTitle());
+                    $image->setTitle($article->getSlug());
 
                     if (!empty($contents = $this->getRequest()->request->get('content'))) {
                         $image->setContent($this->getRequest()->request->get('content')[$key]);
@@ -97,6 +99,8 @@ class Hydrator extends MetaService
             }
         }
 
-        return $object;
+        $this->persistAndFlush([$object]);
+
+        return new JsonResponse("created");
     }
 }
