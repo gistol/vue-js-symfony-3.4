@@ -9,13 +9,15 @@
 
             <div>
                 <label for="image_1">Image 1</label>
-                <input type="file" id="image_1" name="image"/>
+                <input type="file" id="image_1" name="image[]"/>
             </div>
 
             <div>
                 <label for="content_1">Contenu 1</label>
                 <input type="text" id="content_1" name="content[]"/>
             </div>
+
+            <child-form v-for="(item, key) in children" :item="item"></child-form>
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
@@ -36,58 +38,35 @@
             return {
                 title: '',
                 nbInput: undefined,
-                csrf_token: undefined
+                csrf_token: undefined,
+                children: []
             }
+        },
+
+        components: {
+            'child-form': {
+                template:
+                "<div>" +
+                    "<label for='image'>Image {{ item }}</label>" +
+                    "<input type='file' name='image[]'/>" +
+                    "<label>Contenu {{ item }}</label>" +
+                    "<input type='text' name='content[]'/>" +
+                    "<button v-on:click='remove'>Supprimer</button>" +
+                "</div>",
+                props: ['item'],
+                methods: {
+                    remove(e) {
+                        e.target.parentNode.remove();
+                    }
+                }
+            },
         },
 
         methods: {
 
             addForm() {
-
-                let nbInput = this.nbInput++;
-                nbInput++;
-
-                class Form {
-                    constructor() {
-
-                        const div = document.createElement('div');
-                        const labelImage = document.createElement('label');
-                        const labelContent = document.createElement('label');
-                        const inputImage = document.createElement('input');
-                        const inputContent = document.createElement('input');
-                        const button = document.createElement('button');
-
-                        labelImage.innerText = 'Image n°' + nbInput;
-                        labelImage.setAttribute('for', 'image_' + nbInput);
-                        labelContent.innerText = 'Contenu n°' + nbInput;
-                        labelContent.setAttribute('for', 'content_' + nbInput);
-
-                        inputImage.name = 'image[]';
-                        inputImage.id = 'image_' + nbInput;
-                        inputImage.type = 'file';
-
-                        inputContent.name = 'content[]';
-                        inputContent.id = 'content_' + nbInput;
-                        inputContent.type = 'text';
-
-                        button.innerText = 'Supprimer';
-                        button.addEventListener('click', (e) => {
-                            e.target.parentNode.remove();
-                        });
-
-                        div.appendChild(labelImage);
-                        div.appendChild(inputImage);
-                        div.appendChild(labelContent);
-                        div.appendChild(inputContent);
-                        div.appendChild(button);
-
-                        return div;
-                    }
-                }
-
-                const newForm = new Form();
-                const form = this.$el.querySelector('form');
-                form.insertBefore(newForm, form.lastElementChild)
+                this.nbInput++;
+                this.children.push(this.nbInput);
             },
 
             handleSubmit() {
@@ -118,5 +97,5 @@
             this.nbInput = this.$el.querySelectorAll('input[name="content[]"').length;
         }
     }
-    
+
 </script>

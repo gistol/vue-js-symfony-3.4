@@ -77,21 +77,23 @@ class Hydrator extends MetaService
             $article = &$object;
             $article->setDate(new \DateTime());
 
-            if (!empty($file = $this->getRequest()->files->get('image'))) {
+            if (!empty($files = $this->getRequest()->files->get('image'))) {
 
-                $filename = uniqid() . '.' . $file->guessExtension();
+                foreach ($files as $key => $file) {
+                    $filename = uniqid() . '.' . $file->guessExtension();
 
-                $image = new Image();
-                $image->setSrc($filename);
-                $image->setTitle($article->getTitle());
+                    $image = new Image();
+                    $image->setSrc($filename);
+                    $image->setTitle($article->getTitle());
 
-                if (!empty($this->getRequest()->request->get('content'))) {
-                    $image->setContent($this->getRequest()->request->get('content'));
+                    if (!empty($contents = $this->getRequest()->request->get('content'))) {
+                        $image->setContent($this->getRequest()->request->get('content')[$key]);
+                    }
+
+                    $image->setArticle($article);
+                    $article->addImage($image);
+                    $file->move($this->container->getParameter('images_directory'), $filename);
                 }
-
-                $image->setArticle($article);
-                $article->addImage($image);
-                $file->move($this->container->getParameter('images_directory'), $filename);
             }
         }
 

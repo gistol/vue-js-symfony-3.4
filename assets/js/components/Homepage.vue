@@ -2,9 +2,11 @@
     <div class="container">
         <div v-for='article in articles' class="article">
             <h1> {{ article.title }} </h1>
-            <p> {{ article.content }} </p>
             <router-link v-bind:to="{name: 'article', params: {id: article.id} }">
-                <img v-for="image in article.images" v-bind:src="'./images/' + image.src"/>
+                <div v-for="image in article.images">
+                    <img :src="'./images/' + image.src" />
+                    <p>{{ image.content }}</p>
+                </div>
                 Accéder à l'article
             </router-link>
         </div>
