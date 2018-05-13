@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
-use AppBundle\Entity\Image;
 use AppBundle\Entity\User;
 use AppBundle\Service\Hydrator;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -80,80 +79,5 @@ class DefaultController extends Controller
     public function getArticleAction($slug, ObjectManager $manager)
     {
         return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
-    }
-
-    /**
-     * @Route("/admin/create", name="create_article")
-     * @param Request $request
-     * @param ObjectManager $manager
-     * @return JsonResponse
-     */
-    public function createArticleAction(Request $request, ObjectManager $manager, Hydrator $hydrator)
-    {
-        if ($request->isXmlHttpRequest()) {
-
-            if ($hydrator->isFormValid([Article::class, Image::class])) {
-                return $hydrator->hydrateObject(Article::class);
-            } else {
-                return new JsonResponse('Formulaire invalide');
-            }
-        } else {
-            return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @Route("/login", name="login")
-     * @return JsonResponse|Response
-     */
-    public function loginAction(ObjectManager $manager, Request $request, Hydrator $hydrator)
-    {
-        if ($request->isXmlHttpRequest()) {
-
-            if ($hydrator->isFormValid([User::class])) {
-
-                $user = $manager->getRepository(User::class)->findOneBy([
-                    'username' => $request->request->get('username')
-                ]);
-
-                if (is_null($user)) {
-                    return new JsonResponse("Le nom d'utilisateur n'existe pas.");
-                }
-
-                if (password_verify($request->request->get('password'), $user->getPassword())) {
-                    $token = hash('sha256', time() . $user->getUsername());
-
-                    $this->get('session')->set('token', $token);
-
-                    return new JsonResponse(["token" => $token]);
-                }
-
-                return new JsonResponse("Mot de passe incorrect.");
-            }
-
-            return new JsonResponse('Formulaire invalide.');
-        }
-
-        return new Response("Requête non autorisée", Response::HTTP_BAD_REQUEST);
-    }
-
-    /**
-     * @Route("/getSessionToken", name="get_token")
-     * @return Response|JsonResponse
-     */
-    public function checkTokenAction(Request $request)
-    {
-        if (!$request->isXmlHttpRequest()) {
-            return new Response("Requête non autorisée.", Response::HTTP_BAD_REQUEST);
-        }
-
-        if (is_null($token = $request->getSession()->get('token'))) {
-
-            $msg = "Le token n'existe pas en session. L'authentification a échoué.";
-            $this->get('logger')->crit($msg);
-            return new JsonResponse(["err" => $msg]);
-        }
-
-        return new JsonResponse($token);
     }
 }
