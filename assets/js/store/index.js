@@ -24,7 +24,7 @@ const Store = new Vuex.Store({
                         const resp = JSON.parse(req.responseText);
                         resolve(resp.csrf_token);
                     } else {
-                        reject(req.statusText);
+                        reject(req.responseText);
                     }
                 });
 
@@ -42,7 +42,7 @@ const Store = new Vuex.Store({
                     if (req.status >= 200 && req.status < 400) {
                         resolve(JSON.parse(req.responseText));
                     } else {
-                        reject(req.statusText);
+                        reject(req.responseText);
                     }
                 });
 
