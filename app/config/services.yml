@@ -1,7 +1,6 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
-    #parameter_name: value
 
 services:
     # default configuration for services in *this* file
@@ -34,15 +33,33 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
-    AppBundle\Service\MetaService:
-        public: true
-        autowire: true
-        arguments: ["@service_container"]
 
-    AppBundle\Service\Hydrator:
+    AppBundle\Service\FileUploader:
+        arguments:
+            $imagesDir: "%images_directory%"
+
+    app.meta_service:
+        class: AppBundle\Service\MetaService
         public: true
         autowire: true
+        arguments: ["@service_container", '@AppBundle\Service\FileUploader', "@logger"]
+
+    app.hydrator:
+        class: AppBundle\Service\Hydrator
+        public: true
+        autowire: true
+        arguments: ["@app.meta_service"]
 
     AppBundle\Service\AppTools:
         public: true
         autowire: true
+
+    AppBundle\EventListener\EntityListener:
+        public: true
+        autowire: true
+        arguments: ["@app.meta_service"]
+        tags:
+          - { name: doctrine.event_listener, event: preRemove }
+
+
+
