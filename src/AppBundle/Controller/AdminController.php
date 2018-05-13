@@ -33,4 +33,21 @@ class AdminController extends Controller
             return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
         }
     }
+
+    /**
+     * @Route("/admin/articles/delete/{id}", name="delete_article")
+     * @param int $id
+     * @param ObjectManager $manager
+     * @return JsonResponse
+     */
+    public function deleteArticleAction($id, ObjectManager $manager)
+    {
+        if(!is_null($article = $manager->getRepository(Article::class)->find($id))) {
+            $manager->remove($article);
+            $manager->flush();
+            return new JsonResponse('The article has been deleted.');
+        } else {
+            return new JsonResponse('Article not found.', Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
