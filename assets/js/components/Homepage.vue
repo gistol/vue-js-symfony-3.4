@@ -13,39 +13,9 @@
     </div>
 </template>
 
-<style scoped>
-
-    .container *{
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-    }
-
-    .container {
-        width: 80%;
-        display: flex;
-        display: -webkit-flex;
-        flex-wrap: wrap;
-        -webkit-flex-wrap: wrap;
-        margin: 0 auto;
-        justify-content: space-around;
-        -webkit-justify-content: space-around;
-    }
-
-    .article {
-        width: 30%;
-        padding: 5px;
-        border: 1px solid #d8d8d8;
-        margin-top: 5px;
-    }
-
-    img{
-        width: 100%;
-    }
-
-</style>
-
 <script>
+
+    import Mixin from '../mixins';
 
     export default {
         name: 'Homepage',
@@ -57,20 +27,7 @@
             }
         },
 
-        methods: {
-            getArticles() {
-                fetch('/vue-js-symfony-3.4/web/app_dev.php/articles')
-                    .then((res) => res.json())
-                    .then((data) => {
-                        if (data.length > 0) {
-                            this.articles = data;
-                        }
-                    })
-                    .catch((err) => {
-                        console.log('Erreur : ' + err)
-                    })
-            }
-        },
+        mixins: [Mixin],
 
         beforeMount() {
             this.getArticles();
