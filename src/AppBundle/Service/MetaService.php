@@ -3,17 +3,26 @@
 namespace AppBundle\Service;
 
 use Doctrine\ORM\OptimisticLockException;
-use Symfony\Component\Config\Tests\Fixtures\Configuration\ExampleConfiguration;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * Class MetaService
+ * @package AppBundle\Service
+ */
 class MetaService
 {
     /**
      * @var ContainerInterface
      */
     protected $container;
+
+    /**
+     * @var FileUploader $fileUploader
+     */
+    protected $fileUploader;
 
     /**
      * @var Request $request
@@ -26,12 +35,19 @@ class MetaService
     protected $session;
 
     /**
+     * @var LoggerInterface $logger
+     */
+    protected $logger;
+
+    /**
      * MetaService constructor.
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, FileUploader $fileUploader, LoggerInterface $logger)
     {
         $this->container = $container;
+        $this->fileUploader = $fileUploader;
+        $this->logger = $logger;
     }
 
     /**
@@ -53,48 +69,50 @@ class MetaService
     /**
      * @param $msg
      * @param array $context
-     * @return bool
      */
-    public function err($msg, array $context = null)
+    public function err($msg, array $context = [])
     {
-        return $this->container->get('logger')->err($msg, $context);
+        $this->logger->error($msg, [$context]);
     }
 
     /**
      * @param $msg
      * @param array $context
-     * @return bool
      */
-    public function info($msg, array $context = null)
+    public function info($msg, array $context = [])
     {
-        return $this->container->get('logger')->info($msg, $context);
+        $this->logger->info($msg, $context);
     }
 
     /**
      * @param $msg
      * @param array $context
-     * @return bool
      */
-    public function crit($msg, array $context = null)
+    public function crit($msg, array $context = [])
     {
-        return $this->container->get('logger')->crit($msg, $context);
+        $this->logger->critical($msg, $context);
     }
 
     /**
      * @param $msg
      * @param array $context
-     * @return bool
      */
-    public function warn($msg, array $context = null)
+    public function warn($msg, array $context = [])
     {
-        return $this->container->get('logger')->warn($msg, $context);
+        $this->logger->warning($msg, $context);
     }
 
+    /**
+     * @return \Doctrine\ORM\EntityManager|object
+     */
     public function getEntityManager()
     {
         return $this->container->get('doctrine.orm.entity_manager');
     }
 
+    /**
+     * @param $entity
+     */
     public function persist($entity)
     {
         $this->getEntityManager()->persist($entity);
@@ -107,7 +125,6 @@ class MetaService
         } catch (OptimisticLockException $exception) {
             $this->warn($exception->getMessage(), ["MetaService" => "flush()"]);
         }
-
     }
 
     /**
@@ -137,5 +154,13 @@ class MetaService
         }
 
         return $param;
+    }
+
+    /**
+     * @return FileUploader
+     */
+    public function getFileUploader()
+    {
+        return $this->fileUploader;
     }
 }
