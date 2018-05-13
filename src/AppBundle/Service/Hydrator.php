@@ -76,6 +76,11 @@ class Hydrator extends MetaService
         }
 
         if ($object instanceof Article) {
+
+            if (!is_dir($folder = $this->getParameter('images_directory'))) {
+                mkdir($folder);
+            }
+
             $article = &$object;
             $article->setDate(new \DateTime());
 
@@ -89,12 +94,12 @@ class Hydrator extends MetaService
                     $image->setTitle($article->getSlug());
 
                     if (!empty($contents = $this->getRequest()->request->get('content'))) {
-                        $image->setContent($this->getRequest()->request->get('content')[$key]);
+                        $image->setContent($contents[$key]);
                     }
 
                     $image->setArticle($article);
                     $article->addImage($image);
-                    $file->move($this->container->getParameter('images_directory'), $filename);
+                    $file->move($folder, $filename);
                 }
             }
         }
