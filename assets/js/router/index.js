@@ -6,6 +6,8 @@ import Homepage from '../components/Homepage';
 import Article from '../components/Article';
 import Admin from '../components/admin/Admin';
 import CreateArticle from '../components/admin/CreateArticle';
+import ListArticles from '../components/admin/ListArticles';
+import EditArticle from '../components/admin/EditArticle';
 import Comment from '../components/admin/Comment';
 import Newsletter from '../components/admin/Newsletter';
 import PageNotFound from '../components/PageNotFound';
@@ -36,6 +38,18 @@ const Router = new VueRouter({
                     path: 'create',
                     name: 'createArticle',
                     component: CreateArticle,
+                },
+                {
+                    path: 'articles',
+                    name: 'listArticle',
+                    component: ListArticles,
+                    props: true
+                },
+                {
+                    path: 'articles/edit/:slug',
+                    name: 'editArticle',
+                    component: EditArticle,
+                    props: true
                 },
                 {
                     path: 'newsletter',
