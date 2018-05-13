@@ -22,6 +22,6 @@ AppBundle\Entity\Article:
         images:
             targetEntity: AppBundle\Entity\Image
             mappedBy: article
-            cascade: ['persist']
+            cascade: ['persist', 'remove']
 
     lifecycleCallbacks: {  }
