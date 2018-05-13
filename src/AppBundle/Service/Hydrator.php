@@ -5,9 +5,24 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Image;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class Hydrator extends MetaService
+class Hydrator
 {
+    /**
+     * @var MetaService $metaService
+     */
+    protected $metaService;
+
+    /**
+     * Hydrator constructor.
+     * @param MetaService $metaService
+     */
+    public function __construct(MetaService $metaService)
+    {
+        $this->metaService = $metaService;
+    }
+
     /**
      * @var array
      */
@@ -23,10 +38,10 @@ class Hydrator extends MetaService
      */
     public function isFormValid(array $classes = [])
     {
-        foreach ($this->getRequest()->request as $field => $value) {
+        foreach ($this->metaService->getRequest()->request as $field => $value) {
 
             if ($field === 'csrf_token') {
-                if (!($value === $this->getSession()->get('csrf_token'))) {
+                if (!($value === $this->metaService->getSession()->get('csrf_token'))) {
                     return false;
                 }
             } else {
@@ -64,7 +79,7 @@ class Hydrator extends MetaService
     {
         $object = new $class;
 
-        foreach ($this->getRequest()->request as $field => $value) {
+        foreach ($this->metaService->getRequest()->request as $field => $value) {
             if ($field !== "csrf_token" && method_exists($object, $method = 'set' . ucfirst($field))) {
                 if ($object instanceof Article && $field === 'title') {
                     $slug = AppTools::slugify($value);
@@ -77,35 +92,34 @@ class Hydrator extends MetaService
 
         if ($object instanceof Article) {
 
-            if (!is_dir($folder = $this->getParameter('images_directory'))) {
+            if (!is_dir($folder = $this->metaService->getParameter('images_directory'))) {
                 mkdir($folder);
             }
 
             $article = &$object;
             $article->setDate(new \DateTime());
 
-            if (!empty($files = $this->getRequest()->files->get('image'))) {
+            if (!empty($files = $this->metaService->getRequest()->files->get('image'))) {
 
                 foreach ($files as $key => $file) {
-                    $filename = uniqid() . '.' . $file->guessExtension();
+                    $filename = $this->metaService->getFileUploader()->uploadFile($file);
 
                     $image = new Image();
                     $image->setSrc($filename);
                     $image->setTitle($article->getSlug());
 
-                    if (!empty($contents = $this->getRequest()->request->get('content'))) {
+                    if (!empty($contents = $this->metaService->getRequest()->get('content'))) {
                         $image->setContent($contents[$key]);
                     }
 
                     $image->setArticle($article);
                     $article->addImage($image);
-                    $file->move($folder, $filename);
                 }
             }
         }
 
-        $this->persistAndFlush([$object]);
+        $this->metaService->persistAndFlush([$object]);
 
-        return new JsonResponse("created");
+        return new JsonResponse("created", Response::HTTP_CREATED);
     }
 }
