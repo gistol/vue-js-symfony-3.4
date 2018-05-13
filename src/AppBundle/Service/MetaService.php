@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use Doctrine\ORM\OptimisticLockException;
+use Symfony\Component\Config\Tests\Fixtures\Configuration\ExampleConfiguration;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -54,7 +55,7 @@ class MetaService
      * @param array $context
      * @return bool
      */
-    public function err($msg, array $context)
+    public function err($msg, array $context = null)
     {
         return $this->container->get('logger')->err($msg, $context);
     }
@@ -64,7 +65,7 @@ class MetaService
      * @param array $context
      * @return bool
      */
-    public function info($msg, array $context)
+    public function info($msg, array $context = null)
     {
         return $this->container->get('logger')->info($msg, $context);
     }
@@ -74,7 +75,7 @@ class MetaService
      * @param array $context
      * @return bool
      */
-    public function crit($msg, array $context)
+    public function crit($msg, array $context = null)
     {
         return $this->container->get('logger')->crit($msg, $context);
     }
@@ -84,7 +85,7 @@ class MetaService
      * @param array $context
      * @return bool
      */
-    public function warn($msg, array $context)
+    public function warn($msg, array $context = null)
     {
         return $this->container->get('logger')->warn($msg, $context);
     }
@@ -114,13 +115,27 @@ class MetaService
      */
     public function persistAndFlush(array $entities = [])
     {
-        foreach ($entities as $entity)
-        {
+        foreach ($entities as $entity) {
             if (is_object($entity)) {
                 $this->persist($entity);
             }
+
+            $this->flush();
+        }
+    }
+
+    /**
+     * @param string $param
+     * @return string
+     */
+    public function getParameter($param)
+    {
+        try {
+            $param = $this->container->getParameter($param);
+        } catch (\Exception $exception) {
+            $this->err("The parameter given does not exist");
         }
 
-        $this->flush();
+        return $param;
     }
 }
