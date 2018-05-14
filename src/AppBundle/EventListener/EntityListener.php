@@ -23,15 +23,6 @@ class EntityListener
         $this->metaService = $metaService;
     }
 
-    public function preUpdate(PreUpdateEventArgs $args)
-    {
-        $entity = $args->getEntity();
-
-        if ($entity instanceof Image) {
-
-        }
-    }
-
     public function preRemove(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();

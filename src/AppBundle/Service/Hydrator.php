@@ -154,6 +154,9 @@ class Hydrator
 
                 if (array_key_exists($key, $files) && !is_null($file = $files[$key])) {
                     $image = new Image();
+                    if(!empty($images[$key])) {
+                        $this->metaService->getEntityManager()->remove($images[$key]);
+                    }
                     $filename = $this->metaService->getFileUploader()->uploadFile($file);
                     $image->setSrc($filename);
                     $image->setTitle($article->getSlug());
