@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -52,20 +53,7 @@ class DefaultController extends Controller
      */
     private function getJson($arg)
     {
-        $encoder = new JsonEncoder();
-        $normalizer = new ObjectNormalizer();
-
-        $normalizer->setCircularReferenceHandler(function($object) {
-            return $object->getId();
-        });
-
-        $serializer = new Serializer([$normalizer], [$encoder]);
-        $json = $serializer->serialize($arg, 'json');
-
-        $response = new Response($json);
-        $response->headers->set('Content-Type', 'application/json');
-
-        return $response;
+        return $this->get('app.serializor')->serialize($arg);
     }
 
     /**

@@ -6,6 +6,7 @@ class AppTools
 {
     public static function slugify($slug)
     {
+        $slug = trim($slug);
         $slug = preg_replace('/\s|\'/', '-', $slug);
         $slug = str_replace(["à", "â", "ä"], 'a', $slug);
         $slug = str_replace(["ö", "ô"], 'o', $slug);

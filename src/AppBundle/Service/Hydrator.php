@@ -96,24 +96,33 @@ class Hydrator
                 mkdir($folder);
             }
 
+            $contents = $this->metaService->getRequest()->get('content');
+            $files = $this->metaService->getRequest()->files->get('image');
+
             $article = &$object;
             $article->setDate(new \DateTime());
 
-            if (!empty($files = $this->metaService->getRequest()->files->get('image'))) {
+            $nbOfChildComponents = count($contents);
 
+            for ($i = 0; $i < $nbOfChildComponents; $i++) {
+                $image = new Image();
+                $image->setTitle($article->getSlug());
+                $image->setArticle($article);
+                $article->addImage($image);
+            }
+
+            if (!empty($files)) {
                 foreach ($files as $key => $file) {
-                    $filename = $this->metaService->getFileUploader()->uploadFile($file);
-
-                    $image = new Image();
-                    $image->setSrc($filename);
-                    $image->setTitle($article->getSlug());
-
-                    if (!empty($contents = $this->metaService->getRequest()->get('content'))) {
-                        $image->setContent($contents[$key]);
+                    if (!is_null($file)) {
+                        $filename = $this->metaService->getFileUploader()->uploadFile($file);
+                        $article->getImages()[$key]->setSrc($filename);
                     }
+                }
+            }
 
-                    $image->setArticle($article);
-                    $article->addImage($image);
+            if (!empty($contents)) {
+                foreach ($contents as $key => $content) {
+                    $article->getImages()[$key]->setContent($content);
                 }
             }
         }
@@ -121,5 +130,52 @@ class Hydrator
         $this->metaService->persistAndFlush([$object]);
 
         return new JsonResponse("created", Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param object $object
+     */
+    public function updateObject($object)
+    {
+        if ($object instanceof Article) {
+            $article = &$object;
+            $images = $article->getImages();
+            $files = $this->metaService->getRequest()->files->get('image');
+            $contents = $this->metaService->getRequest()->request->get('content');
+
+            /* There are more images in the article than the number received from the form:
+               images have been removed
+            */
+            if (($delta = $images->count() - count($contents)) > 0) {
+                $i = 0;
+                while ($i < $delta) {
+                    $this->metaService->getEntityManager()->remove($images[$delta + $i]);
+                    $i++;
+                }
+            }
+
+            foreach ($contents as $key => $content) {
+
+                if($delta < 0) {
+                    if ($key < $images->count()) {
+                        $images[$key]->setContent($content);
+                        if (!empty($files)) {
+                            $filename = $this->metaService->getFileUploader()->uploadFile($files[$key]);
+                            $this->metaService->getFileUploader()->removeFile($images[$key]->getSrc());
+                            $images[$key]->setSrc($filename);
+                        }
+                    }
+                } else {
+                    $image = new Image();
+                    $filename = $this->metaService->getFileUploader()->uploadFile($files[$key]);
+                    $images[$key]->setSrc($filename);
+                    $article->addImage($image);
+                    $image->setArticle($article);
+                }
+            }
+
+        }
+
+        $this->metaService->flush();
     }
 }

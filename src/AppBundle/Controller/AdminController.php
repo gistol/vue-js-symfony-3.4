@@ -42,10 +42,51 @@ class AdminController extends Controller
      */
     public function deleteArticleAction($id, ObjectManager $manager)
     {
-        if(!is_null($article = $manager->getRepository(Article::class)->find($id))) {
-            $manager->remove($article);
+        $ret = $this->getArticle($id);
+
+        if ($ret instanceof Article) {
+            $manager->remove($ret);
             $manager->flush();
             return new JsonResponse('The article has been deleted.');
+        } else {
+            return $ret;
+        }
+    }
+
+    /**
+     * @Route("/admin/articles/edit/{id}", name="edit_article")
+     * @param int $id
+     * @param ObjectManager $manager
+     * @return JsonResponse
+     */
+    public function editArticleAction($id, Request $request, Hydrator $hydrator)
+    {
+        if ($request->isXmlHttpRequest()) {
+            if ($hydrator->isFormValid([Article::class, Image::class])) {
+                $ret = $this->getArticle($id);
+
+                if ($ret instanceof Article) {
+                    $hydrator->updateObject($ret);
+                    return new JsonResponse('The article has been updated.');
+                } else {
+                    return $ret;
+                }
+            } else {
+                return new JsonResponse('Formulaire invalide');
+            }
+        } else {
+            return $this->get('app.serializor')->serialize($this->getArticle($id));
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return Article|null|object|JsonResponse
+     */
+    private function getArticle($id)
+    {
+        if(!is_null($article = $this->getDoctrine()->getRepository(Article::class)->find($id))) {
+            return $article;
         } else {
             return new JsonResponse('Article not found.', Response::HTTP_BAD_REQUEST);
         }

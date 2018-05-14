@@ -46,7 +46,7 @@ const Router = new VueRouter({
                     props: true
                 },
                 {
-                    path: 'articles/edit/:slug',
+                    path: 'articles/edit/:id',
                     name: 'editArticle',
                     component: EditArticle,
                     props: true

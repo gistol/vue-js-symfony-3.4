@@ -7,13 +7,13 @@
                 </tr>
                 <tr>
                     <td>
-                        <img :src="'./images/' + article.images[0].src"/>
+                        <img v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <button v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
-                        <router-link  v-bind:to="{name: 'editArticle', params: {slug: article.slug}}">
+                        <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
                             <button>Editer</button>
                         </router-link>
                     </td>
@@ -28,6 +28,9 @@
     import Mixin from '../../mixins'
 
     export default {
+
+        name: 'ListArticles',
+
         data() {
             return {
                 articles: undefined

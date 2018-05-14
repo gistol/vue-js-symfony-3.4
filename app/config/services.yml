@@ -59,7 +59,13 @@ services:
         autowire: true
         arguments: ["@app.meta_service"]
         tags:
+          - { name: doctrine.event_listener, event: preUpdate }
           - { name: doctrine.event_listener, event: preRemove }
+
+    app.serializor:
+        class: AppBundle\Service\Serializor
+        public: true
+        autowire: true
 
 
 
