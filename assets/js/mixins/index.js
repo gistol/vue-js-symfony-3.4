@@ -14,17 +14,27 @@ const Mixins = {
         'child-form': {
             template:
             "<div>" +
-            "<label for='image'>Image {{ item }}</label>" +
-            "<input type='file' value=''/>" +
-            "<label>Contenu {{ item }}</label>" +
+            "<label for='image'>Image {{ item + 1 }}</label>" +
+            "<img v-if='this.$props.image.src !== undefined' :src='src' />" +
+            "<input type='file'/>" +
+            "<label>Contenu {{ item + 1 }}</label>" +
             "<input type='text' :value='image.content'/>" +
             "<button v-on:click='remove'>Supprimer</button>" +
             "</div>",
-            props: ['item', 'image'],
-            mounted() {
-                this.$el.querySelector('input[type="file"]').setAttribute('name', 'image[' + this.item + ']');
-                this.$el.querySelector('input[type="text"]').setAttribute('name', 'content[' + this.item + ']');
+
+            data() {
+                return {
+                    src: './images/' + this.$props.image.src
+                }
             },
+
+            props: ['item', 'image'],
+
+            mounted() {
+                this.$el.querySelector('input[type="file"]').setAttribute('name', 'image[' + (this.item) + ']');
+                this.$el.querySelector('input[type="text"]').setAttribute('name', 'content[' + (this.item) + ']');
+            },
+
             methods: {
                 remove(e) {
                     e.target.parentNode.remove();
@@ -53,8 +63,8 @@ const Mixins = {
         /* Common to CreateArticle and EditArticle components */
 
         addForm() {
-            this.nbImages++;
             this.images.push(this.nbImages);
+            this.nbImages++;
         },
 
         /* Common to CreateArticle and EditArticle components */
@@ -82,7 +92,7 @@ const Mixins = {
 
         handleEdition() {
             this.handleSubmit('articles/edit/' + this.$route.params.id);
-        }
+        },
     },
 
     created() {

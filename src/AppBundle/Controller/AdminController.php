@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Image;
 use AppBundle\Service\Hydrator;
+use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -20,12 +21,14 @@ class AdminController extends Controller
      * @param ObjectManager $manager
      * @return JsonResponse
      */
-    public function createArticleAction(Request $request, Hydrator $hydrator)
+    public function createArticleAction(Request $request, Hydrator $hydrator, MetaService $metaService)
     {
         if ($request->isXmlHttpRequest()) {
 
             if ($hydrator->isFormValid([Article::class, Image::class])) {
-                return $hydrator->hydrateObject(Article::class);
+                $object = $hydrator->hydrateObject(Article::class);
+                $metaService->persistAndFlush([$object]);
+                return new JsonResponse("created", Response::HTTP_CREATED);
             } else {
                 return new JsonResponse('Formulaire invalide');
             }
