@@ -148,6 +148,7 @@ class Hydrator
             }
         }
 
+
         if (!empty($contents)) {
 
             foreach ($contents as $key => $content) {
@@ -162,9 +163,8 @@ class Hydrator
                     $image->setTitle($article->getSlug());
                     $image->setArticle($article);
                     $article->addImage($image);
+                    $image->setContent($contents[$key]);
                 }
-
-                $image->setContent($contents[$key]);
             }
         }
 
