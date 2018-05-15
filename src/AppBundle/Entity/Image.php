@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Image

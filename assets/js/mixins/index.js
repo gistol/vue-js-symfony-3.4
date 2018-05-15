@@ -37,6 +37,7 @@ const Mixins = {
 
             methods: {
                 remove(e) {
+                    this.$emit('decrement');
                     e.target.parentNode.remove();
                 }
             }

@@ -148,20 +148,19 @@ class Hydrator
             }
         }
 
-
         if (!empty($contents)) {
 
             foreach ($contents as $key => $content) {
 
                 if (array_key_exists($key, $files) && !is_null($file = $files[$key])) {
                     $image = new Image();
-                    if(!empty($images[$key])) {
+                    if (!empty($images[$key])) {
                         $this->metaService->getEntityManager()->remove($images[$key]);
                     }
                     $filename = $this->metaService->getFileUploader()->uploadFile($file);
-                    $image->setSrc($filename);
                     $image->setTitle($article->getSlug());
                     $image->setArticle($article);
+                    $image->setSrc($filename);
                     $article->addImage($image);
                     $image->setContent($contents[$key]);
                 }

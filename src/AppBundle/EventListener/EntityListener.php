@@ -29,8 +29,8 @@ class EntityListener
 
         if ($entity instanceof Image) {
             $file = $entity->getSrc();
-            $this->metaService->info("Removed file " . $file, ['EntityListener' => $entity->getArticle()->getTitle()]);
             $this->metaService->getFileUploader()->removeFile($file);
+            $this->metaService->info("Removed file " . $file, ['EntityListener' => $entity->getArticle()->getTitle()]);
         }
     }
 }
