@@ -7,7 +7,7 @@
                 <input type="text" id="title" name="title" v-model="title"/>
             </div>
 
-            <child-form v-for="(image, i) in images" :item="i" :image="image"></child-form>
+            <child-form v-for="(image, i) in images" :item="i" :key='image' :image="image"></child-form>
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 

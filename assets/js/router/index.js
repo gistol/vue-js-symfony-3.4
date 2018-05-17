@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 /* Components */
+import User from '../components/User';
 import Homepage from '../components/Homepage';
 import Article from '../components/Article';
 import Admin from '../components/admin/Admin';
@@ -20,14 +21,20 @@ const Router = new VueRouter({
     routes: [
         {
             path: '/',
-            name: 'home_user',
-            component: Homepage,
-        },
-        {
-            path: '/article/:slug',
-            name: 'article',
-            component: Article,
-            props: true
+            component: User,
+            children: [
+                {
+                    path: '',
+                    name: 'home_user',
+                    component: Homepage,
+                },
+                {
+                    path: 'article/:slug',
+                    name: 'article',
+                    component: Article,
+                    props: true
+                },
+            ]
         },
         {
             path: '/admin',

@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        <p>Oops, page non trouvée ! </p>
     </div>
 </template>
 
@@ -8,11 +8,5 @@
 
     export default {
         name: 'PageNotFound',
-
-        data() {
-            return {
-
-            }
-        },
     }
 </script>

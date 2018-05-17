@@ -25,19 +25,23 @@
 
 <script>
 
-    import Mixin from '../../mixins'
+    import Mixin from '../../mixins';
 
     export default {
 
         name: 'ListArticles',
 
         data() {
-            return {
-                articles: undefined
+            return {}
+        },
+
+        computed: {
+            articles() {
+                return this.$store.state.articles
             }
         },
 
-        mixins: [Mixin],
+        Mixins: [Mixin],
 
         methods: {
             deleteArticle(e) {
@@ -55,8 +59,14 @@
             }
         },
 
-        beforeMount() {
-            this.getArticles();
+        created() {
+            this.$store.dispatch('getArticles');
         },
     }
 </script>
+
+<style scoped>
+    img {
+        width: 30%;
+    }
+</style>

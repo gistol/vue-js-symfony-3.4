@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div v-for='article in articles' class="article">
-            <h1> {{ article.title }} </h1>
+            <h2> {{ article.title }} </h2>
             <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                 <div v-if="index === 0" v-for="(image, index) in article.images">
                     <img :src="'./images/' + image.src" :alt="image.title"/>
@@ -21,16 +21,20 @@
         name: 'Homepage',
 
         data(){
-            return {
-                articles: undefined,
-                image: undefined
+            return {}
+        },
+
+        computed: {
+            articles() {
+                return this.$store.state.articles
             }
         },
 
         mixins: [Mixin],
 
-        beforeMount() {
-            this.getArticles();
+        created() {
+            this.$store.dispatch('getArticles');
+            this.$store.dispatch('getCsrfToken');
         },
     }
 </script>

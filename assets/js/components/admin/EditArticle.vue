@@ -29,6 +29,12 @@
 
         mixins: [Mixin],
 
+        computed: {
+            csrf_token() {
+                return this.$store.state.csrf_token;
+            }
+        },
+
         created() {
             fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/articles/edit/' + this.$route.params.id)
                 .then((data) => data.json())
@@ -43,7 +49,15 @@
                 })
                 .catch((err) => {
                     console.log(err);
-                })
+                });
+
+            this.$store.dispatch('getCsrfToken');
         }
     }
 </script>
+
+<style scoped>
+    img {
+        width: 30%;
+    }
+</style>

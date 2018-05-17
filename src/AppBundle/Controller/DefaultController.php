@@ -48,15 +48,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @param $arg
-     * @return Response
-     */
-    private function getJson($arg)
-    {
-        return $this->get('app.serializor')->serialize($arg);
-    }
-
-    /**
      * @Route("/article/{slug}", name="article")
      * @param string $slug
      * @return Response
@@ -64,5 +55,14 @@ class DefaultController extends Controller
     public function getArticleAction($slug, ObjectManager $manager)
     {
         return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
+    }
+
+    /**
+     * @param $arg
+     * @return Response
+     */
+    private function getJson($arg)
+    {
+        return $this->get('app.serializor')->serialize($arg);
     }
 }

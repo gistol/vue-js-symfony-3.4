@@ -5,31 +5,40 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
     state:{
-        articles: [],
+        articles: undefined,
+        csrf_token: undefined
     },
-    mutations: {
 
+    mutations: {
+        addArticles(state, articles) {
+            state.articles = articles
+        },
+
+        addCsrfToken(state, csrf_token) {
+            state.csrf_token = csrf_token
+        }
     },
+
     actions: {
 
-        getCsrfToken() {
+        getCsrfToken(context) {
 
-            return new Promise((resolve, reject) => {
+            const req = getRequestObject("GET", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
 
-                const req = getRequestObject("GET", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
+            req.addEventListener("load", () => {
 
-                req.addEventListener("load", () => {
-
-                    if (req.status >= 200 && req.status < 400) {
-                        const resp = JSON.parse(req.responseText);
-                        resolve(resp.csrf_token);
-                    } else {
-                        reject(req.responseText);
+                if (req.status >= 200 && req.status < 400) {
+                    const resp = JSON.parse(req.responseText);
+                    context.commit('addCsrfToken', resp.csrf_token);
+                } else {
+                    console.log(req.responseText);
+                    if (this.$route.name === 'login') {
+                        this.$store.push({name: 'login'})
                     }
-                });
-
-                req.send();
+                }
             });
+
+            req.send();
         },
 
         postData(context, data) {
@@ -52,7 +61,21 @@ const Store = new Vuex.Store({
 
                 req.send(data.value);
             });
-        }
+        },
+
+        getArticles(context) {
+            fetch('/vue-js-symfony-3.4/web/app_dev.php/articles')
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.length > 0) {
+                        console.log(data);
+                        context.commit('addArticles', data);
+                    }
+                })
+                .catch((err) => {
+                    console.log('Erreur : ' + err)
+                })
+        },
     }
 });
 

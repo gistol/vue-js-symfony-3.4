@@ -22,8 +22,13 @@
         data() {
             return {
                 username: undefined,
-                password: undefined,
-                csrf_token: undefined
+                password: undefined
+            }
+        },
+
+        computed: {
+            csrf_token() {
+                return this.$store.state.csrf_token;
             }
         },
 
@@ -50,12 +55,7 @@
         },
 
         created() {
-            this.$store.dispatch('getCsrfToken').then((data) => {
-                this.csrf_token = data
-            }).catch((err) => {
-                console.log(err);
-                this.$store.push({name: 'login'})
-            })
+            this.$store.dispatch('getCsrfToken');
         }
     }
 </script>

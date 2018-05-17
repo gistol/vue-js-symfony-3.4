@@ -4,7 +4,6 @@ const Mixins = {
         return {
             value: '',
             title: '',
-            csrf_token: undefined,
             images: [],
             nbImages: 0
         }
@@ -46,21 +45,6 @@ const Mixins = {
 
     methods: {
 
-        /* Common to Homepage and ListArticles components */
-
-        getArticles() {
-            fetch('/vue-js-symfony-3.4/web/app_dev.php/articles')
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.length > 0) {
-                        this.articles = data;
-                    }
-                })
-                .catch((err) => {
-                    console.log('Erreur : ' + err)
-                })
-        },
-
         /* Common to CreateArticle and EditArticle components */
 
         addForm() {
@@ -94,12 +78,6 @@ const Mixins = {
         handleEdition() {
             this.handleSubmit('articles/edit/' + this.$route.params.id);
         },
-    },
-
-    created() {
-        this.$store.dispatch('getCsrfToken').then((data) => {
-            this.csrf_token = data
-        });
     },
 };
 
