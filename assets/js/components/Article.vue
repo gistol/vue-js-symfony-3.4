@@ -4,11 +4,11 @@
             <img :src="'./images/' + image.src" :alt='image.title' />
             <figcaption>{{ image.content }}</figcaption>
         </figure>
-        <form v-on:submit.prevent="handleSubmit">
+        <form v-on:submit.prevent="handleComment" enctype="multipart/form-data">
 
             <div>
-                <label for="name">Nom</label>
-                <input type="text" id="name" name="name" v-model="name"/>
+                <label for="username">Nom</label>
+                <input type="text" id="username" name="username" v-model="username"/>
             </div>
 
             <div>
@@ -30,12 +30,15 @@
 </template>
 
 <script>
+
+    import Mixin from '../mixins';
+
     export default {
         name: 'Article',
 
         data() {
             return {
-                name: undefined,
+                username: undefined,
                 email: undefined,
                 comment: undefined,
                 article: undefined,
@@ -47,6 +50,8 @@
                 return this.$store.state.csrf_token;
             }
         },
+
+        mixins: [Mixin],
 
         created() {
             this.getArticle(this.$route.params.slug);

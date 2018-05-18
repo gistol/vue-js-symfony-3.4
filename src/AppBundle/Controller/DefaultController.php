@@ -3,11 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Comment;
+use AppBundle\Service\Hydrator;
+use AppBundle\Service\MetaService;
 use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -64,5 +68,34 @@ class DefaultController extends Controller
     private function getJson($arg)
     {
         return $this->get('app.serializor')->serialize($arg);
+    }
+
+    /**
+     * @Route("/article/{slug}/comment", name="handle_comment")
+     * @param string $slug
+     * @param Request $request
+     * @param Hydrator $hydrator
+     * @param MetaService $metaService
+     * @return JsonResponse
+     */
+    public function handleCommentAction($slug, ObjectManager $manager, Request $request, Hydrator $hydrator, MetaService $metaService)
+    {
+        if (is_null($article = $manager->getRepository(Article::class)->findOneBy(['slug' => $slug]))) {
+            return new JsonResponse("Article inconnu", Response::HTTP_NOT_FOUND);
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            if ($hydrator->isFormValid([Comment::class])) {
+                $comment = $hydrator->hydrateObject(Comment::class);
+                $article->addComment($comment);
+                $comment->setArticle($article);
+                $metaService->persistAndFlush([$comment]);
+                return new JsonResponse("Votre commentaire a bien été envoyé !");
+            } else {
+                return new JsonResponse('Formulaire invalide');
+            }
+        } else {
+            return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
+        }
     }
 }

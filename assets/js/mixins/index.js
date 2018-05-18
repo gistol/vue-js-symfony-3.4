@@ -52,32 +52,40 @@ const Mixins = {
             this.nbImages++;
         },
 
-        /* Common to CreateArticle and EditArticle components */
+        /* Common to CreateArticle, EditArticle and Article component (comments) */
 
         handleSubmit(uri) {
 
-            if (this.title.length < 3) {
-                alert("Le titre doit contenir au moins 3 caractères.");
-            } else {
-                this.$store.dispatch('postData', {
-                    url: '/vue-js-symfony-3.4/web/app_dev.php/admin/' + uri,
-                    value: new FormData(this.$el.querySelector('form'))
-                }).then((data) => {
-                    console.log(data);
-                }).catch((err) => {
-                    console.log('Erreur : ' + err)
-                });
+            const route = this.$route.name;
 
+            if (route === "createArticle" || route === "editArticle") {
+                if (this.title.length < 3) {
+                    alert("Le titre doit contenir au moins 3 caractères.");
+                    return;
+                }
             }
+
+            this.$store.dispatch('postData', {
+                url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
+                value: new FormData(this.$el.querySelector('form'))
+            }).then((data) => {
+                console.log(data);
+            }).catch((err) => {
+                console.log('Erreur : ' + err)
+            });
         },
 
         handleCreation() {
-            this.handleSubmit('create');
+            this.handleSubmit('/admin/create');
         },
 
         handleEdition() {
-            this.handleSubmit('articles/edit/' + this.$route.params.id);
+            this.handleSubmit('/admin/articles/edit/' + this.$route.params.id);
         },
+
+        handleComment() {
+            this.handleSubmit('/article/' + this.$route.params.slug + '/comment');
+        }
     },
 };
 

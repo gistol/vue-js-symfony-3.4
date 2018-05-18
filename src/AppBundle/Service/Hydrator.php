@@ -3,9 +3,8 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 
 class Hydrator
 {
@@ -72,7 +71,7 @@ class Hydrator
     /**
      * Function to hydrate the specified object
      * No need to validate fields as already done
-     * @return object
+     * @return Article|Comment
      * @param $class
      */
     public function hydrateObject($class)

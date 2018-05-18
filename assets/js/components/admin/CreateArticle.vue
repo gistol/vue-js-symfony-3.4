@@ -29,8 +29,15 @@
 
         mixins: [Mixin],
 
+        computed: {
+            csrf_token() {
+                return this.$store.state.csrf_token;
+            }
+        },
+
         created() {
             this.addForm();
+            this.$store.dispatch('getCsrfToken');
         }
     }
 
