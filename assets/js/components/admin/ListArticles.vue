@@ -37,7 +37,7 @@
 
         computed: {
             articles() {
-                return this.$store.state.articles
+                return this.$store.state.articles;
             }
         },
 
@@ -57,6 +57,10 @@
                     console.log("Erreur : " + err);
                 });
             }
+        },
+
+        beforeRouteUpdate(to, next, from) {
+            this.$store.state.loading = true
         },
 
         created() {

@@ -10,7 +10,12 @@
 
         data() {
             return {
+                comments: undefined
             }
         },
+
+        created() {
+
+        }
     }
 </script>

@@ -31,6 +31,7 @@
 
 <script>
 
+    import mapState from 'vuex';
     import Mixin from '../mixins';
 
     export default {

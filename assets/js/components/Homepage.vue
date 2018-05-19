@@ -15,6 +15,7 @@
 
 <script>
 
+    import { mapState } from 'vuex';
     import Mixin from '../mixins';
 
     export default {
@@ -24,11 +25,9 @@
             return {}
         },
 
-        computed: {
-            articles() {
-                return this.$store.state.articles
-            }
-        },
+        computed: mapState({
+            articles: (state) => state.articles
+        }),
 
         mixins: [Mixin],
 

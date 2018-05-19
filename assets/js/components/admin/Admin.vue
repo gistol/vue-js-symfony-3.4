@@ -9,6 +9,7 @@
                 <a id="logout" v-on:click="logout">Déconnexion</a>
             </ul>
         </nav>
+        <p v-if="loading">Chargement café</p>
         <router-view></router-view>
     </div>
 </template>
@@ -20,6 +21,7 @@
 
         data() {
             return {
+                loading: false,
                 title: undefined,
             }
         },
