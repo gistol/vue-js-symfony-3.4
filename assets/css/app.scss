@@ -73,6 +73,13 @@ h1 {
   }
 }
 
+form {
+  @include width(100%);
+  $array: text, 'email', 'password';
+  @include loopInput($array, 'width', 100%);
+  @include loopInput($array, 'padding', 5px);
+}
+
 .btn {
   @include borderRadius(10px);
   @extend %pointer;
@@ -90,4 +97,18 @@ h1 {
 
 table img{
   width: 100%;
+}
+
+footer{
+  @include height(100px);
+  @extend %border-box;
+  @extend %flex;
+  @extend %align-center;
+  background: #eee;
+
+  form {
+    @include width(30%);
+    @extend %margin-auto;
+    @extend %flex;
+  }
 }

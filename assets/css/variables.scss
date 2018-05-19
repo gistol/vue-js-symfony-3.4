@@ -17,6 +17,11 @@
   -webkit-flex-wrap: wrap;
 }
 
+%align-center{
+  align-items: center;
+  -webkit-align-items: center;
+}
+
 %pointer {
   cursor: pointer;
 }
@@ -57,6 +62,14 @@
 
 @mixin padding($padding) {
   padding: $padding;
+}
+
+@mixin loopInput($array, $rule, $value) {
+  @each $item in $array {
+    input[type=#{$item}]{
+      #{$rule}: #{$value}
+    }
+  }
 }
 
 $purple: rebeccapurple;

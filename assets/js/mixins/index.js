@@ -5,7 +5,10 @@ const Mixins = {
             value: '',
             title: '',
             images: [],
-            nbImages: 0
+            nbImages: 0,
+            enctype: 'multipart/form-data',
+            newsletter: undefined,
+            newsletterFormValid: false
         }
     },
 
@@ -41,6 +44,18 @@ const Mixins = {
                 }
             }
         },
+    },
+
+    watch: {
+        newsletter(val) {
+            const field = this.$refs.newsletter;
+            if (!new RegExp(/^[\w.-]+@[\w.-]{2,}\.[a-z]{2,4}$/).test(val)) {
+                field.style.border = "2px solid red";
+            } else {
+                field.style.border = "2px solid green";
+                this.newsletterFormValid = true;
+            }
+        }
     },
 
     methods: {
@@ -85,6 +100,14 @@ const Mixins = {
 
         handleComment() {
             this.handleSubmit('/article/' + this.$route.params.slug + '/comment');
+        },
+
+        addToNewsletter() {
+            if (this.newsletterFormValid) {
+                this.handleSubmit('/newsletter');
+            } else {
+                alert("Adresse email invalide !");
+            }
         }
     },
 };

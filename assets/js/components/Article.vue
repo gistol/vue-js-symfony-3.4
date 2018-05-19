@@ -4,7 +4,8 @@
             <img :src="'./images/' + image.src" :alt='image.title' />
             <figcaption>{{ image.content }}</figcaption>
         </figure>
-        <form v-on:submit.prevent="handleComment" enctype="multipart/form-data">
+
+        <form v-show="show" v-on:submit.prevent="handleComment" enctype="multipart/form-data">
 
             <div>
                 <label for="username">Nom</label>
@@ -26,6 +27,7 @@
             <input type="submit"/>
 
         </form>
+        <button @click="showForm">Commenter</button>
     </div>
 </template>
 
@@ -43,6 +45,7 @@
                 email: undefined,
                 comment: undefined,
                 article: undefined,
+                show: false
             }
         },
 
@@ -56,7 +59,7 @@
 
         created() {
             this.getArticle(this.$route.params.slug);
-            this.$store.dispatch('getCsrfToken')
+            this.$store.dispatch('getCsrfToken');
         },
 
         methods: {
@@ -69,6 +72,11 @@
                     .catch((err) => {
                         console.log('Err => ' + err)
                     })
+            },
+
+            showForm(e) {
+                this.show = !this.show;
+                e.target.innerText = this.show ? "Masquer" : "Commenter";
             }
         }
     }

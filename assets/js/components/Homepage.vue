@@ -3,9 +3,9 @@
         <div v-for='article in articles' class="article">
             <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                 <img v-if="index === 0" v-for="(image, index) in article.images" :src="'./images/' + image.src" :alt="image.title"/>
+                <h2>{{ article.title }}</h2>
             </router-link>
 
-                <h2>{{ article.title }}</h2>
             <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                 <button class="button-link">En savoir plus</button>
             </router-link>
