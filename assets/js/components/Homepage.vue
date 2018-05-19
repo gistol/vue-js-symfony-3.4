@@ -1,14 +1,15 @@
 <template>
     <div class="container">
         <div v-for='article in articles' class="article">
-            <h2> {{ article.title }} </h2>
             <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                <div v-if="index === 0" v-for="(image, index) in article.images">
-                    <img :src="'./images/' + image.src" :alt="image.title"/>
-                    <p>{{ image.content }}</p>
-                </div>
-                Accéder à l'article
+                <img v-if="index === 0" v-for="(image, index) in article.images" :src="'./images/' + image.src" :alt="image.title"/>
             </router-link>
+
+                <h2>{{ article.title }}</h2>
+            <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
+                <button class="button-link">En savoir plus</button>
+            </router-link>
+
         </div>
     </div>
 </template>

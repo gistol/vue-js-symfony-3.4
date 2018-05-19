@@ -1,0 +1,64 @@
+%block {
+  display: block;
+}
+
+%flex {
+  display: flex;
+  display: -webkit-flex;
+}
+
+%space-around {
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+}
+
+%wrap {
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+}
+
+%pointer {
+  cursor: pointer;
+}
+
+%border-box {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+%no-border {
+  border: none;
+}
+
+%text-center {
+  text-align: center;
+}
+
+%margin-auto {
+  margin: auto;
+}
+
+%no-underline {
+  text-decoration: none;
+}
+
+@mixin height($height) {
+  height: $height;
+}
+
+@mixin width($width) {
+  width: $width;
+}
+
+@mixin borderRadius($angle) {
+  border-radius: $angle;
+}
+
+@mixin padding($padding) {
+  padding: $padding;
+}
+
+$purple: rebeccapurple;
+$medium-purple: mediumpurple;
+$light-grey: #eee;

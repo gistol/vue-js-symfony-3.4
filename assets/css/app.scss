@@ -1,18 +1,11 @@
-%pointer{
-  cursor: pointer;
-}
+@import "variables";
 
-%bbox{
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+body{
+  font-family: 'Helvetica', sans-serif;
 }
-
-$blue: #009499;
 
 /* Admin */
 #logout:hover{
-  color: orangered;
   @extend %pointer;
 }
 
@@ -23,15 +16,14 @@ html, body, #app, nav, nav ul, h1{
 }
 
 nav{
-  background: #eee;
+  background: $purple;
   width: 100%;
-  height: 60px;
+  @include height(60px);
 }
 
 nav ul{
-  display: flex;
-  display: -webkit-flex;
-  height: 100%;
+  @extend %flex;
+  @include height(100%);
   align-items: center;
   list-style: none;
 }
@@ -40,43 +32,60 @@ nav ul li {
   width: 10vw;
   height: 100%;
   line-height: 60px;
-  text-align: center;
+  @extend %text-center;
   @extend %pointer;
+  color: white;
 }
 
 nav ul li:hover{
-  background: #7DA0B1;
+  background: $medium-purple;
 }
 
 h1 {
-  background: $blue;
-  text-align: center;
+  background: $light-grey;
+  @extend %text-center;
 }
 
 .container *{
-  @extend %bbox;
+  @extend %border-box;
 }
 
 .container {
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  display: -webkit-flex;
-  flex-wrap: wrap;
-  -webkit-flex-wrap: wrap;
-  justify-content: space-around;
-  -webkit-justify-content: space-around;
+  @include width(80%);
+  @extend %flex;
+  @extend %wrap;
+  @extend %space-around;
+  @extend %margin-auto;
 }
 
 .article {
-  width: 30%;
+  @include width(30%);
   padding: 5px;
   border: 1px solid #d8d8d8;
   margin-top: 5px;
+
+  img{
+    @include width(100%);
+  }
+
+  a {
+    @extend %no-underline;
+  }
 }
 
-img{
-  width: 30%;
+.btn {
+  @include borderRadius(10px);
+  @extend %pointer;
+  @extend %margin-auto;
+  @extend %block;
+  @extend %no-border;
+  color: white;
+}
+
+.button-link{
+  @extend .btn;
+  @include padding(10px);
+  background: $purple;
 }
 
 table img{
