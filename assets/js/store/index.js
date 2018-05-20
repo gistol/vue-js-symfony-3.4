@@ -5,13 +5,21 @@ Vue.use(Vuex);
 
 const Store = new Vuex.Store({
     state:{
-        articles: undefined,
+        articles: [],
+        remain: true,
+        lastId: 0,
         csrf_token: undefined
     },
 
     mutations: {
         addArticles(state, articles) {
-            state.articles = articles
+            articles.forEach((article, index, array) => {
+                /* Getting the id of the last article in the array for the next request */
+                if (index === array.length - 1) {
+                    this.lastId = article.id;
+                }
+                state.articles.push(article)
+            });
         },
 
         addCsrfToken(state, csrf_token) {
@@ -31,7 +39,6 @@ const Store = new Vuex.Store({
                     const resp = JSON.parse(req.responseText);
                     context.commit('addCsrfToken', resp.csrf_token);
                 } else {
-                    console.log(req.responseText);
                     if (this.$route.name === 'login') {
                         this.$store.push({name: 'login'})
                     }
@@ -64,11 +71,13 @@ const Store = new Vuex.Store({
         },
 
         getArticles(context) {
-            fetch('/vue-js-symfony-3.4/web/app_dev.php/articles')
+            fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
                 .then((res) => res.json())
                 .then((data) => {
+                    if (data.length < 9) {
+                        context.state.remain = false;
+                    }
                     if (data.length > 0) {
-                        console.log(data);
                         context.commit('addArticles', data);
                     }
                 })

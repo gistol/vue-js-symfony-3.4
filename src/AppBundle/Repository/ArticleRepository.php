@@ -10,4 +10,17 @@ namespace AppBundle\Repository;
  */
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param $id
+     * @return array
+     */
+    public function myFindBy($id)
+    {
+        $qb = $this->createQueryBuilder('a')
+        ->where('a.id > :id')
+        ->setParameter('id', $id)
+        ->setMaxResults(9);
+
+        return $qb->getQuery()->getResult();
+    }
 }

@@ -42,11 +42,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/articles", name="articles")
+     * @Route("/articles/{id}", name="articles")
      */
-    public function getArticlesAction(ObjectManager $manager)
+    public function getArticlesAction(ObjectManager $manager, $id)
     {
-        $articles = $manager->getRepository(Article::class)->findAll();
+        $articles = $manager->getRepository(Article::class)->myFindBy($id);
 
         return $this->getJson($articles);
     }

@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <form v-on:submit.prevent="handleSubmit" enctype="multipart/form-data">
+    <div class="container">
+        <form v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" v-model="username"/>
 
@@ -9,7 +9,7 @@
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
-            <input type="submit"/>
+            <input type="submit" class="btn"/>
         </form>
     </div>
 </template>
@@ -22,14 +22,18 @@
         data() {
             return {
                 username: undefined,
-                password: undefined
+                password: undefined,
+                style: {
+                    width: '50%',
+                    marginTop: '80px'
+                }
             }
         },
 
         computed: {
             csrf_token() {
                 return this.$store.state.csrf_token;
-            }
+            },
         },
 
         methods: {

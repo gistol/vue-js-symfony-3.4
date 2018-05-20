@@ -23,5 +23,6 @@
     export default {
         name: 'User',
         mixins: [Mixin]
+
     }
 </script>

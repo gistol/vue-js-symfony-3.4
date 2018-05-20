@@ -48,6 +48,10 @@
   text-decoration: none;
 }
 
+%max-width {
+  width: 100%;
+}
+
 @mixin height($height) {
   height: $height;
 }

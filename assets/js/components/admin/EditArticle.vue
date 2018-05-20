@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <form v-on:submit.prevent="handleEdition" enctype="multipart/form-data">
+        <form v-on:submit.prevent="handleEdition" :enctype='enctype'>
 
             <div>
                 <label for="title">Titre</label>

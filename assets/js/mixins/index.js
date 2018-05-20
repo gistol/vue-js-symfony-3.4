@@ -26,6 +26,7 @@ const Mixins = {
 
             data() {
                 return {
+                    /* Child component src */
                     src: './images/' + this.$props.image.src
                 }
             },
@@ -61,7 +62,6 @@ const Mixins = {
     methods: {
 
         /* Common to CreateArticle and EditArticle components */
-
         addForm() {
             this.images.push(this.nbImages);
             this.nbImages++;

@@ -52,10 +52,14 @@ h1 {
 
 .container {
   @include width(80%);
+  @extend %margin-auto;
+}
+
+.container_flex {
+  @extend .container;
   @extend %flex;
   @extend %wrap;
   @extend %space-around;
-  @extend %margin-auto;
 }
 
 .article {
@@ -78,21 +82,34 @@ form {
   $array: text, 'email', 'password';
   @include loopInput($array, 'width', 100%);
   @include loopInput($array, 'padding', 5px);
+  @include loopInput('submit', 'padding', 5px);
+}
+
+label {
+  padding: 5px;
+  @extend %block;
+  margin-bottom: 2px;
+  background: $light-grey;
 }
 
 .btn {
-  @include borderRadius(10px);
+  @include borderRadius(7px);
   @extend %pointer;
   @extend %margin-auto;
   @extend %block;
   @extend %no-border;
+  @include padding(10px);
   color: white;
 }
 
 .button-link{
   @extend .btn;
-  @include padding(10px);
   background: $purple;
+}
+
+.btn-submit {
+  @extend .button-link;
+  background: $medium-purple;
 }
 
 table img{

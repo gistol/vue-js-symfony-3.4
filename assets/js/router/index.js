@@ -67,6 +67,10 @@ const Router = new VueRouter({
                     path: 'comments',
                     name: 'comments',
                     component: Comment
+                },
+                {
+                    path: 'logout',
+                    name: 'logout'
                 }
             ],
             meta: {

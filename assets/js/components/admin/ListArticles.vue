@@ -20,6 +20,7 @@
                 </tr>
             </tbody>
         </table>
+        <button v-on:click="addArticles">Plus d'articles</button>
     </div>
 </template>
 
@@ -30,10 +31,6 @@
     export default {
 
         name: 'ListArticles',
-
-        data() {
-            return {}
-        },
 
         computed: {
             articles() {
@@ -56,6 +53,10 @@
                 .catch((err) => {
                     console.log("Erreur : " + err);
                 });
+            },
+
+            addArticles() {
+                this.$store.dispatch('getArticles');
             }
         },
 

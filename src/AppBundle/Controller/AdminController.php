@@ -18,7 +18,8 @@ class AdminController extends Controller
     /**
      * @Route("/admin/create", name="create_article")
      * @param Request $request
-     * @param ObjectManager $manager
+     * @param Hydrator $hydrator
+     * @param MetaService $metaService
      * @return JsonResponse
      */
     public function createArticleAction(Request $request, Hydrator $hydrator, MetaService $metaService)
