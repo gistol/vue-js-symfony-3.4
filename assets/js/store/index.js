@@ -6,6 +6,7 @@ Vue.use(Vuex);
 const Store = new Vuex.Store({
     state:{
         articles: [],
+        endloading: false,
         remain: true,
         lastId: 0,
         csrf_token: undefined
@@ -18,7 +19,8 @@ const Store = new Vuex.Store({
                 if (index === array.length - 1) {
                     this.lastId = article.id;
                 }
-                state.articles.push(article)
+                state.articles.push(article);
+                state.endloading = true;
             });
         },
 

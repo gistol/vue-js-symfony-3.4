@@ -70,6 +70,21 @@
   width: $width;
 }
 
+@mixin widthArticle() {
+
+  @media all and (min-width: 1024px) {
+    width: 30%;
+  }
+
+  @media all and (min-width: 768px) and (max-width: 1024px) {
+    width: 48%;
+  }
+
+  @media all and (max-width: 768px) {
+    width: 95%;
+  }
+}
+
 @mixin borderRadius($angle) {
   border-radius: $angle;
 }

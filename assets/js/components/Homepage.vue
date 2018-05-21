@@ -3,17 +3,23 @@
         <div class="container_flex">
             <div v-for='article in articles' class="article">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                    <img v-if="index === 0" v-for="(image, index) in article.images" :src="'./images/' + image.src" :alt="image.title"/>
+                    <div :style="{
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        height: '225px',
+                        backgroundImage: 'url('+'./images/' + image.src +')'
+                     }" v-if="index === 0" v-for="(image, index) in article.images" :alt="image.title">
+                    </div>
                     <h2>{{ article.title }}</h2>
                 </router-link>
 
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                    <button class="button-link">En savoir plus</button>
+                    <button class="button-link m10">En savoir plus</button>
                 </router-link>
             </div>
         </div>
         <div class="container">
-            <button v-if="$store.state.remain" v-on:click="addArticles">Plus d'articles</button>
+            <button v-if="$store.state.remain" v-show="endloading" v-on:click="addArticles" class="button-default">Plus d'articles</button>
         </div>
     </div>
 </template>
@@ -27,7 +33,8 @@
         name: 'Homepage',
 
         computed: mapState({
-            articles: (state) => state.articles
+            articles: (state) => state.articles,
+            endloading: (state) => state.endloading
         }),
 
         mixins: [Mixin],

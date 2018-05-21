@@ -10,7 +10,7 @@ body{
 }
 
 /* All */
-html, body, #app, nav, nav ul, h1{
+html, body, #app, nav, nav ul{
   padding: 0;
   margin: 0;
 }
@@ -37,18 +37,9 @@ nav ul li {
   @extend %pointer;
 }
 
-input[type='submit'] {
-
-}
-
 nav ul li:hover,
 button:hover {
   background: $medium-purple;
-}
-
-h1 {
-  background: $light-grey;
-  @extend %text-center;
 }
 
 #app_user {
@@ -58,19 +49,18 @@ h1 {
   /* Footer */
 
   footer{
-    position: absolute;
     @include width(100%);
-    @include height(100px);
     @extend %border-box;
     @extend %flex;
     @extend %align-center;
     background: $purple;
-    bottom: 0;
+    height: 100px;
 
     form {
+      height: 30px;
+      @extend %flex;
       @include width(30%);
       @extend %margin-auto;
-      @extend %flex;
     }
   }
 }
@@ -80,8 +70,15 @@ h1 {
 }
 
 .container {
-  @include width(80%);
-  @extend %margin-auto;
+  margin: 50px auto;
+
+  @media all and (min-width: 1024px){
+    @include width(80%);
+  }
+
+  @media all and (max-width: 1024px){
+    @include width(100%);
+  }
 }
 
 .container_flex {
@@ -91,11 +88,15 @@ h1 {
   @extend %space-around;
 }
 
+.m10 {
+  margin: 10px auto;
+}
+
 .article {
-  @include width(30%);
+  @include widthArticle();
   padding: 5px;
   border: 1px solid #d8d8d8;
-  margin-top: 5px;
+  margin-top: 10px;
 
   img{
     @include width(100%);
@@ -136,9 +137,9 @@ form {
   @extend %block;
   @extend %no-border;
   @extend %pointer;
-  @include padding(8px);
+  @include padding(7px);
   color: white;
-  margin: 10px auto;
+  @extend %margin-auto;
 }
 
 .button-link,
