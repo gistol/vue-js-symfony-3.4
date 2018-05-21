@@ -7,9 +7,19 @@
   display: -webkit-flex;
 }
 
+%column {
+  flex-direction: column;
+  -webkit-flex-direction: column;
+}
+
 %space-around {
   justify-content: space-around;
   -webkit-justify-content: space-around;
+}
+
+%justify-center {
+  justify-content: center;
+  -webkit-justify-content: center;
 }
 
 %wrap {
@@ -68,10 +78,10 @@
   padding: $padding;
 }
 
-@mixin loopInput($array, $rule, $value) {
+@mixin loopItem($array, $rule, $value) {
   @each $item in $array {
-    input[type=#{$item}]{
-      #{$rule}: #{$value}
+    #{$item} {
+      #{$rule}: #{$value};
     }
   }
 }

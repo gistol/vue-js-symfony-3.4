@@ -33,11 +33,16 @@ nav ul li {
   height: 100%;
   line-height: 60px;
   @extend %text-center;
-  @extend %pointer;
   color: white;
+  @extend %pointer;
 }
 
-nav ul li:hover{
+input[type='submit'] {
+
+}
+
+nav ul li:hover,
+button:hover {
   background: $medium-purple;
 }
 
@@ -79,25 +84,27 @@ h1 {
 
 form {
   @include width(100%);
-  $array: text, 'email', 'password';
-  @include loopInput($array, 'width', 100%);
-  @include loopInput($array, 'padding', 5px);
-  @include loopInput('submit', 'padding', 5px);
-}
+  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']';
 
-label {
-  padding: 5px;
-  @extend %block;
-  margin-bottom: 2px;
-  background: $light-grey;
+  @include loopItem($array, 'width', 100%);
+  @include loopItem($array, 'display', 'block');
+  @include loopItem($array, 'padding', 5px);
+  @include loopItem($array, 'margin', '0 auto');
+  @include loopItem('textarea', 'margin', '0 auto');
+  @include loopItem('textarea', 'display', 'block');
+
+  label {
+    padding: 10px;
+    margin-bottom: 2px;
+  }
 }
 
 .btn {
   @include borderRadius(7px);
-  @extend %pointer;
   @extend %margin-auto;
   @extend %block;
   @extend %no-border;
+  @extend %pointer;
   @include padding(10px);
   color: white;
 }
@@ -107,8 +114,9 @@ label {
   background: $purple;
 }
 
-.btn-submit {
-  @extend .button-link;
+.button-submit,
+.button-close {
+  @extend .btn;
   background: $medium-purple;
 }
 
@@ -116,12 +124,14 @@ table img{
   width: 100%;
 }
 
+/* Footer */
+
 footer{
   @include height(100px);
   @extend %border-box;
   @extend %flex;
   @extend %align-center;
-  background: #eee;
+  background: $purple;
 
   form {
     @include width(30%);
