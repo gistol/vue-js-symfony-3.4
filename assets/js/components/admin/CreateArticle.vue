@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <form v-on:submit.prevent="handleCreation" enctype="multipart/form-data">
+    <div class="container">
+        <form v-on:submit.prevent="handleCreation" :enctype="enctype" :style="width">
 
             <div>
                 <label for="title">Titre</label>
@@ -11,11 +11,9 @@
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
-            <input type="submit"/>
-
+            <input type="submit" class="button-submit"/>
+            <button v-on:click.prevent="addForm" class="button-default" :style="buttonAdd">Ajouter une image</button>
         </form>
-
-        <button v-on:click.prevent="addForm">Ajouter une image</button>
     </div>
 </template>
 

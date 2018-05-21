@@ -51,6 +51,30 @@ h1 {
   @extend %text-center;
 }
 
+#app_user {
+  position: relative;
+  min-height: 100vh;
+
+  /* Footer */
+
+  footer{
+    position: absolute;
+    @include width(100%);
+    @include height(100px);
+    @extend %border-box;
+    @extend %flex;
+    @extend %align-center;
+    background: $purple;
+    bottom: 0;
+
+    form {
+      @include width(30%);
+      @extend %margin-auto;
+      @extend %flex;
+    }
+  }
+}
+
 .container *{
   @extend %border-box;
 }
@@ -82,9 +106,16 @@ h1 {
   }
 }
 
+table img{
+  width: 100%;
+}
+
+/* form */
+
 form {
   @include width(100%);
-  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']';
+  @extend %margin-auto;
+  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']', 'input[type='file']';
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
@@ -98,44 +129,30 @@ form {
     margin-bottom: 2px;
   }
 }
+/* buttons */
 
 .btn {
   @include borderRadius(7px);
-  @extend %margin-auto;
   @extend %block;
   @extend %no-border;
   @extend %pointer;
-  @include padding(10px);
+  @include padding(8px);
   color: white;
+  margin: 10px auto;
 }
 
-.button-link{
+.button-link,
+.button-default {
   @extend .btn;
   background: $purple;
 }
 
-.button-submit,
-.button-close {
+.button-submit {
   @extend .btn;
   background: $medium-purple;
 }
 
-table img{
-  width: 100%;
-}
-
-/* Footer */
-
-footer{
-  @include height(100px);
-  @extend %border-box;
-  @extend %flex;
-  @extend %align-center;
-  background: $purple;
-
-  form {
-    @include width(30%);
-    @extend %margin-auto;
-    @extend %flex;
-  }
+.button-delete {
+  @extend .btn;
+  background: $dark-red;
 }

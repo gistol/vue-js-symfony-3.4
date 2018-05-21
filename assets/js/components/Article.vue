@@ -53,9 +53,6 @@
                 comment: undefined,
                 article: undefined,
                 show: false,
-                width: {
-                    width: '40%'
-                }
             }
         },
 
@@ -106,6 +103,7 @@
 
     #comment_modal {
         position: fixed;
+        z-index: 1;
         background: rgba(0,0,0,.8);
         top: 0;
         bottom: 0;

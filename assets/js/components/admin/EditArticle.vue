@@ -13,7 +13,7 @@
 
             <input type="submit"/>
 
-            <button v-on:click.prevent="addForm">Ajouter une image</button>
+            <button v-on:click.prevent="addForm" class="button-default" :style="buttonAdd">Ajouter une image</button>
 
         </form>
     </div>

@@ -8,26 +8,48 @@ const Mixins = {
             nbImages: 0,
             enctype: 'multipart/form-data',
             newsletter: undefined,
-            newsletterFormValid: false
+            newsletterFormValid: false,
+            width: {
+                width: '40%'
+            },
+            buttonAdd: {
+                position: 'fixed',
+                bottom: '5px',
+                left: '5px'
+            }
         }
     },
 
     components: {
         'child-form': {
             template:
-            "<div>" +
+            "<div :style='style'>" +
             "<label for='image'>Image {{ item + 1 }}</label>" +
-            "<img v-if='this.$props.image.src !== undefined' :src='src' />" +
-            "<input type='file'/>" +
+            "<img v-if='this.$props.image.src !== undefined' v-bind:src='src' />" +
+            "<img v-bind:src='preview' v-bind:style='maxWidth'/>" +
+            "<input type='file' v-on:change='loadFile'/>" +
             "<label>Contenu {{ item + 1 }}</label>" +
-            "<input type='text' :value='image.content'/>" +
-            "<button v-on:click='remove'>Supprimer</button>" +
+            "<textarea :value='image.content' :style='[maxWidth, textAreaH]'></textarea>" +
+            "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
             "</div>",
 
             data() {
                 return {
                     /* Child component src */
-                    src: './images/' + this.$props.image.src
+                    src: './images/' + this.$props.image.src,
+                    preview: undefined,
+                    maxWidth: {
+                        width: '100%'
+                    },
+                    textAreaH: {
+                        height: '150px',
+                        resize: 'none'
+                    },
+                    style: {
+                        padding: '10px',
+                        margin: '10px auto',
+                        background: '#eee'
+                    },
                 }
             },
 
@@ -42,8 +64,12 @@ const Mixins = {
                 remove(e) {
                     this.$emit('decrement');
                     e.target.parentNode.remove();
+                },
+
+                loadFile(e) {
+                    this.preview = URL.createObjectURL(e.target.files[0]);
                 }
-            }
+            },
         },
     },
 

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="app_user">
         <nav>
             <ul>
                 <router-link v-bind:to="{name: 'home_user'}" tag="li">Accueil</router-link>
