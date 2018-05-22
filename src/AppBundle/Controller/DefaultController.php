@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Newsletter;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use AppBundle\Service\Serializor;
@@ -97,5 +98,16 @@ class DefaultController extends Controller
         } else {
             return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    /**
+     * @Route("/newsletter", name="newsletter")
+     */
+    public function handleNewsletterAction(Request $request, MetaService $metaService)
+    {
+        $email = htmlspecialchars($request->request->get('email'));
+        $newsletter = (new Newsletter())->setEmail($email);
+        $metaService->persistAndFlush([$newsletter]);
+        return new JsonResponse('Votre abonnement a bien été pris en compte.');
     }
 }

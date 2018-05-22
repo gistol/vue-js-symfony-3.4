@@ -68,7 +68,7 @@ const Mixins = {
 
                 loadFile(e) {
                     this.preview = URL.createObjectURL(e.target.files[0]);
-                }
+                },
             },
         },
     },
@@ -93,6 +93,10 @@ const Mixins = {
             this.nbImages++;
         },
 
+        displayServerMessage(message) {
+            this.$el.querySelector('#server_message').innerHTML = message;
+        },
+
         /* Common to CreateArticle, EditArticle and Article component (comments) */
 
         handleSubmit(uri) {
@@ -110,9 +114,9 @@ const Mixins = {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: new FormData(this.$el.querySelector('form'))
             }).then((data) => {
-                console.log(data);
+                this.displayServerMessage(data);
             }).catch((err) => {
-                console.log('Erreur : ' + err)
+                this.displayServerMessage('Erreur : ' + err)
             });
         },
 

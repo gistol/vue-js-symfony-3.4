@@ -6,13 +6,13 @@ Vue.use(Vuex);
 const Store = new Vuex.Store({
     state:{
         articles: [],
-        endloading: false,
-        remain: true,
+        remain: undefined,
         lastId: 0,
         csrf_token: undefined
     },
 
     mutations: {
+
         addArticles(state, articles) {
             articles.forEach((article, index, array) => {
                 /* Getting the id of the last article in the array for the next request */
@@ -20,7 +20,7 @@ const Store = new Vuex.Store({
                     this.lastId = article.id;
                 }
                 state.articles.push(article);
-                state.endloading = true;
+                state.remain = true;
             });
         },
 

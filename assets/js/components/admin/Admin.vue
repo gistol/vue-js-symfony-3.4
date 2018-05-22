@@ -11,6 +11,7 @@
         </nav>
         <p v-if="loading">Chargement</p>
         <router-view></router-view>
+        <div id="server_message"></div>
     </div>
 </template>
 

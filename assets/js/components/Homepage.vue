@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="container">
-            <button v-if="$store.state.remain" v-show="endloading" v-on:click="addArticles" class="button-default">Plus d'articles</button>
+            <button v-if="$store.state.remain" v-on:click="addArticles" class="button-default">Plus d'articles</button>
         </div>
     </div>
 </template>

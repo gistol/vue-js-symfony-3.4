@@ -13,6 +13,7 @@
                 <input type="submit" value="Je m'abonne" class="button-submit"/>
             </form>
         </footer>
+        <div id="server_message"></div>
     </div>
 </template>
 
