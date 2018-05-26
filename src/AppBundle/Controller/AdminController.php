@@ -29,12 +29,12 @@ class AdminController extends Controller
             if ($hydrator->isFormValid([Article::class, Image::class])) {
                 $object = $hydrator->hydrateObject(Article::class);
                 $metaService->persistAndFlush([$object]);
-                return new JsonResponse("created", Response::HTTP_CREATED);
+                return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
             } else {
                 return new JsonResponse('Formulaire invalide');
             }
         } else {
-            return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
+            return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -51,7 +51,7 @@ class AdminController extends Controller
         if ($ret instanceof Article) {
             $manager->remove($ret);
             $manager->flush();
-            return new JsonResponse('The article has been deleted.');
+            return new JsonResponse("L'article a été supprimé.");
         } else {
             return $ret;
         }
@@ -71,7 +71,7 @@ class AdminController extends Controller
 
                 if ($ret instanceof Article) {
                     $hydrator->updateObject($ret);
-                    return new JsonResponse('The article has been updated.');
+                    return new JsonResponse("L'article a été mis à jour.");
                 } else {
                     return $ret;
                 }
@@ -92,7 +92,7 @@ class AdminController extends Controller
         if(!is_null($article = $this->getDoctrine()->getRepository(Article::class)->find($id))) {
             return $article;
         } else {
-            return new JsonResponse('Article not found.', Response::HTTP_BAD_REQUEST);
+            return new JsonResponse("L'article n'existe pas.", Response::HTTP_BAD_REQUEST);
         }
     }
 }

@@ -9,7 +9,7 @@
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
-            <input type="submit" class="btn"/>
+            <input type="submit" class="button-submit"/>
         </form>
     </div>
 </template>

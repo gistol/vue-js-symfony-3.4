@@ -1,36 +1,34 @@
 <template>
     <div>
-        <div class='container'>
+        <div class='container w40'>
             <figure v-for="image in article.images">
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption>{{ image.content }}</figcaption>
             </figure>
         </div>
         <div id="comment_modal" v-show="show">
-            <div v-bind:style="width">
-                <button @click="showForm" class="button-close">Fermer</button>
-                <form v-on:submit.prevent="handleComment" enctype="multipart/form-data">
+            <button @click="showForm" class="button-close">Fermer</button>
+            <form v-on:submit.prevent="handleComment" :enctype="enctype">
 
-                    <div>
-                        <label for="username">Nom</label>
-                        <input type="text" id="username" name="username" v-model="username"/>
-                    </div>
+                <div>
+                    <label for="username">Nom</label>
+                    <input type="text" id="username" name="username" v-model="username"/>
+                </div>
 
-                    <div>
-                        <label for="email">Email</label>
-                        <input type="text" id="email" name="email" v-model="email"/>
-                    </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" v-model="email"/>
+                </div>
 
-                    <div>
-                        <label for="comment">Commentaire</label>
-                        <textarea id="comment" name="comment" v-model="comment"></textarea>
-                    </div>
+                <div>
+                    <label for="comment">Commentaire</label>
+                    <textarea id="comment" name="comment" v-model="comment"></textarea>
+                </div>
 
-                    <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
+                <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
-                    <input type="submit" class="button-submit"/>
-                </form>
-            </div>
+                <input type="submit" class="button-submit mauto"/>
+            </form>
         </div>
         <div class='container'>
             <button ref='modal_opener' @click="showForm" class="button-link">Commenter</button>
@@ -40,7 +38,6 @@
 
 <script>
 
-    import mapState from 'vuex';
     import Mixin from '../mixins';
 
     export default {
@@ -93,14 +90,6 @@
 
     @import "../../../assets/css/variables";
 
-    .container {
-        width: 50%;
-
-        img {
-            @extend %max-width;
-        }
-    }
-
     #comment_modal {
         position: fixed;
         z-index: 1;
@@ -113,35 +102,18 @@
         @extend %align-center;
         @extend %justify-center;
 
+        form {
+            @include width(40%);
+        }
+
+        form * {
+            @extend %border-box;
+        }
+
         button {
             position: absolute;
             top: 5px;
             right: 5px;
         }
-
-        form {
-
-            padding: 10px;
-
-            background: $light-grey;
-
-            /* This rule overwrites the one defined in variables.scss only for width */
-            @include loopItem("input[type=text]", 'width', 90%);
-
-            textarea {
-                height: 200px;
-                width: 90%;
-                resize: none;
-                padding: 5px;
-            }
-
-            input[type='submit'] {
-                margin: 10px auto;
-            }
-        }
-    }
-
-    button {
-        margin: 10px auto;
     }
 </style>

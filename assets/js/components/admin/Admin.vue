@@ -11,7 +11,7 @@
         </nav>
         <p v-if="loading">Chargement</p>
         <router-view></router-view>
-        <div id="server_message"></div>
+        <div v-show='serverMessage' id="server_message"></div>
     </div>
 </template>
 
@@ -26,6 +26,7 @@
             return {
                 loading: false,
                 title: undefined,
+                serverMessage: false
             }
         },
 

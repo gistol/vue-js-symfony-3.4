@@ -8,9 +8,8 @@
         <router-view></router-view>
         <footer>
             <form v-on:submit.prevent="addToNewsletter" :enctype="enctype">
-                <label for="email"></label>
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
-                <input type="submit" value="Je m'abonne" class="button-submit"/>
+                <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>
         </footer>
         <div id="server_message"></div>

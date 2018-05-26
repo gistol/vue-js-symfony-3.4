@@ -9,27 +9,19 @@ const Mixins = {
             enctype: 'multipart/form-data',
             newsletter: undefined,
             newsletterFormValid: false,
-            width: {
-                width: '40%'
-            },
-            buttonAdd: {
-                position: 'fixed',
-                bottom: '5px',
-                left: '5px'
-            }
         }
     },
 
     components: {
         'child-form': {
             template:
-            "<div :style='style'>" +
+            "<div style='margin: 10px auto;'>" +
             "<label for='image'>Image {{ item + 1 }}</label>" +
-            "<img v-if='this.$props.image.src !== undefined' v-bind:src='src' />" +
-            "<img v-bind:src='preview' v-bind:style='maxWidth'/>" +
+            "<img v-if='this.$props.image.src !== undefined' v-bind:src='src'/>" +
+            "<img v-bind:src='preview'/>" +
             "<input type='file' v-on:change='loadFile'/>" +
             "<label>Contenu {{ item + 1 }}</label>" +
-            "<textarea :value='image.content' :style='[maxWidth, textAreaH]'></textarea>" +
+            "<textarea :value='image.content' :style='textAreaH'></textarea>" +
             "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
             "</div>",
 
@@ -38,17 +30,9 @@ const Mixins = {
                     /* Child component src */
                     src: './images/' + this.$props.image.src,
                     preview: undefined,
-                    maxWidth: {
-                        width: '100%'
-                    },
                     textAreaH: {
                         height: '150px',
                         resize: 'none'
-                    },
-                    style: {
-                        padding: '10px',
-                        margin: '10px auto',
-                        background: '#eee'
                     },
                 }
             },
@@ -57,7 +41,7 @@ const Mixins = {
 
             mounted() {
                 this.$el.querySelector('input[type="file"]').setAttribute('name', 'image[' + (this.item) + ']');
-                this.$el.querySelector('input[type="text"]').setAttribute('name', 'content[' + (this.item) + ']');
+                this.$el.querySelector('textarea').setAttribute('name', 'content[' + (this.item) + ']');
             },
 
             methods: {
@@ -94,7 +78,11 @@ const Mixins = {
         },
 
         displayServerMessage(message) {
-            this.$el.querySelector('#server_message').innerHTML = message;
+            this.$parent.$el.querySelector('#server_message').innerText = message;
+            this.$parent.serverMessage = true;
+            setTimeout(() => {
+                this.$parent.serverMessage = false;
+            }, 4000);
         },
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */

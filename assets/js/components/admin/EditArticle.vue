@@ -1,7 +1,6 @@
 <template>
-    <div class="container">
-        <form v-on:submit.prevent="handleEdition" :enctype='enctype'>
-
+    <div class="container w40">
+        <form v-on:submit.prevent="handleEdition" :enctype="enctype">
             <div>
                 <label for="title">Titre</label>
                 <input type="text" id="title" name="title" v-model="title"/>
@@ -11,10 +10,9 @@
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
-            <input type="submit"/>
+            <input type="submit" class="button-submit"/>
 
-            <button v-on:click.prevent="addForm" class="button-default" :style="buttonAdd">Ajouter une image</button>
-
+            <button v-on:click.prevent="addForm" class="button-default button-add">Ajouter une image</button>
         </form>
     </div>
 </template>
@@ -55,9 +53,3 @@
         }
     }
 </script>
-
-<style scoped>
-    img {
-        width: 30%;
-    }
-</style>

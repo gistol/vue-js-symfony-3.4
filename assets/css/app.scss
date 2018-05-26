@@ -37,36 +37,28 @@ nav ul li {
   @extend %pointer;
 }
 
-nav ul li:hover,
-button:hover {
+nav ul li:hover {
   background: $medium-purple;
-}
-
-#app_user {
-  position: relative;
-  min-height: 100vh;
-
-  /* Footer */
-
-  footer{
-    @include width(100%);
-    @extend %border-box;
-    @extend %flex;
-    @extend %align-center;
-    background: $purple;
-    height: 100px;
-
-    form {
-      height: 30px;
-      @extend %flex;
-      @include width(30%);
-      @extend %margin-auto;
-    }
-  }
 }
 
 .container *{
   @extend %border-box;
+}
+
+.container, table {
+  a {
+    @extend %no-underline;
+  }
+}
+
+.container table {
+  width: 100%;
+}
+
+table {
+  img {
+    width: 100%;
+  }
 }
 
 .container {
@@ -88,6 +80,14 @@ button:hover {
   @extend %space-around;
 }
 
+.w40 {
+  @include width(40%);
+}
+
+.w150 {
+  @include width(150px);
+}
+
 .m10 {
   margin: 10px auto;
 }
@@ -101,36 +101,58 @@ button:hover {
   img{
     @include width(100%);
   }
-
-  a {
-    @extend %no-underline;
-  }
 }
 
-table img{
-  width: 100%;
+.list_articles_actions {
+  @extend %flex;
+  @extend %space-around;
+  background: $light-grey;
+  padding: 5px;
 }
 
 /* form */
 
 form {
+  background: $purple;
+  padding: 15px;
+  border-radius: 8px;
   @include width(100%);
-  @extend %margin-auto;
-  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']', 'input[type='file']';
+  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']', 'input[type='file']', textarea;
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
-  @include loopItem($array, 'padding', 5px);
-  @include loopItem($array, 'margin', '0 auto');
-  @include loopItem('textarea', 'margin', '0 auto');
+  @include loopItem($array, 'padding', 7px);
+  @include loopItem($array, 'margin', '5px auto 10px auto');
+  @include loopItem($array, 'border-radius', '5px');
+  @include loopItem($array, 'border', 'none');
   @include loopItem('textarea', 'display', 'block');
 
   label {
-    padding: 10px;
-    margin-bottom: 2px;
+    color: #fff;
+    padding: 0;
+    margin-bottom: 5px;
+    font-size: 1.1em;
+  }
+
+  img{
+    margin: 10px auto;
+    width: 100%;
+  }
+
+  input[type='file'] {
+    color: #fff;
+    padding: 0;
+  }
+
+  textarea {
+    font-family: 'Helvetica', sans-serif;
   }
 }
 /* buttons */
+
+.mauto {
+  margin: 0 auto;
+}
 
 .btn {
   @include borderRadius(7px);
@@ -139,21 +161,68 @@ form {
   @extend %pointer;
   @include padding(7px);
   color: white;
-  @extend %margin-auto;
 }
 
-.button-link,
 .button-default {
   @extend .btn;
   background: $purple;
 }
 
+.button-default:hover{
+  background: $medium-purple;
+}
+
 .button-submit {
   @extend .btn;
+  @extend .mauto;
   background: $medium-purple;
 }
 
 .button-delete {
   @extend .btn;
   background: $dark-red;
+}
+
+.button-delete:hover {
+  background: red;
+}
+
+.button-add {
+  position: fixed;
+  bottom: 5px;
+  left: 5px;
+}
+
+#app_user {
+  position: relative;
+  min-height: 100vh;
+
+  /* Footer */
+
+  footer{
+    @include padding(20px);
+    @include width(100%);
+    @extend %border-box;
+    @extend %flex;
+    @extend %align-center;
+    background: $purple;
+
+    form {
+      padding: 0;
+      input[type='email'] {
+        margin: 0 auto 10px auto;
+      }
+      @include width(30%);
+      @extend %margin-auto;
+    }
+  }
+}
+
+#server_message {
+  padding: 20px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  background: rgba(0,0,0, .8);
+  color: #fff;
 }

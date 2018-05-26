@@ -1,5 +1,5 @@
 <template>
-    <div class='container'>
+    <div class='container w40'>
         <table v-for="article in articles">
             <tbody>
                 <tr>
@@ -11,16 +11,16 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                        <button v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
+                    <td class="list_articles_actions">
+                        <button class="button-default w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
                         <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
-                            <button>Editer</button>
+                            <button class="button-default w150">Editer</button>
                         </router-link>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <button v-on:click="addArticles">Plus d'articles</button>
+        <button v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
     </div>
 </template>
 
@@ -47,11 +47,11 @@
                    url: '/vue-js-symfony-3.4/web/app_dev.php/admin/articles/delete/' + e.target.getAttribute('data-id')
                 })
                 .then((data) => {
-                    console.log(data);
+                    this.displayServerMessage(displayServerMessage("L'article a été supprimé !");
                     e.target.parentNode.parentNode.parentNode.parentNode.remove();
                 })
                 .catch((err) => {
-                    console.log("Erreur : " + err);
+                    this.displayServerMessage('Erreur : ' + err);
                 });
             },
 
@@ -69,9 +69,3 @@
         },
     }
 </script>
-
-<style scoped>
-    img {
-        width: 30%;
-    }
-</style>
