@@ -9,7 +9,6 @@
                 <router-link v-bind:to="{name: 'logout'}" tag="li">Déconnexion</router-link>
             </ul>
         </nav>
-        <p v-if="loading">Chargement</p>
         <router-view></router-view>
         <div v-show='serverMessage' id="server_message"></div>
     </div>

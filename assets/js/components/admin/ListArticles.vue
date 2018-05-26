@@ -20,13 +20,11 @@
                 </tr>
             </tbody>
         </table>
-        <button v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
+        <button v-if='this.$store.state.articles.length > 0' v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
     </div>
 </template>
 
 <script>
-
-    import Mixin from '../../mixins';
 
     export default {
 
@@ -38,30 +36,33 @@
             }
         },
 
-        Mixins: [Mixin],
-
         methods: {
+
+            displayServerMessage(message) {
+                this.$parent.serverMessage = true;
+                this.$parent.$el.querySelector('#server_message').innerText = message;
+                setTimeout(() => {
+                    this.$parent.serverMessage = false;
+                }, 4000);
+            },
+
             deleteArticle(e) {
 
                 this.$store.dispatch('postData', {
                    url: '/vue-js-symfony-3.4/web/app_dev.php/admin/articles/delete/' + e.target.getAttribute('data-id')
                 })
                 .then((data) => {
-                    this.displayServerMessage(displayServerMessage("L'article a été supprimé !");
+                    this.displayServerMessage(data);
                     e.target.parentNode.parentNode.parentNode.parentNode.remove();
                 })
                 .catch((err) => {
-                    this.displayServerMessage('Erreur : ' + err);
+                    this.displayServerMessage(err);
                 });
             },
 
             addArticles() {
                 this.$store.dispatch('getArticles');
             }
-        },
-
-        beforeRouteUpdate(to, next, from) {
-            this.$store.state.loading = true
         },
 
         created() {

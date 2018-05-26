@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container w40">
         <form v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" v-model="username"/>
@@ -11,10 +11,13 @@
 
             <input type="submit" class="button-submit"/>
         </form>
+        <div v-show='serverMessage' id="server_message"></div>
     </div>
 </template>
 
 <script>
+
+    import Mixin from '../../mixins';
 
     export default {
         name: 'Login',
@@ -23,8 +26,8 @@
             return {
                 username: undefined,
                 password: undefined,
+                serverMessage: false,
                 style: {
-                    width: '50%',
                     marginTop: '80px'
                 }
             }
@@ -36,6 +39,8 @@
             },
         },
 
+        mixins: [Mixin],
+
         methods: {
             handleSubmit() {
                 this.$store.dispatch('postData', {
@@ -45,15 +50,18 @@
 
                 }).then((data) => {
 
+                    this.serverMessage = true;
+
                     if (!data.token) {
-                        alert(data);
+                        this.$el.querySelector("#server_message").innerText = data;
                     } else {
                         localStorage.setItem('token', data.token);
                         this.$router.push({name: 'home_admin'});
                     }
                     
                 }).catch((err) => {
-                    console.log(err);
+                    this.serverMessage = true;
+                    this.$el.querySelector("#server_message").innerText = err;
                 });
             }
         },

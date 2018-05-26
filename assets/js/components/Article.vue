@@ -7,7 +7,7 @@
             </figure>
         </div>
         <div id="comment_modal" v-show="show">
-            <button @click="showForm" class="button-close">Fermer</button>
+            <button @click="showForm" class="button-delete">Fermer</button>
             <form v-on:submit.prevent="handleComment" :enctype="enctype">
 
                 <div>
@@ -31,7 +31,7 @@
             </form>
         </div>
         <div class='container'>
-            <button ref='modal_opener' @click="showForm" class="button-link">Commenter</button>
+            <button ref='modal_opener' @click="showForm" class="button-default mauto">Commenter</button>
         </div>
     </div>
 </template>
@@ -115,5 +115,9 @@
             top: 5px;
             right: 5px;
         }
+    }
+
+    img {
+        width: 100%;
     }
 </style>
