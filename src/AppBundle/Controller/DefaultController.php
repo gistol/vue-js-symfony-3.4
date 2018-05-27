@@ -115,8 +115,13 @@ class DefaultController extends Controller
     public function handleNewsletterAction(Request $request, MetaService $metaService)
     {
         $email = htmlspecialchars($request->request->get('email'));
-        $newsletter = (new Newsletter())->setEmail($email);
-        $metaService->persistAndFlush([$newsletter]);
-        return new JsonResponse('Votre abonnement a bien été pris en compte.');
+
+        if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
+            $newsletter = (new Newsletter())->setEmail($email);
+            $metaService->persistAndFlush([$newsletter]);
+            return new JsonResponse('Votre abonnement a bien été pris en compte.');
+        }
+
+        return new JsonResponse("Vous êtes déjà abonné(e).");
     }
 }

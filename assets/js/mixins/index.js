@@ -13,6 +13,25 @@ const Mixins = {
     },
 
     components: {
+        'server-message': {
+            template: "<div :style='style' v-show='displayMessage'><slot></slot></div>",
+
+            props: ['displayMessage'],
+
+            computed: {
+                style() {
+                    return {
+                        padding: '20px',
+                        position: 'fixed',
+                        top: '60px',
+                        left: '0',
+                        background: 'rgba(0, 0, 0, .8)',
+                        color: '#fff'
+                    }
+                }
+            },
+        },
+
         'child-form': {
             template:
             "<div style='margin: 10px auto;'>" +
@@ -60,7 +79,7 @@ const Mixins = {
     watch: {
         newsletter(val) {
             const field = this.$refs.newsletter;
-            if (!new RegExp(/^[\w.-]+@[\w.-]{2,}\.[a-z]{2,4}$/).test(val)) {
+            if (!new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,4}$/).test(val)) {
                 field.style.border = "2px solid red";
             } else {
                 field.style.border = "2px solid green";
@@ -78,10 +97,10 @@ const Mixins = {
         },
 
         displayServerMessage(message) {
-            this.$parent.$el.querySelector('#server_message').innerText = message;
-            this.$parent.serverMessage = true;
+            this.$store.state.displayMessage = !this.$store.state.displayMessage;
+            this.$store.state.message = message;
             setTimeout(() => {
-                this.$parent.serverMessage = false;
+                this.$store.state.displayMessage = !this.$store.state.displayMessage;
             }, 4000);
         },
 
@@ -118,6 +137,7 @@ const Mixins = {
 
         handleComment() {
             this.handleSubmit('/article/' + this.$route.params.slug + '/comment');
+            this.showForm();
         },
 
         addToNewsletter() {

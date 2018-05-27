@@ -10,16 +10,15 @@
                         backgroundImage: 'url('+'./images/' + image.src +')'
                      }" v-if="index === 0" v-for="(image, index) in article.images" :alt="image.title">
                     </div>
-                    <h2>{{ article.title }}</h2>
                 </router-link>
-
+                <h2>{{ article.title }}</h2>
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                    <button class="button-link m10">En savoir plus</button>
+                    <button class="button-default m10">En savoir plus</button>
                 </router-link>
             </div>
         </div>
         <div class="container">
-            <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default">Plus d'articles</button>
+            <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-submit">Plus d'articles</button>
         </div>
     </div>
 </template>

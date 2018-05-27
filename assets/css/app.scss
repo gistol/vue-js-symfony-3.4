@@ -98,6 +98,10 @@ table {
   border: 1px solid #d8d8d8;
   margin-top: 10px;
 
+  h2 {
+    text-align: center;
+  }
+
   img{
     @include width(100%);
   }
@@ -216,13 +220,4 @@ form {
       @extend %margin-auto;
     }
   }
-}
-
-#server_message {
-  padding: 20px;
-  position: fixed;
-  top: 60px;
-  left: 0;
-  background: rgba(0,0,0, .8);
-  color: #fff;
 }

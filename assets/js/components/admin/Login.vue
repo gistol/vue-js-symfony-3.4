@@ -11,13 +11,14 @@
 
             <input type="submit" class="button-submit"/>
         </form>
-        <div v-show='serverMessage' id="server_message"></div>
+        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 
 <script>
 
     import Mixin from '../../mixins';
+    import { mapState } from 'vuex';
 
     export default {
         name: 'Login',
@@ -26,48 +27,17 @@
             return {
                 username: undefined,
                 password: undefined,
-                serverMessage: false,
-                divServerMessage : undefined,
                 style: {
                     marginTop: '80px'
                 }
             }
         },
 
-        computed: {
-            csrf_token() {
-                return this.$store.state.csrf_token;
-            },
-        },
+        computed: mapState(['displayMessage', 'message', 'csrf_token']),
 
         mixins: [Mixin],
 
         methods: {
-
-            displayMessageServer(message, redirect) {
-
-                this.serverMessage = true;
-
-                if (redirect) {
-
-                    this.divServerMessage.innerText = 'Authentification réussie.';
-
-                    let i = 3;
-
-                    const redirectInterval = setInterval(() => {
-
-                        if (i > 0) {
-                            this.divServerMessage.innerText = 'Vous allez être redirigé(e) dans ' + i + ' seconde'.concat(i > 1 ? 's' : '');
-                            --i;
-                        } else {
-                            clearInterval(redirectInterval);
-                            this.$router.push({name: 'home_admin'});
-                        }
-                    }, 1000);
-                } else {
-                    this.divServerMessage.innerText = message;
-                }
-            },
 
             handleSubmit() {
                 this.$store.dispatch('postData', {
@@ -78,15 +48,17 @@
                 }).then((data) => {
 
                     if (!data.token) {
-                        this.displayMessageServer(data);
+                        this.displayServerMessage(data);
                     } else  {
-
                         localStorage.setItem('token', data.token);
-                        this.displayMessageServer(data, true);
+                        this.displayServerMessage('Authentification réussie.');
+                        setTimeout(() => {
+                            this.$router.push({name: 'home_admin'});
+                        });
                     }
                     
                 }).catch((err) => {
-                    this.displayMessageServer(err);
+                    this.displayServerMessage(err);
                 });
             }
         },
@@ -94,9 +66,5 @@
         created() {
             this.$store.dispatch('getCsrfToken');
         },
-
-        mounted() {
-            this.divServerMessage = this.$el.querySelector("#server_message");
-        }
     }
 </script>

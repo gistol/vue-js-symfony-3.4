@@ -12,15 +12,20 @@
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>
         </footer>
-        <div id="server_message"></div>
+        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 
 <script>
     import Mixin from '../mixins';
+    import { mapState } from 'vuex';
 
     export default {
+
         name: 'User',
-        mixins: [Mixin]
+
+        mixins: [Mixin],
+
+        computed: mapState(['displayMessage', 'message'])
     }
 </script>

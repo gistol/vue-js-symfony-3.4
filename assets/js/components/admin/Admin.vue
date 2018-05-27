@@ -10,26 +10,22 @@
             </ul>
         </nav>
         <router-view></router-view>
-        <div v-show='serverMessage' id="server_message"></div>
+        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 
 <script>
 
     import Mixin from '../../mixins';
+    import { mapState } from 'vuex';
 
     export default {
+
         name: 'Admin',
 
-        data() {
-            return {
-                loading: false,
-                title: undefined,
-                serverMessage: false
-            }
-        },
-
         mixins: [Mixin],
+
+        computed: mapState(['displayMessage', 'message']),
 
         beforeRouteUpdate(to, from, next) {
             if (to.name === 'logout') {

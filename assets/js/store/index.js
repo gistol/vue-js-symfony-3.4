@@ -8,7 +8,9 @@ const Store = new Vuex.Store({
         articles: [],
         articlesCount: undefined,
         lastId: 0,
-        csrf_token: undefined
+        csrf_token: undefined,
+        displayMessage: false,
+        message: ''
     },
 
     mutations: {

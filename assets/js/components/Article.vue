@@ -31,7 +31,7 @@
             </form>
         </div>
         <div class='container'>
-            <button ref='modal_opener' @click="showForm" class="button-default mauto">Commenter</button>
+            <button @click="showForm()" class="button-default mauto">Commenter</button>
         </div>
     </div>
 </template>
@@ -41,17 +41,20 @@
     import Mixin from '../mixins';
 
     export default {
+
         name: 'Article',
 
         data() {
             return {
+                article: [],
                 username: undefined,
                 email: undefined,
                 comment: undefined,
-                article: undefined,
-                show: false,
+                show: false, /* Modal */
             }
         },
+
+        mixins: [Mixin],
 
         computed: {
             csrf_token() {
@@ -59,14 +62,8 @@
             },
         },
 
-        mixins: [Mixin],
-
-        created() {
-            this.getArticle(this.$route.params.slug);
-            this.$store.dispatch('getCsrfToken');
-        },
-
         methods: {
+
             getArticle(slug) {
                 fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/article/' + slug)
                     .then((data) => data.json())
@@ -78,11 +75,17 @@
                     })
             },
 
+            /* Function to open or close the modal */
+            /* Also called in the mixin when the user submits their message */
             showForm(e) {
                 this.show = !this.show;
-                this.$refs.modal_opener = this.show ? "Masquer" : "Commenter";
             }
-        }
+        },
+
+        created() {
+            this.getArticle(this.$route.params.slug);
+            this.$store.dispatch('getCsrfToken');
+        },
     }
 </script>
 

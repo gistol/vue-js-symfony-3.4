@@ -29,6 +29,7 @@
 
 <script>
 
+    import Mixin from '../../mixins';
     import { mapState } from 'vuex';
 
     export default {
@@ -41,15 +42,9 @@
             articlesCount: (state) => state.articlesCount,
         }),
 
-        methods: {
+        mixins: [Mixin],
 
-            displayServerMessage(message) {
-                this.$parent.serverMessage = true;
-                this.$parent.$el.querySelector('#server_message').innerText = message;
-                setTimeout(() => {
-                    this.$parent.serverMessage = false;
-                }, 4000);
-            },
+        methods: {
 
             deleteArticle(e) {
 

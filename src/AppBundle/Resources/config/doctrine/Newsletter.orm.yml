@@ -13,6 +13,7 @@ AppBundle\Entity\Newsletter:
             type: string
             length: 255
             nullable: false
+            unique: true
         date:
             type: datetimetz
 

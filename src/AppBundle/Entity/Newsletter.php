@@ -86,4 +86,3 @@ class Newsletter
         return $this->date;
     }
 }
-
