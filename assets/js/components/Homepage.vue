@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="container">
-            <button v-if="$store.state.remain" v-on:click="addArticles" class="button-default">Plus d'articles</button>
+            <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default">Plus d'articles</button>
         </div>
     </div>
 </template>
@@ -32,9 +32,10 @@
     export default {
         name: 'Homepage',
 
-        computed: mapState({
+        computed : mapState({
             articles: (state) => state.articles,
-            endloading: (state) => state.endloading
+            nbArticles: (state) => state.articles.length,
+            articlesCount: (state) => state.articlesCount,
         }),
 
         mixins: [Mixin],
@@ -47,6 +48,7 @@
 
         created() {
             this.$store.dispatch('getArticles');
+            this.$store.dispatch('getNumberOfArticles');
             this.$store.dispatch('getCsrfToken');
         },
     }

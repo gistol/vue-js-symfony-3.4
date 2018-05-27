@@ -10,6 +10,19 @@ namespace AppBundle\Repository;
  */
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getNumberOfArticles()
+    {
+        $sql = 'SELECT count(id) AS nb_articles from article';
+        try {
+            $stmt = $this->_em->getConnection()->query($sql);
+            $r = $stmt->fetch();
+            $stmt->closeCursor();
+            return $r;
+        } catch (\Exception $exception) {
+            return null;
+        }
+    }
+
     /**
      * @param $id
      * @return array

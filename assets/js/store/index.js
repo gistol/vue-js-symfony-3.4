@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const Store = new Vuex.Store({
     state:{
         articles: [],
-        remain: undefined,
+        articlesCount: undefined,
         lastId: 0,
         csrf_token: undefined
     },
@@ -20,12 +20,15 @@ const Store = new Vuex.Store({
                     this.lastId = article.id;
                 }
                 state.articles.push(article);
-                state.remain = true;
             });
         },
 
         addCsrfToken(state, csrf_token) {
             state.csrf_token = csrf_token
+        },
+
+        setNumberOfArticles(state, data) {
+            state.articlesCount = data;
         }
     },
 
@@ -76,9 +79,6 @@ const Store = new Vuex.Store({
             fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
                 .then((res) => res.json())
                 .then((data) => {
-                    if (data.length < 9) {
-                        context.state.remain = false;
-                    }
                     if (data.length > 0) {
                         context.commit('addArticles', data);
                     }
@@ -87,6 +87,14 @@ const Store = new Vuex.Store({
                     console.log('Erreur : ' + err)
                 })
         },
+
+        getNumberOfArticles({commit}) {
+            fetch('/vue-js-symfony-3.4/web/app_dev.php/articlesCount')
+                .then((res) => res.json())
+                .then((data) => {
+                    commit('setNumberOfArticles', data);
+            });
+        }
     }
 });
 

@@ -27,6 +27,7 @@
                 username: undefined,
                 password: undefined,
                 serverMessage: false,
+                divServerMessage : undefined,
                 style: {
                     marginTop: '80px'
                 }
@@ -42,6 +43,32 @@
         mixins: [Mixin],
 
         methods: {
+
+            displayMessageServer(message, redirect) {
+
+                this.serverMessage = true;
+
+                if (redirect) {
+
+                    this.divServerMessage.innerText = 'Authentification réussie.';
+
+                    let i = 3;
+
+                    const redirectInterval = setInterval(() => {
+
+                        if (i > 0) {
+                            this.divServerMessage.innerText = 'Vous allez être redirigé(e) dans ' + i + ' seconde'.concat(i > 1 ? 's' : '');
+                            --i;
+                        } else {
+                            clearInterval(redirectInterval);
+                            this.$router.push({name: 'home_admin'});
+                        }
+                    }, 1000);
+                } else {
+                    this.divServerMessage.innerText = message;
+                }
+            },
+
             handleSubmit() {
                 this.$store.dispatch('postData', {
                     url: '/vue-js-symfony-3.4/web/app_dev.php/login',
@@ -50,24 +77,26 @@
 
                 }).then((data) => {
 
-                    this.serverMessage = true;
-
                     if (!data.token) {
-                        this.$el.querySelector("#server_message").innerText = data;
-                    } else {
+                        this.displayMessageServer(data);
+                    } else  {
+
                         localStorage.setItem('token', data.token);
-                        this.$router.push({name: 'home_admin'});
+                        this.displayMessageServer(data, true);
                     }
                     
                 }).catch((err) => {
-                    this.serverMessage = true;
-                    this.$el.querySelector("#server_message").innerText = err;
+                    this.displayMessageServer(err);
                 });
             }
         },
 
         created() {
             this.$store.dispatch('getCsrfToken');
+        },
+
+        mounted() {
+            this.divServerMessage = this.$el.querySelector("#server_message");
         }
     }
 </script>

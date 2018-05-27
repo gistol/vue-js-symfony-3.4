@@ -1,10 +1,13 @@
 <template>
     <div class='container w40'>
+        <h2>{{ articlesCount }} article(s)</h2>
         <table v-for="article in articles">
-            <tbody>
+            <thead>
                 <tr>
-                    <td> {{ article.title }} </td>
+                    <th>{{ article.title }}</th>
                 </tr>
+            </thead>
+            <tbody>
                 <tr>
                     <td>
                         <img v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
@@ -20,21 +23,23 @@
                 </tr>
             </tbody>
         </table>
-        <button v-if='this.$store.state.articles.length > 0' v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
+        <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
     </div>
 </template>
 
 <script>
 
+    import { mapState } from 'vuex';
+
     export default {
 
         name: 'ListArticles',
 
-        computed: {
-            articles() {
-                return this.$store.state.articles;
-            }
-        },
+        computed : mapState({
+            articles: (state) => state.articles,
+            nbArticles: (state) => state.articles.length,
+            articlesCount: (state) => state.articlesCount,
+        }),
 
         methods: {
 
@@ -67,6 +72,7 @@
 
         created() {
             this.$store.dispatch('getArticles');
+            this.$store.dispatch('getNumberOfArticles');
         },
     }
 </script>

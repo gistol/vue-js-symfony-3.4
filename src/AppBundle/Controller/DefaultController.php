@@ -43,6 +43,15 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/articlesCount", name="articles_count")
+     */
+    public function getNbArticlesAction(ObjectManager $manager)
+    {
+        $result = $manager->getRepository(Article::class)->getNumberOfArticles();
+        return new Response($result["nb_articles"]);
+    }
+
+    /**
      * @Route("/articles/{id}", name="articles")
      */
     public function getArticlesAction(ObjectManager $manager, $id)
