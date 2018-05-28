@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
@@ -26,9 +27,9 @@ class AdminController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            if ($hydrator->isFormValid([Article::class, Image::class])) {
-                $object = $hydrator->hydrateObject(Article::class);
-                $metaService->persistAndFlush([$object]);
+            if ($hydrator->isFormValid([Article::class, Image::class, Comment::class])) {
+                $article = $hydrator->hydrateObject(Article::class);
+                $metaService->persistAndFlush([$article]);
                 return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
             } else {
                 return new JsonResponse('Formulaire invalide');

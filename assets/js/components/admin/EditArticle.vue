@@ -7,13 +7,15 @@
             </div>
 
             <child-form v-for="(image, i) in images" :item="i" :image="image"></child-form>
+            <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
 
             <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
 
             <input type="submit" class="button-submit"/>
-
-            <button v-on:click.prevent="addForm" class="button-default button-add">Ajouter une image</button>
         </form>
+
+        <button v-on:click.prevent="addCategoryForm" class="button-default button-add-category">Ajouter une Category</button>
+        <button v-on:click.prevent="addForm" class="button-default button-add-image">Ajouter une image</button>
     </div>
 </template>
 
@@ -41,6 +43,12 @@
                     data.images.forEach((image) => {
                         this.images.push(image);
                     });
+
+                    data.categories.forEach((category) => {
+                        this.categories.push(category);
+                    });
+
+                    /* Display an empty form if no form filled before */
                     if (this.images.length === 0) {
                         this.addForm();
                     }

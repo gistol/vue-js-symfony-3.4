@@ -6,6 +6,8 @@ const Mixins = {
             title: '',
             images: [],
             nbImages: 0,
+            categories: [],
+            nbCategories: 0,
             enctype: 'multipart/form-data',
             newsletter: undefined,
             newsletterFormValid: false,
@@ -33,16 +35,17 @@ const Mixins = {
         },
 
         'child-form': {
+
             template:
-            "<div style='margin: 10px auto;'>" +
-            "<label for='image'>Image {{ item + 1 }}</label>" +
-            "<img v-if='this.$props.image.src !== undefined' v-bind:src='src'/>" +
-            "<img v-bind:src='preview'/>" +
-            "<input type='file' v-on:change='loadFile'/>" +
-            "<label>Contenu {{ item + 1 }}</label>" +
-            "<textarea :value='image.content' :style='textAreaH'></textarea>" +
-            "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
-            "</div>",
+                "<div style='margin: 10px auto;'>" +
+                "<label for='image'>Image {{ item + 1 }}</label>" +
+                "<img v-if='this.$props.image.src !== undefined' v-bind:src='src'/>" +
+                "<img v-bind:src='preview'/>" +
+                "<input type='file' v-bind:name='fileName' v-on:change='loadFile'/>" +
+                "<label>Contenu {{ item + 1 }}</label>" +
+                "<textarea :value='image.content' v-bind:name='content' v-bind:style='textAreaH'></textarea>" +
+                "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
+                "</div>",
 
             data() {
                 return {
@@ -53,15 +56,12 @@ const Mixins = {
                         height: '150px',
                         resize: 'none'
                     },
+                    fileName: 'image[' + (this.item) + ']',
+                    content: 'content[' + (this.item) + ']'
                 }
             },
 
             props: ['item', 'image'],
-
-            mounted() {
-                this.$el.querySelector('input[type="file"]').setAttribute('name', 'image[' + (this.item) + ']');
-                this.$el.querySelector('textarea').setAttribute('name', 'content[' + (this.item) + ']');
-            },
 
             methods: {
                 remove(e) {
@@ -74,6 +74,36 @@ const Mixins = {
                 },
             },
         },
+
+        'category-form': {
+
+            template:
+                "<div>" +
+                "<label v-bind:style='style' v-bind:for='category'>Catégorie n°{{ index + 1 }}</label>" +
+                "<input type='text' v-bind:name='name' :id='category'/>" +
+                "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
+                "</div>"
+            ,
+
+            data() {
+                return {
+                    style: {
+                        marginTop: '10px',
+                        display: 'block'
+                    },
+                    category: 'category_' + this.index,
+                    name: 'category[' + this.index + ']',
+                }
+            },
+
+            methods: {
+                remove(e) {
+                    e.target.parentNode.remove();
+                }
+            },
+
+            props: ['index'],
+        }
     },
 
     watch: {
@@ -96,12 +126,9 @@ const Mixins = {
             this.nbImages++;
         },
 
-        displayServerMessage(message) {
-            this.$store.state.displayMessage = !this.$store.state.displayMessage;
-            this.$store.state.message = message;
-            setTimeout(() => {
-                this.$store.state.displayMessage = !this.$store.state.displayMessage;
-            }, 4000);
+        addCategoryForm() {
+            this.categories.push(this.nbCategories);
+            this.nbCategories++;
         },
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */
@@ -121,9 +148,9 @@ const Mixins = {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: new FormData(this.$el.querySelector('form'))
             }).then((data) => {
-                this.displayServerMessage(data);
+                this.$store.commit('displayServerMessage', data);
             }).catch((err) => {
-                this.displayServerMessage('Erreur : ' + err)
+                this.$store.commit('displayServerMessage', 'Erreur : ' + err)
             });
         },
 

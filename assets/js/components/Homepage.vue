@@ -3,7 +3,7 @@
         <div class="container_flex">
             <div v-for='article in articles' class="article">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                    <div :style="{
+                    <div class='image' :style="{
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         height: '225px',

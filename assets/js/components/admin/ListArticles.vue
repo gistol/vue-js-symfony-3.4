@@ -52,11 +52,11 @@
                    url: '/vue-js-symfony-3.4/web/app_dev.php/admin/articles/delete/' + e.target.getAttribute('data-id')
                 })
                 .then((data) => {
-                    this.displayServerMessage(data);
+                    this.$store.commit('displayServerMessage', data);
                     e.target.parentNode.parentNode.parentNode.parentNode.remove();
                 })
                 .catch((err) => {
-                    this.displayServerMessage(err);
+                    this.$store.commit('displayServerMessage', err);
                 });
             },
 

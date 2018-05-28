@@ -31,6 +31,14 @@ const Store = new Vuex.Store({
 
         setNumberOfArticles(state, data) {
             state.articlesCount = data;
+        },
+
+        displayServerMessage(state, message) {
+            state.displayMessage = !state.displayMessage;
+            state.message = message;
+            setTimeout(() => {
+                state.displayMessage = !state.displayMessage;
+            }, 4000);
         }
     },
 
@@ -96,7 +104,7 @@ const Store = new Vuex.Store({
                 .then((data) => {
                     commit('setNumberOfArticles', data);
             });
-        }
+        },
     }
 });
 

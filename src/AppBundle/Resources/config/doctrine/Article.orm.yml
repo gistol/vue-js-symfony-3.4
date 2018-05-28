@@ -29,4 +29,10 @@ AppBundle\Entity\Article:
             mappedBy: article
             cascade: ['remove']
 
+    manyToMany:
+        categories:
+            targetEntity: AppBundle\Entity\Category
+            mappedBy: articles
+            cascade: ['persist']
+
     lifecycleCallbacks: {  }

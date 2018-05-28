@@ -102,7 +102,7 @@ table {
     text-align: center;
   }
 
-  img{
+  .image {
     @include width(100%);
   }
 }
@@ -191,9 +191,16 @@ form {
   background: red;
 }
 
-.button-add {
+.button-add-image,
+.button-add-category{
   position: fixed;
   bottom: 5px;
+  left: 5px;
+}
+
+.button-add-category {
+  position: fixed;
+  bottom: 40px;
   left: 5px;
 }
 

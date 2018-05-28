@@ -48,17 +48,17 @@
                 }).then((data) => {
 
                     if (!data.token) {
-                        this.displayServerMessage(data);
+                        this.$store.commit('displayServerMessage', data);
                     } else  {
                         localStorage.setItem('token', data.token);
-                        this.displayServerMessage('Authentification réussie.');
+                        this.$store.commit('displayServerMessage', 'Authentification réussie.');
                         setTimeout(() => {
                             this.$router.push({name: 'home_admin'});
                         });
                     }
                     
                 }).catch((err) => {
-                    this.displayServerMessage(err);
+                    this.$store.commit('displayServerMessage', err);
                 });
             }
         },

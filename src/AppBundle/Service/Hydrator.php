@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
 
@@ -168,4 +169,20 @@ class Hydrator
 
         return $object;
     }
+
+    private function categoryCreator(Article $article)
+    {
+        $categories = $this->metaService->getRequest()->request->get('category');
+
+        foreach ($categories as $category) {
+            if (is_null($this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
+                $cat = (new Category())->setCategory($category);
+                $article->addCategory($cat);
+                $cat->addArticle($article);
+            }
+        }
+
+        return $article;
+    }
+
 }
