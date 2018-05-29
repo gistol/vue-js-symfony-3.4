@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
-use AppBundle\Entity\Comment;
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Image;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
@@ -27,7 +27,7 @@ class AdminController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            if ($hydrator->isFormValid([Article::class, Image::class, Comment::class])) {
+            if ($hydrator->isFormValid([Article::class, Image::class, Category::class])) {
                 $article = $hydrator->hydrateObject(Article::class);
                 $metaService->persistAndFlush([$article]);
                 return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
@@ -67,7 +67,7 @@ class AdminController extends Controller
     public function editArticleAction($id, Request $request, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
-            if ($hydrator->isFormValid([Article::class, Image::class])) {
+            if ($hydrator->isFormValid([Article::class, Image::class, Category::class])) {
                 $ret = $this->getArticle($id);
 
                 if ($ret instanceof Article) {

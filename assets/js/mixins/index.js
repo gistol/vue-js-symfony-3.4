@@ -80,7 +80,7 @@ const Mixins = {
             template:
                 "<div>" +
                 "<label v-bind:style='style' v-bind:for='category'>Catégorie n°{{ index + 1 }}</label>" +
-                "<input type='text' v-bind:name='name' :id='category'/>" +
+                "<input type='text' v-bind:name='name' :id='category' :value='this.$props.category.category'/>" +
                 "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
                 "</div>"
             ,
@@ -102,7 +102,7 @@ const Mixins = {
                 }
             },
 
-            props: ['index'],
+            props: ['index', 'category'],
         }
     },
 

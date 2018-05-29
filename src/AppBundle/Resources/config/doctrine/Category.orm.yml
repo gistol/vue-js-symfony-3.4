@@ -17,6 +17,6 @@ AppBundle\Entity\Category:
     manyToMany:
         articles:
             targetEntity: AppBundle\Entity\Article
-            inversedBy: categories
+            mappedBy: categories
 
     lifecycleCallbacks: {  }

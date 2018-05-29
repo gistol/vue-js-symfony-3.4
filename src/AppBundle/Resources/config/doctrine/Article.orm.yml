@@ -32,7 +32,7 @@ AppBundle\Entity\Article:
     manyToMany:
         categories:
             targetEntity: AppBundle\Entity\Category
-            mappedBy: articles
+            inversedBy: articles
             cascade: ['persist']
 
     lifecycleCallbacks: {  }

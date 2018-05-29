@@ -83,6 +83,7 @@ class Hydrator
         if ($object instanceof Article) {
             $object->setDate(new \DateTime());
             $this->imageCreator($object);
+            $this->categoryCreator($object);
         }
 
         return $object;
@@ -97,6 +98,7 @@ class Hydrator
 
         if ($object instanceof Article) {
             $this->imageCreator($object);
+            $this->categoryCreator($object);
         }
 
         $this->metaService->flush();
@@ -172,11 +174,17 @@ class Hydrator
 
     private function categoryCreator(Article $article)
     {
-        $categories = $this->metaService->getRequest()->request->get('category');
+        $categories = $this->metaService->getRequest()->get('category');
+        $articleCategories = $article->getCategories();
+        $cat = null;
 
         foreach ($categories as $category) {
-            if (is_null($this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
+
+            if (is_null($entity = $this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
                 $cat = (new Category())->setCategory($category);
+            }
+
+            if (!$articleCategories->contains($cat = !is_null($entity) ? $entity : $cat)) {
                 $article->addCategory($cat);
                 $cat->addArticle($article);
             }

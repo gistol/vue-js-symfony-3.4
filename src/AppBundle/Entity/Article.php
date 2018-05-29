@@ -236,3 +236,4 @@ class Article
         return $this->categories;
     }
 }
+
