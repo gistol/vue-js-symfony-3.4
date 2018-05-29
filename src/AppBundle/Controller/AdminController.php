@@ -4,7 +4,9 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\Newsletter;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -82,6 +84,26 @@ class AdminController extends Controller
         } else {
             return $this->get('app.serializor')->serialize($this->getArticle($id));
         }
+    }
+
+    /**
+     * @Route("/admin/comments", name="admin_comments")
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function commentAction(ObjectManager $manager)
+    {
+        return $this->get('app.serializor')->serialize($manager->getRepository(Comment::class)->findAll());
+    }
+
+    /**
+     * @Route("/admin/newsletters", name="admin_newsletters")
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function newsletterAction(ObjectManager $manager)
+    {
+        return $this->get('app.serializor')->serialize($manager->getRepository(Newsletter::class)->findAll());
     }
 
     /**
