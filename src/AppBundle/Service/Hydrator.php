@@ -178,15 +178,24 @@ class Hydrator
         $articleCategories = $article->getCategories();
         $cat = null;
 
-        foreach ($categories as $category) {
-
-            if (is_null($entity = $this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
-                $cat = (new Category())->setCategory($category);
+        foreach ($articleCategories as $key => $category) {
+            if (empty($categories) || !array_key_exists($key, $categories)) {
+                $article->removeCategory($category);
             }
+        }
 
-            if (!$articleCategories->contains($cat = !is_null($entity) ? $entity : $cat)) {
-                $article->addCategory($cat);
-                $cat->addArticle($article);
+        if (!empty($categories)) {
+
+            foreach ($categories as $category) {
+
+                if (is_null($entity = $this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
+                    $cat = (new Category())->setCategory($category);
+                }
+
+                if (!$articleCategories->contains($cat = !is_null($entity) ? $entity : $cat)) {
+                    $article->addCategory($cat);
+                    $cat->addArticle($article);
+                }
             }
         }
 
