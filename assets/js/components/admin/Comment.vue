@@ -1,18 +1,20 @@
 <template>
-    <div>
+    <div class="container w40">
         <table>
             <tbody v-for="comment in comments">
                 <tr>{{ comment.username }}</tr>
                 <tr>{{ comment.email }}</tr>
                 <tr>{{ comment.comment }}</tr>
                 <tr>{{ comment.article.title }}</tr>
-                <tr>{{ comment.date }}</tr>
+                <tr>{{ comment.date|formatFullDate }}</tr>
             </tbody>
         </table>
     </div>
 </template>
 
 <script>
+
+    import Mixin from './../../mixins';
 
     export default {
         name: 'Comment',
@@ -22,6 +24,8 @@
                 comments: undefined
             }
         },
+
+        mixins: [Mixin],
 
         methods: {
             getComments() {
@@ -34,6 +38,7 @@
         },
 
         created() {
+            this.$store.commit('displayWaitingForData');
             this.getComments();
         }
     }

@@ -40,6 +40,9 @@
         methods: {
 
             handleSubmit() {
+
+                this.$store.commit('displaySendingRequest');
+
                 this.$store.dispatch('postData', {
                     url: '/vue-js-symfony-3.4/web/app_dev.php/login',
                     value: new FormData(this.$el.querySelector('form')),
@@ -49,12 +52,10 @@
 
                     if (!data.token) {
                         this.$store.commit('displayServerMessage', data);
-                    } else  {
+                    } else {
                         localStorage.setItem('token', data.token);
                         this.$store.commit('displayServerMessage', 'Authentification réussie.');
-                        setTimeout(() => {
-                            this.$router.push({name: 'home_admin'});
-                        });
+                        this.$router.push({name: 'home_admin'});
                     }
                     
                 }).catch((err) => {

@@ -10,7 +10,8 @@ const Store = new Vuex.Store({
         lastId: 0,
         csrf_token: undefined,
         displayMessage: false,
-        message: ''
+        message: '',
+        timer: undefined
     },
 
     mutations: {
@@ -34,11 +35,20 @@ const Store = new Vuex.Store({
         },
 
         displayServerMessage(state, message) {
-            state.displayMessage = !state.displayMessage;
+            if (state.displayMessage) clearTimeout(state.timer);
+            state.displayMessage = true;
             state.message = message;
-            setTimeout(() => {
+            state.timer = setTimeout(() => {
                 state.displayMessage = !state.displayMessage;
             }, 4000);
+        },
+
+        displaySendingRequest() {
+            this.commit('displayServerMessage', 'Envoi en cours.');
+        },
+
+        displayWaitingForData() {
+            this.commit('displayServerMessage', 'Réception en cours.');
         }
     },
 

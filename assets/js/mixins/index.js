@@ -144,6 +144,8 @@ const Mixins = {
                 }
             }
 
+            this.$store.commit('displaySendingRequest');
+
             this.$store.dispatch('postData', {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: new FormData(this.$el.querySelector('form'))
@@ -173,6 +175,17 @@ const Mixins = {
             } else {
                 alert("Adresse email invalide !");
             }
+        },
+    },
+
+    filters: {
+
+        formatShortDate(date) {
+            return new Date(date.timestamp*1000).toLocaleDateString();
+        },
+
+        formatFullDate(date) {
+            return 'Le ' + new Date(date.timestamp*1000).toLocaleString();
         }
     },
 };
