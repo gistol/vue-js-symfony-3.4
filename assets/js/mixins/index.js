@@ -38,11 +38,11 @@ const Mixins = {
 
             template:
                 "<div style='margin: 10px auto;'>" +
-                "<label for='image'>Image {{ item + 1 }}</label>" +
+                "<label for='image'>Image</label>" +
                 "<img v-if='this.$props.image.src !== undefined' v-bind:src='src'/>" +
                 "<img v-bind:src='preview'/>" +
                 "<input type='file' v-bind:name='fileName' v-on:change='loadFile'/>" +
-                "<label>Contenu {{ item + 1 }}</label>" +
+                "<label>Contenu</label>" +
                 "<textarea :value='image.content' v-bind:name='content' v-bind:style='textAreaH'></textarea>" +
                 "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
                 "</div>",
@@ -65,8 +65,8 @@ const Mixins = {
 
             methods: {
                 remove(e) {
-                    this.$emit('decrement');
-                    e.target.parentNode.remove();
+                    this.$el.remove();
+                    console.log(this.$parent.$children)
                 },
 
                 loadFile(e) {

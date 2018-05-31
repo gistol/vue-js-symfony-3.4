@@ -31,7 +31,7 @@
             </form>
         </div>
         <div class='container'>
-            <button @click="showForm()" class="button-default mauto">Commenter</button>
+            <button @click="showForm" class="button-default mauto">Commenter</button>
         </div>
     </div>
 </template>

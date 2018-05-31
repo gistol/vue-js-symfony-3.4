@@ -1,6 +1,6 @@
 <template>
     <div class='container w40'>
-        <h2>{{ articlesCount }} article(s)</h2>
+        <h2 v-if="articlesCount.length > 0">{{ articlesCount }} article(s)</h2>
         <table v-for="article in articles">
             <thead>
                 <tr>

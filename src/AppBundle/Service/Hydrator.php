@@ -118,8 +118,11 @@ class Hydrator
     {
         foreach ($this->metaService->getRequest()->request as $field => $value) {
             if ($field !== "csrf_token" && method_exists($object, $method = 'set' . ucfirst($field))) {
-                if ($object instanceof Article && $field === 'title') {
-                    $slug = $this->metaService->getAppTools($value);
+                if ($object instanceof Article && $field === 'title'
+                    && ($this->metaService->getRequest()->get('title') !== $object->getTitle()
+                        || is_null($object->getSlug()))
+                    ) {
+                    $slug = $this->appTools->slugify($value);
                     $object->setSlug($slug);
                 }
 
@@ -170,7 +173,10 @@ class Hydrator
                     $image->setArticle($article);
                     $image->setSrc($filename);
                     $article->addImage($image);
-                    $image->setContent($contents[$key]);
+                    $image->setContent($content);
+                } else {
+                    $images[$key]->setTitle($article->getSlug());
+                    $images[$key]->setContent($content);
                 }
             }
         }
