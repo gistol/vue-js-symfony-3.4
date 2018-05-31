@@ -15,12 +15,18 @@ class Hydrator
     protected $metaService;
 
     /**
+     * @var AppTools $appTools
+     */
+    protected $appTools;
+
+    /**
      * Hydrator constructor.
      * @param MetaService $metaService
      */
-    public function __construct(MetaService $metaService)
+    public function __construct(MetaService $metaService, AppTools $appTools)
     {
         $this->metaService = $metaService;
+        $this->appTools = $appTools;
     }
 
     /**
@@ -113,7 +119,7 @@ class Hydrator
         foreach ($this->metaService->getRequest()->request as $field => $value) {
             if ($field !== "csrf_token" && method_exists($object, $method = 'set' . ucfirst($field))) {
                 if ($object instanceof Article && $field === 'title') {
-                    $slug = AppTools::slugify($value);
+                    $slug = $this->metaService->getAppTools($value);
                     $object->setSlug($slug);
                 }
 

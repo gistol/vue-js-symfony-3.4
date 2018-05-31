@@ -32,11 +32,14 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
-
-
     AppBundle\Service\FileUploader:
         arguments:
             $imagesDir: "%images_directory%"
+
+    app.tools:
+        class: AppBundle\Service\AppTools
+        arguments: ['@doctrine.orm.entity_manager']
+        public: true
 
     app.meta_service:
         class: AppBundle\Service\MetaService
@@ -48,11 +51,7 @@ services:
         class: AppBundle\Service\Hydrator
         public: true
         autowire: true
-        arguments: ["@app.meta_service"]
-
-    AppBundle\Service\AppTools:
-        public: true
-        autowire: true
+        arguments: ["@app.meta_service", "@app.tools"]
 
     AppBundle\EventListener\EntityListener:
         public: true

@@ -35,6 +35,8 @@ const Store = new Vuex.Store({
         },
 
         displayServerMessage(state, message) {
+            /* if a message is already being displayed */
+            /* Reset the timer */
             if (state.displayMessage) clearTimeout(state.timer);
             state.displayMessage = true;
             state.message = message;
@@ -49,6 +51,11 @@ const Store = new Vuex.Store({
 
         displayWaitingForData() {
             this.commit('displayServerMessage', 'Réception en cours.');
+        },
+
+        hideMessage(state) {
+            state.displayMessage = false;
+            clearTimeout(state.timer);
         }
     },
 
@@ -99,6 +106,8 @@ const Store = new Vuex.Store({
             fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
                 .then((res) => res.json())
                 .then((data) => {
+                    context.commit('hideMessage');
+
                     if (data.length > 0) {
                         context.commit('addArticles', data);
                     }

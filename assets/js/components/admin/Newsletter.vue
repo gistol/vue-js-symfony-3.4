@@ -26,7 +26,7 @@
 
         data() {
             return {
-                newsletters: undefined
+                newsletters: []
             }
         },
 
@@ -37,6 +37,7 @@
                 fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/newsletters')
                     .then(response => response.json())
                     .then(newsletters => {
+                        this.$store.commit('hideMessage');
                         this.newsletters = newsletters;
                     });
             }

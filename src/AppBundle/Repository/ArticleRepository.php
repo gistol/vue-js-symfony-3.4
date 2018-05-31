@@ -36,4 +36,20 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * Function to get the number of articles having the same slug
+     * If one or more, must change the slug end value (-2, -3, ...-n)
+     * @param $slug
+     * @return array
+     */
+    public function myFindBySlug($slug)
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->select('count(a.id) as count_same_slug')
+            ->where('a.slug LIKE :slug')
+            ->setParameter('slug', "$slug%");
+
+        return $qb->getQuery()->getResult();
+    }
 }

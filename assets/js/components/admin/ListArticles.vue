@@ -66,6 +66,7 @@
         },
 
         created() {
+            this.$store.commit('displayWaitingForData');
             this.$store.dispatch('getArticles');
             this.$store.dispatch('getNumberOfArticles');
         },
