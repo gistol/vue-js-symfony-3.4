@@ -48,7 +48,6 @@
         created() {
             this.$store.dispatch('getArticles');
             this.$store.dispatch('getNumberOfArticles');
-            this.$store.dispatch('getCsrfToken');
         },
     }
 </script>

@@ -34,12 +34,15 @@ class DefaultController extends Controller
     /**
      * @Route("/csrf_token", name="csrf_token")
      */
-    public function getCsrfToken(TokenGeneratorInterface $generator)
+    public function getCsrfToken(TokenGeneratorInterface $generator, Request $request)
     {
         $csrf_token = $generator->generateToken();
-        $this->get('session')->set('csrf_token', $csrf_token);
+        $param = $request->request->get('sender');
+        $this->get('session')->set($param, $csrf_token);
 
-        return new JsonResponse(['csrf_token' => $csrf_token]);
+        return new JsonResponse([
+            'csrf_token' => $csrf_token
+        ]);
     }
 
     /**
@@ -95,7 +98,7 @@ class DefaultController extends Controller
         }
 
         if ($request->isXmlHttpRequest()) {
-            if ($hydrator->isFormValid([Comment::class])) {
+            if ($hydrator->isFormValid([Comment::class], $request->get('sender'))) {
                 $comment = $hydrator->hydrateObject(Comment::class);
                 $article->addComment($comment);
                 $comment->setArticle($article);
@@ -112,16 +115,21 @@ class DefaultController extends Controller
     /**
      * @Route("/newsletter", name="newsletter")
      */
-    public function handleNewsletterAction(Request $request, MetaService $metaService)
+    public function handleNewsletterAction(Hydrator $hydrator, Request $request, MetaService $metaService)
     {
-        $email = htmlspecialchars($request->request->get('email'));
+        if ($hydrator->isFormValid([Newsletter::class], $request->get('sender'))) {
 
-        if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
-            $newsletter = (new Newsletter())->setEmail($email);
-            $metaService->persistAndFlush([$newsletter]);
-            return new JsonResponse('Votre abonnement a bien été pris en compte.');
+            $email = htmlspecialchars($request->request->get('email'));
+
+            if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
+                $newsletter = (new Newsletter())->setEmail($email);
+                $metaService->persistAndFlush([$newsletter]);
+                return new JsonResponse('Votre abonnement a bien été pris en compte.');
+            }
+
+            return new JsonResponse("Vous êtes déjà abonné(e).");
+        } else {
+            return new JsonResponse('Formulaire invalide');
         }
-
-        return new JsonResponse("Vous êtes déjà abonné(e).");
     }
 }

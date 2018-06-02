@@ -1,29 +1,22 @@
 <template>
-    <div class="container w40">
-        <table v-for="(comment, key) in comments">
-            <tbody>
-                <tr>
-                    <td><b>Commentaire n°{{ key +1}}</b></td>
-                </tr>
-                <tr>
-                    <td><b>Auteur : </b>{{ comment.username }}</td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Email : </b>{{ comment.email }}
-                    </td>
-                </tr>
-                <tr>
-                    <td><b>Commentaire : </b>{{ comment.comment }}</td>
-                </tr>
-                <tr>
-                    <td><b>Article : </b>{{ comment.article.title }}</td>
-                </tr>
-                <tr>
-                    <td><b>Date : </b>{{ comment.date|formatFullDate }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="comment" v-for="(comment, key) in comments.reverse()">
+            <p v-bind:style="style">Date: {{ comment.date|formatShortDate }}</p>
+            <p>Auteur: {{ comment.username }}</p>
+            <p v-bind:style="style">Email: {{ comment.email }}</p>
+            <p>Commentaire: {{ comment.comment }}</p>
+            <p v-bind:style="style">Article: {{ comment.article.title }}</p>
+            <p v-bind:style="style" v-if="comment.published">Publié: Oui</p>
+            <p>Publié: Non</p>
+            <div class="list_actions">
+                <p v-if="!comment.published">
+                    <button class="button-delete">Masquer</button>
+                </p>
+                <p>
+                    <button class="button-default">Supprimer</button>
+                </p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -37,6 +30,14 @@
         data() {
             return {
                 comments: []
+            }
+        },
+
+        computed: {
+            style() {
+                return {
+                    background: '#fcfcfc',
+                }
             }
         },
 
@@ -58,4 +59,19 @@
             this.getComments();
         }
     }
+
 </script>
+
+<style scoped>
+
+    .comment {
+        padding: 5px;
+        border: 1px solid rgb(163,175,183);
+        margin-bottom: 10px;
+    }
+
+    p {
+        padding: 5px;
+        margin: 0;
+    }
+</style>

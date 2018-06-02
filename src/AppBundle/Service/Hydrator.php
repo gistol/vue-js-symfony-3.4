@@ -42,12 +42,14 @@ class Hydrator
      * @param array $classes
      * @return bool
      */
-    public function isFormValid(array $classes = [])
+    public function isFormValid(array $classes = [], $sender)
     {
+        dump($p = $this->metaService->getSession()->get($sender));
+
         foreach ($this->metaService->getRequest()->request as $field => $value) {
 
             if ($field === 'csrf_token') {
-                if (!($value === $this->metaService->getSession()->get('csrf_token'))) {
+                if (!($value === $this->metaService->getSession()->get($sender))) {
                     return false;
                 }
             } else {
@@ -61,7 +63,7 @@ class Hydrator
                 }
 
                 /* If not in array => the form has been modified before sending it */
-                if (!in_array($method = 'get' . ucfirst($field), $this->methods)) {
+                if ($field !== 'sender' && !in_array($method = 'get' . ucfirst($field), $this->methods)) {
                     return false;
                 }
             }

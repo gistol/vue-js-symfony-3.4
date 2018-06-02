@@ -1,13 +1,13 @@
 <template>
     <div class="container w40">
-        <form v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
+        <form name='login' v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" v-model="username"/>
 
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password"/>
 
-            <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
+            <input type="hidden" name="csrf_token"/>
 
             <input type="submit" class="button-submit"/>
         </form>
@@ -25,6 +25,7 @@
 
         data() {
             return {
+                formName: 'login',
                 username: undefined,
                 password: undefined,
                 style: {
@@ -33,7 +34,7 @@
             }
         },
 
-        computed: mapState(['displayMessage', 'message', 'csrf_token']),
+        computed: mapState(['displayMessage', 'message']),
 
         mixins: [Mixin],
 
@@ -43,9 +44,12 @@
 
                 this.$store.commit('displaySendingRequest');
 
+                const formData = new FormData(this.$el.querySelector('form'));
+                formData.append('sender', 'login');
+
                 this.$store.dispatch('postData', {
                     url: '/vue-js-symfony-3.4/web/app_dev.php/login',
-                    value: new FormData(this.$el.querySelector('form')),
+                    value: formData,
                     contentType: false
 
                 }).then((data) => {
@@ -64,8 +68,10 @@
             }
         },
 
-        created() {
-            this.$store.dispatch('getCsrfToken');
+        mounted() {
+            this.$store.dispatch('getCsrfToken', this.formName).then(token => {
+                this.setCsrfToken(this.formName, token)
+            })
         },
     }
 </script>

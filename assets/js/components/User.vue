@@ -7,8 +7,9 @@
         </nav>
         <router-view></router-view>
         <footer>
-            <form v-on:submit.prevent="addToNewsletter" :enctype="enctype">
+            <form name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
+                <input type="hidden" name="csrf_token"/>
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>
         </footer>
@@ -24,8 +25,25 @@
 
         name: 'User',
 
+        data() {
+            return {
+                formName: 'newsletter'
+            }
+        },
+
         mixins: [Mixin],
 
-        computed: mapState(['displayMessage', 'message'])
+        computed: mapState([
+            'displayMessage',
+            'message',
+            'csrf_token'
+        ]),
+
+        mounted() {
+            this.$store.dispatch('getCsrfToken', this.formName)
+                .then(token => {
+                    this.setCsrfToken(this.formName, token)
+                });
+        }
     }
 </script>

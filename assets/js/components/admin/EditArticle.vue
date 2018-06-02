@@ -1,6 +1,6 @@
 <template>
     <div class="container w40">
-        <form v-on:submit.prevent="handleEdition" :enctype="enctype">
+        <form name='create_edit_article' v-on:submit.prevent="handleEdition" :enctype="enctype">
             <div>
                 <label for="title">Titre</label>
                 <input type="text" id="title" name="title" v-model="title"/>
@@ -9,13 +9,14 @@
             <child-form v-for="(image, i) in images" :item="i" :image="image"></child-form>
             <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
 
-            <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
+            <input type="hidden" name="csrf_token"/>
 
             <input type="submit" class="button-submit"/>
         </form>
-
-        <button v-on:click.prevent="addCategoryForm" class="button-default button-add-category">Ajouter une Category</button>
-        <button v-on:click.prevent="addForm" class="button-default button-add-image">Ajouter une image</button>
+        <div class="list_actions">
+            <button v-on:click.prevent="addCategoryForm" class="button-default">Ajouter une Category</button>
+            <button v-on:click.prevent="addForm" class="button-default">Ajouter une image</button>
+        </div>
     </div>
 </template>
 
@@ -26,6 +27,12 @@
     export default {
 
         name: 'EditArticle',
+
+        data() {
+            return {
+                formName: 'create_edit_article'
+            }
+        },
 
         mixins: [Mixin],
 
@@ -56,8 +63,13 @@
                 .catch((err) => {
                     console.log(err);
                 });
+        },
 
-            this.$store.dispatch('getCsrfToken');
+        mounted() {
+            this.$store.dispatch('getCsrfToken', this.formName)
+                .then(token => {
+                    this.setCsrfToken(this.formName, token);
+                });
         }
     }
 </script>

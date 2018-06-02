@@ -14,7 +14,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="list_articles_actions">
+                    <td class="list_actions">
                         <button class="button-default w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
                         <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
                             <button class="button-default w150">Editer</button>

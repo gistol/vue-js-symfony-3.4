@@ -131,9 +131,13 @@ const Mixins = {
             this.nbCategories++;
         },
 
+        setCsrfToken(formName, token) {
+            this.$el.querySelector('form[name=' + formName + '] > input[name=csrf_token]').value = token;
+        },
+
         /* Common to CreateArticle, EditArticle and Article component (comments) */
 
-        handleSubmit(uri) {
+        handleSubmit(uri, formName) {
 
             const route = this.$route.name;
 
@@ -146,9 +150,12 @@ const Mixins = {
 
             this.$store.commit('displaySendingRequest');
 
+            let formData = new FormData(this.$el.querySelector('form[name=' + formName + ']'));
+            formData.append('sender', formName);
+
             this.$store.dispatch('postData', {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
-                value: new FormData(this.$el.querySelector('form'))
+                value: formData
             }).then((data) => {
                 this.$store.commit('displayServerMessage', data);
             }).catch((err) => {
@@ -157,21 +164,21 @@ const Mixins = {
         },
 
         handleCreation() {
-            this.handleSubmit('/admin/create');
+            this.handleSubmit('/admin/create', 'create_edit_article');
         },
 
         handleEdition() {
-            this.handleSubmit('/admin/articles/edit/' + this.$route.params.id);
+            this.handleSubmit('/admin/articles/edit/' + this.$route.params.id, 'create_edit_article');
         },
 
         handleComment() {
-            this.handleSubmit('/article/' + this.$route.params.slug + '/comment');
+            this.handleSubmit('/article/' + this.$route.params.slug + '/comment', 'comment_article');
             this.showForm();
         },
 
         addToNewsletter() {
             if (this.newsletterFormValid) {
-                this.handleSubmit('/newsletter');
+                this.handleSubmit('/newsletter', 'newsletter');
             } else {
                 alert("Adresse email invalide !");
             }

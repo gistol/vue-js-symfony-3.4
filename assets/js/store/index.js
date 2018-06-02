@@ -8,7 +8,6 @@ const Store = new Vuex.Store({
         articles: [],
         articlesCount: undefined,
         lastId: 0,
-        csrf_token: undefined,
         displayMessage: false,
         message: '',
         timer: undefined
@@ -24,10 +23,6 @@ const Store = new Vuex.Store({
                 }
                 state.articles.push(article);
             });
-        },
-
-        addCsrfToken(state, csrf_token) {
-            state.csrf_token = csrf_token
         },
 
         setNumberOfArticles(state, data) {
@@ -61,23 +56,28 @@ const Store = new Vuex.Store({
 
     actions: {
 
-        getCsrfToken(context) {
+        getCsrfToken({commit}, sender) {
 
-            const req = getRequestObject("GET", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
+            return new Promise((resolve) => {
 
-            req.addEventListener("load", () => {
+                const req = getRequestObject("POST", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
 
-                if (req.status >= 200 && req.status < 400) {
-                    const resp = JSON.parse(req.responseText);
-                    context.commit('addCsrfToken', resp.csrf_token);
-                } else {
-                    if (this.$route.name === 'login') {
-                        this.$store.push({name: 'login'})
+                req.addEventListener("load", () => {
+
+                    if (req.status >= 200 && req.status < 400) {
+                        const resp = JSON.parse(req.responseText);
+                        resolve(resp.csrf_token);
+                    } else {
+                        if (this.$route.name === 'login') {
+                            this.$store.push({name: 'login'})
+                        }
                     }
-                }
-            });
+                });
 
-            req.send();
+                req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                req.send('sender=' + sender);
+            });
         },
 
         postData(context, data) {
@@ -102,14 +102,14 @@ const Store = new Vuex.Store({
             });
         },
 
-        getArticles(context) {
+        getArticles({commit}) {
             fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
                 .then((res) => res.json())
                 .then((data) => {
-                    context.commit('hideMessage');
+                    commit('hideMessage');
 
                     if (data.length > 0) {
-                        context.commit('addArticles', data);
+                        commit('addArticles', data);
                     }
                 })
                 .catch((err) => {

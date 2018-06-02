@@ -29,7 +29,7 @@ class AdminController extends Controller
     {
         if ($request->isXmlHttpRequest()) {
 
-            if ($hydrator->isFormValid([Article::class, Image::class, Category::class])) {
+            if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
                 $article = $hydrator->hydrateObject(Article::class);
                 $metaService->persistAndFlush([$article]);
                 return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
@@ -69,7 +69,7 @@ class AdminController extends Controller
     public function editArticleAction($id, Request $request, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
-            if ($hydrator->isFormValid([Article::class, Image::class, Category::class])) {
+            if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
                 $ret = $this->getArticle($id);
 
                 if ($ret instanceof Article) {

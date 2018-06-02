@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class='container w40'>
+        <div class='container w40 w100sm'>
             <figure v-for="image in article.images">
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption>{{ image.content }}</figcaption>
@@ -8,8 +8,7 @@
         </div>
         <div id="comment_modal" v-show="show">
             <button @click="showForm" class="button-delete">Fermer</button>
-            <form v-on:submit.prevent="handleComment" :enctype="enctype">
-
+            <form name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
                 <div>
                     <label for="username">Nom</label>
                     <input type="text" id="username" name="username" v-model="username"/>
@@ -25,12 +24,12 @@
                     <textarea id="comment" name="comment" v-model="comment"></textarea>
                 </div>
 
-                <input type="hidden" name="csrf_token" v-bind:value='csrf_token'/>
+                <input type="hidden" name="csrf_token"/>
 
                 <input type="submit" class="button-submit mauto"/>
             </form>
         </div>
-        <div class='container'>
+        <div v-if="loaded" class='container'>
             <button @click="showForm" class="button-default mauto">Commenter</button>
         </div>
     </div>
@@ -46,7 +45,9 @@
 
         data() {
             return {
+                formName: 'comment_article',
                 article: [],
+                loaded: false,
                 username: undefined,
                 email: undefined,
                 comment: undefined,
@@ -56,12 +57,6 @@
 
         mixins: [Mixin],
 
-        computed: {
-            csrf_token() {
-                return this.$store.state.csrf_token;
-            },
-        },
-
         methods: {
 
             getArticle(slug) {
@@ -69,6 +64,7 @@
                     .then((data) => data.json())
                     .then((data) => {
                         this.article = data;
+                        this.loaded = true;
                     })
                     .catch((err) => {
                         console.log('Err => ' + err)
@@ -84,8 +80,14 @@
 
         created() {
             this.getArticle(this.$route.params.slug);
-            this.$store.dispatch('getCsrfToken');
         },
+
+        mounted() {
+            this.$store.dispatch('getCsrfToken', this.formName)
+                .then(token => {
+                    this.setCsrfToken(this.formName, token)
+                });
+        }
     }
 </script>
 
@@ -96,7 +98,7 @@
     #comment_modal {
         position: fixed;
         z-index: 1;
-        background: rgba(0,0,0,.8);
+        background: rgba(0,0,0,.7);
         top: 0;
         bottom: 0;
         left: 0;
@@ -117,6 +119,12 @@
             position: absolute;
             top: 5px;
             right: 5px;
+        }
+
+        @media all and (max-width: 1024px){
+            form {
+                width: 95%;
+            }
         }
     }
 
