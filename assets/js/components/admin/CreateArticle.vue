@@ -1,5 +1,5 @@
 <template>
-    <div class="container w40">
+    <div class="container w40 w95sm">
         <form name='create_edit_article' v-on:submit.prevent="handleCreation" :enctype="enctype">
 
             <div>
@@ -32,7 +32,7 @@
 
         data() {
             return {
-                formName: 'create_edit_article'
+                formName: 'create_edit_article',
             }
         },
 

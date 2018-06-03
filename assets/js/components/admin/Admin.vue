@@ -1,7 +1,8 @@
 <template>
     <div>
         <nav id="admin_navbar">
-            <ul>
+            <img v-if='smallDevice' v-on:click='showMenu' id="burger" src="images/threelines.png" />
+            <ul id="menu">
                 <router-link v-bind:to="{name: 'createArticle'}" tag="li">Créer un article</router-link>
                 <router-link v-bind:to="{name: 'listArticle'}" tag="li">Liste des articles</router-link>
                 <router-link v-bind:to="{name: 'comments'}" tag="li">Commentaires</router-link>
@@ -17,13 +18,14 @@
 <script>
 
     import Mixin from '../../mixins';
+    import MenuMixin from '../../mixins/MenuMixin';
     import { mapState } from 'vuex';
 
     export default {
 
         name: 'Admin',
 
-        mixins: [Mixin],
+        mixins: [Mixin, MenuMixin],
 
         computed: mapState(['displayMessage', 'message']),
 
@@ -34,7 +36,7 @@
             } else {
                 next();
             }
-        }
+        },
     }
 </script>
 

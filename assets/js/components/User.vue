@@ -1,7 +1,8 @@
 <template>
     <div id="app_user">
         <nav>
-            <ul>
+            <img v-if='smallDevice' v-on:click="showMenu" id="burger" src="images/threelines.png" />
+            <ul id="menu">
                 <router-link v-bind:to="{name: 'home_user'}" tag="li">Accueil</router-link>
             </ul>
         </nav>
@@ -19,6 +20,7 @@
 
 <script>
     import Mixin from '../mixins';
+    import MenuMixin from '../mixins/'
     import { mapState } from 'vuex';
 
     export default {
@@ -31,19 +33,17 @@
             }
         },
 
-        mixins: [Mixin],
+        mixins: [Mixin, MenuMixin],
 
         computed: mapState([
             'displayMessage',
             'message',
-            'csrf_token'
         ]),
 
         mounted() {
-            this.$store.dispatch('getCsrfToken', this.formName)
-                .then(token => {
-                    this.setCsrfToken(this.formName, token)
-                });
+            this.$store.dispatch('getCsrfToken', this.formName).then(token => {
+                this.setCsrfToken(this.formName, token)
+            });
         }
     }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="container w40">
+    <div class="container w40 w95sm">
         <form name='login' v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" v-model="username"/>

@@ -36,7 +36,7 @@
         computed: {
             style() {
                 return {
-                    background: '#fcfcfc',
+                    background: '#eee',
                 }
             }
         },
