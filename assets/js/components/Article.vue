@@ -1,14 +1,15 @@
 <template>
     <div>
-        <div class='container w40 w100sm'>
-            <figure v-for="image in article.images">
+        <div class='container w40 w95sm'>
+            <h2>{{ article.title }}</h2>
+            <figure class='tile' v-for="image in article.images">
                 <img :src="'./images/' + image.src" :alt='image.title' />
-                <figcaption>{{ image.content }}</figcaption>
+                <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
         </div>
         <div id="comment_modal" v-show="show">
             <button @click="showForm" class="button-delete">Fermer</button>
-            <form name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
+            <form autocomplete="off" name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
                 <div>
                     <label for="username">Nom</label>
                     <input type="text" id="username" name="username" v-model="username"/>
@@ -75,7 +76,7 @@
             /* Also called in the mixin when the user submits their message */
             showForm(e) {
                 this.show = !this.show;
-            }
+            },
         },
 
         created() {
@@ -123,7 +124,7 @@
 
         @media all and (max-width: 1024px){
             form {
-                width: 95%;
+                width: 90%;
             }
         }
     }

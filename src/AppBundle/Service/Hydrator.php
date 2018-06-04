@@ -44,8 +44,6 @@ class Hydrator
      */
     public function isFormValid(array $classes = [], $sender)
     {
-        dump($p = $this->metaService->getSession()->get($sender));
-
         foreach ($this->metaService->getRequest()->request as $field => $value) {
 
             if ($field === 'csrf_token') {

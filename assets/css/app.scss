@@ -2,6 +2,8 @@
 
 body{
   font-family: 'Open Sans', sans-serif;
+  color: #76838f;
+  background: #f1f4f5;
 }
 
 /* Admin */
@@ -44,7 +46,7 @@ nav ul li:hover {
   color: #fff;
 }
 
-.container *{
+.container *, footer *{
   @extend %border-box;
 }
 
@@ -74,6 +76,10 @@ table, thead, tr, td {
   text-align: left;
 }
 
+th {
+  color: $super-dark-grey;
+}
+
 .container {
   margin: 50px auto;
 
@@ -82,6 +88,7 @@ table, thead, tr, td {
   }
 
   @media all and (max-width: 1024px){
+    margin: 10px auto 50px auto;
     @include width(100%);
   }
 }
@@ -111,20 +118,37 @@ table, thead, tr, td {
   margin: 10px auto;
 }
 
-.article {
-  @include widthArticle();
-  padding: 5px;
-  border: 1px solid #d8d8d8;
-  margin-top: 10px;
-  color: lightgrey;
+.mt5 {
+  margin-top: 5px;
+}
 
-  h2 {
-    text-align: center;
-  }
+.ml5 {
+  margin-left: 5px;
+}
+
+h2 {
+  text-align: center;
+}
+
+form,
+.tile {
+  padding: 15px;
+  box-shadow: 0 2px 3px rgb(163,175,183);
+  background: #fff;
+}
+
+.tile {
+  @include widthArticle();
+  margin: 20px auto;
 
   .image {
     @include width(100%);
   }
+}
+
+figcaption {
+  font-size: .9em;
+  margin-top: 5px;
 }
 
 .list_actions {
@@ -135,25 +159,29 @@ table, thead, tr, td {
 /* form */
 
 form {
-  background: $super-dark-grey;
-  padding: 15px;
-  border-radius: 8px;
+  background: #fff;
   @include width(100%);
-  $array: 'input[type='text']', 'input[type='password']', 'input[type='email']', 'input[type='file']', textarea;
+  $array: 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="file"]', textarea;
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
+  @include loopItem($array, 'color', $light-grey);
   @include loopItem($array, 'padding', 7px);
-  @include loopItem($array, 'margin', '5px auto 10px auto');
-  @include loopItem($array, 'border-radius', '5px');
+  @include loopItem($array, 'margin', 0);
   @include loopItem($array, 'border', 'none');
+  @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
+  @include loopItem('input[type="password"]', 'border-bottom', 1px solid lightgrey);
+  @include loopItem('input[type="email"]', 'border-bottom', 1px solid lightgrey);
+  @include loopItem('textarea', 'border', 1px solid lightgrey);
   @include loopItem('textarea', 'display', 'block');
+  @include focused($array, 'border-color', 'dodgerblue');
 
   label {
     color: lightgrey;
+    display: block;
     padding: 0;
-    margin-bottom: 5px;
-    font-size: 1em;
+    margin: 15px auto 0 auto;
+    font-size: .9em;
   }
 
   img{
@@ -197,7 +225,7 @@ form {
 
 .button-submit {
   @extend .btn;
-  @extend .mauto;
+  @extend .m10;
   background: darkslategray;
 }
 
@@ -242,7 +270,9 @@ form {
       input[type='email'] {
         margin: 0 auto 10px auto;
       }
-      @include width(30%);
+      box-shadow: none;
+      background: $super-dark-grey;
+      width: 30%;
       @extend %margin-auto;
     }
   }
@@ -252,10 +282,12 @@ form {
   border: none;
 }
 
-#burger {
-  height: 40px;
-  margin-top: 5px;
+#burger,
+#cross {
+  height: 20px;
+  margin: 15px 0 15px 4%;
   padding: 0;
+  cursor: pointer;
 }
 
 @media all and (max-width: 1024px) {
@@ -273,6 +305,30 @@ form {
   nav ul li {
     width: 100%;
     text-align: left;
-    text-indent: 10%;
+    text-indent: 8%;
   }
+
+  .tile{
+    padding: 10px;
+    width: 100%;
+    display: block;
+    margin: 15px auto;
+  }
+
+  #app_user {
+    footer form{
+        width: 100%;
+      }
+  }
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
+.white_space {
+  white-space: pre-wrap;
 }

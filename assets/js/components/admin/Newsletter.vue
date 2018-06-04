@@ -1,5 +1,5 @@
 <template>
-    <div class="container w40" v-if="newsletters.length > 0">
+    <div class="container w40 w95sm" v-if="newsletters.length > 0">
         <table>
             <thead>
                 <tr>

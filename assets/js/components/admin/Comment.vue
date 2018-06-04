@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        <div class="comment" v-for="(comment, key) in comments.reverse()">
+    <div class="container w40 w95sm">
+        <div class="tile" v-for="comment in comments.reverse()">
             <p v-bind:style="style">Date: {{ comment.date|formatShortDate }}</p>
             <p>Auteur: {{ comment.username }}</p>
             <p v-bind:style="style">Email: {{ comment.email }}</p>
@@ -36,7 +36,7 @@
         computed: {
             style() {
                 return {
-                    background: '#eee',
+                    background: '#fafafa',
                 }
             }
         },
@@ -63,12 +63,6 @@
 </script>
 
 <style scoped>
-
-    .comment {
-        padding: 5px;
-        border: 1px solid rgb(163,175,183);
-        margin-bottom: 10px;
-    }
 
     p {
         padding: 5px;

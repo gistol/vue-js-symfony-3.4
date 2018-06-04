@@ -16,19 +16,25 @@ const Mixins = {
 
     components: {
         'server-message': {
-            template: "<div :style='style' v-show='displayMessage'><slot></slot></div>",
+            template:
+            "<transition name='fade'>" +
+            "<div :style='style' v-show='displayMessage'>" +
+            "<slot></slot>" +
+            "</div>" +
+            "</transition>",
 
             props: ['displayMessage'],
 
             computed: {
                 style() {
                     return {
-                        padding: '20px',
+                        padding: '15px',
                         position: 'fixed',
                         top: '60px',
-                        left: '0',
-                        background: 'rgba(0, 0, 0, .8)',
-                        color: '#fff'
+                        right: '0',
+                        background: '#21292e',
+                        color: 'lightgrey',
+                        fontSize: '.9em',
                     }
                 }
             },
@@ -44,7 +50,7 @@ const Mixins = {
                 "<input type='file' v-bind:name='fileName' v-on:change='loadFile'/>" +
                 "<label>Contenu</label>" +
                 "<textarea :value='image.content' v-bind:name='content' v-bind:style='textAreaH'></textarea>" +
-                "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'>Supprimer</button>" +
                 "</div>",
 
             data() {
@@ -81,7 +87,7 @@ const Mixins = {
                 "<div>" +
                 "<label v-bind:style='style' v-bind:for='cat'>Catégorie n°{{ index + 1 }}</label>" +
                 "<input type='text' v-bind:name='name' :id='cat' :value='this.$props.category.category'/>" +
-                "<button v-on:click='remove' class='button-delete'>Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'>Supprimer</button>" +
                 "</div>"
             ,
 

@@ -1,28 +1,16 @@
 <template>
-    <div class='container w40'>
+    <div class='container w40 w95sm'>
         <h2 v-if="articlesCount.length > 0">{{ articlesCount }} article(s)</h2>
-        <table v-for="article in articles">
-            <thead>
-                <tr>
-                    <th>{{ article.title }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <img v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="list_actions">
-                        <button class="button-default w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
-                        <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
-                            <button class="button-default w150">Editer</button>
-                        </router-link>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="tile" v-for="article in articles">
+            <p>{{ article.title }}</p>
+            <img class='image' v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
+            <div class="list_actions">
+                <button class="button-default w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
+                <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
+                    <button class="button-default w150 ml5">Editer</button>
+                </router-link>
+            </div>
+        </div>
         <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
     </div>
 </template>
@@ -72,3 +60,10 @@
         },
     }
 </script>
+
+<style scoped>
+    .article {
+        width: 100%;
+    }
+
+</style>

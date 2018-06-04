@@ -17,7 +17,7 @@
 
         <div class="list_actions">
             <button v-on:click.prevent="addCategoryForm" class="button-default">Ajouter une Category</button>
-            <button v-on:click.prevent="addForm" class="button-default">Ajouter une image</button>
+            <button v-on:click.prevent="addForm" class="button-default ml5">Ajouter une image</button>
         </div>
     </div>
 </template>

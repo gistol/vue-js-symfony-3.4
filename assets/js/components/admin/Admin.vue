@@ -17,8 +17,8 @@
 
 <script>
 
-    import Mixin from '../../mixins';
-    import MenuMixin from '../../mixins/MenuMixin';
+    import Mixin from '../../mixins/index';
+    import MenuMixin from '../../mixins/menuMixin';
     import { mapState } from 'vuex';
 
     export default {

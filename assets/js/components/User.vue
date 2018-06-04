@@ -8,7 +8,7 @@
         </nav>
         <router-view></router-view>
         <footer>
-            <form name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
+            <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
                 <input type="hidden" name="csrf_token"/>
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
@@ -19,8 +19,8 @@
 </template>
 
 <script>
-    import Mixin from '../mixins';
-    import MenuMixin from '../mixins/'
+    import Mixin from '../mixins/index';
+    import MenuMixin from '../mixins/menuMixin';
     import { mapState } from 'vuex';
 
     export default {
