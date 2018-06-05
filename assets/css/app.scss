@@ -156,6 +156,10 @@ figcaption {
   padding: 5px;
 }
 
+.field {
+  margin: 10px auto;
+}
+
 /* form */
 
 form {
@@ -165,15 +169,16 @@ form {
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
-  @include loopItem($array, 'color', $light-grey);
+  @include loopItem($array, 'color', $dark-grey);
   @include loopItem($array, 'padding', 7px);
-  @include loopItem($array, 'margin', 0);
+  //@include loopItem($array, 'margin', 0);
   @include loopItem($array, 'border', 'none');
   @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="password"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="email"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('textarea', 'border', 1px solid lightgrey);
   @include loopItem('textarea', 'display', 'block');
+  @include loopItem('textarea', 'margin-top', '10px');
   @include focused($array, 'border-color', 'dodgerblue');
 
   label {

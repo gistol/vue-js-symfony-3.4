@@ -87,6 +87,25 @@ class AdminController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return Response
+     * @Route("/admin/comment/status", name="comment_status")
+     */
+    public function changeCommentStatus(Request $request, ObjectManager $manager)
+    {
+        $comment = $manager->getRepository(Comment::class)->findOneBy([
+            "id" => $request->get('id')
+        ]);
+
+        $comment->setPublished("true" === $request->get('published'));
+
+        $manager->flush();
+
+        return new JsonResponse("Mise à jour réussie");
+    }
+
+    /**
      * @Route("/admin/comments", name="admin_comments")
      * @param ObjectManager $manager
      * @return Response

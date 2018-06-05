@@ -10,24 +10,24 @@
         <div id="comment_modal" v-show="show">
             <button @click="showForm" class="button-delete">Fermer</button>
             <form autocomplete="off" name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
-                <div>
+                <div class="field">
                     <label for="username">Nom</label>
                     <input type="text" id="username" name="username" v-model="username"/>
                 </div>
 
-                <div>
+                <div class="field">
                     <label for="email">Email</label>
                     <input type="text" id="email" name="email" v-model="email"/>
                 </div>
 
-                <div>
+                <div class="field">
                     <label for="comment">Commentaire</label>
                     <textarea id="comment" name="comment" v-model="comment"></textarea>
                 </div>
 
                 <input type="hidden" name="csrf_token"/>
 
-                <input type="submit" class="button-submit mauto"/>
+                <input type="submit" class="button-submit m10"/>
             </form>
         </div>
         <div v-if="loaded" class='container'>

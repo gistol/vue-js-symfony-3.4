@@ -1,16 +1,19 @@
 <template>
     <div class="container w40 w95sm">
-        <div class="tile" v-for="comment in comments.reverse()">
+        <div class="tile" v-for="(comment, key) in comments">
             <p v-bind:style="style">Date: {{ comment.date|formatShortDate }}</p>
             <p>Auteur: {{ comment.username }}</p>
             <p v-bind:style="style">Email: {{ comment.email }}</p>
             <p>Commentaire: {{ comment.comment }}</p>
             <p v-bind:style="style">Article: {{ comment.article.title }}</p>
-            <p v-bind:style="style" v-if="comment.published">Publié: Oui</p>
-            <p>Publié: Non</p>
+            <p v-if="comment.published">Publié: Oui</p>
+            <p v-else>Publié: Non</p>
             <div class="list_actions">
-                <p v-if="!comment.published">
-                    <button class="button-delete">Masquer</button>
+                <p v-if="comment.published">
+                    <button v-on:click='updateStatus(false, comment.id, key)' class="button-delete">Masquer</button>
+                </p>
+                <p v-else>
+                    <button v-on:click='updateStatus(true, comment.id, key)' class="button-default">Publier</button>
                 </p>
                 <p>
                     <button class="button-default">Supprimer</button>
@@ -51,7 +54,17 @@
                         this.$store.commit('hideMessage');
                         this.comments = comments;
                     });
-            }
+            },
+
+            updateStatus(bool, id, key) {
+                this.$store.dispatch('postData', {
+                    url: "/vue-js-symfony-3.4/web/app_dev.php/admin/comment/status",
+                    contentType: 'application/x-www-form-urlencoded',
+                    value: 'published=' + bool + '&id=' + id
+                }).then(() => {
+                    this.comments[key].published = bool;
+                })
+            },
         },
 
         created() {
