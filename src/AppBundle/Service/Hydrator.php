@@ -201,7 +201,11 @@ class Hydrator
             foreach ($categories as $category) {
 
                 if (is_null($entity = $this->metaService->getEntityManager()->getRepository(Category::class)->findOneBy(['category' => $category]))) {
-                    $cat = (new Category())->setCategory($category);
+                    $cat = (new Category())->setCategory(strtolower($category));
+                }
+
+                if (!is_null($entity)) {
+                    $entity->setCategory(strtolower($category));
                 }
 
                 if (!$articleCategories->contains($cat = !is_null($entity) ? $entity : $cat)) {

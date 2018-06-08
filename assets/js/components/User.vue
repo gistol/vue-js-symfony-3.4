@@ -4,6 +4,7 @@
             <img v-if='smallDevice' v-on:click="showMenu" id="burger" src="images/threelines.png" />
             <ul id="menu">
                 <router-link v-bind:to="{name: 'home_user'}" tag="li">Accueil</router-link>
+                <router-link v-bind:to="{name: 'categories'}" tag="li">Catégories</router-link>
             </ul>
         </nav>
         <router-view></router-view>

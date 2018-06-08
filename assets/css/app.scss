@@ -146,6 +146,11 @@ form,
   }
 }
 
+.tile-comment{
+  @extend .tile;
+  cursor: pointer;
+}
+
 figcaption {
   font-size: .9em;
   margin-top: 5px;
@@ -165,24 +170,27 @@ figcaption {
 form {
   background: #fff;
   @include width(100%);
-  $array: 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="file"]', textarea;
+  $array: 'select', 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="file"]', textarea;
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
-  @include loopItem($array, 'color', $dark-grey);
   @include loopItem($array, 'padding', 7px);
-  //@include loopItem($array, 'margin', 0);
+  @include loopItem($array, 'color', #76838f);
+  @include loopItem($array, 'margin', 5px auto);
   @include loopItem($array, 'border', 'none');
+  @include loopItem('select', 'border', '1px solid lightgrey');
   @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="password"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="email"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('textarea', 'border', 1px solid lightgrey);
   @include loopItem('textarea', 'display', 'block');
   @include loopItem('textarea', 'margin-top', '10px');
+  @include loopItem('textarea', 'font-size', '.9em');
+  @include loopItem('textarea', 'height', '150px');
+  @include loopItem('textarea', 'resize', 'none');
   @include focused($array, 'border-color', 'dodgerblue');
 
   label {
-    color: lightgrey;
     display: block;
     padding: 0;
     margin: 15px auto 0 auto;
@@ -210,7 +218,6 @@ form {
 }
 
 .btn {
-  @include borderRadius(7px);
   @extend %block;
   @extend %no-border;
   @extend %pointer;
@@ -336,4 +343,31 @@ form {
 
 .white_space {
   white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -o-pre-wrap;
+}
+
+.button-group{
+  margin-top: 5px;
+  display: flex;
+  display: -webkit-flex;
+}
+
+.button-group button {
+  border-left: 1px solid white;
+}
+
+.comment {
+  border-left: 3px solid lightgrey;
+  margin-top: 15px;
+  padding: 0 10px 1px 10px;
+}
+
+.category_link{
+  margin: 0 5px;
+  color: #76838f;
+}
+
+.category_link:hover{
+  color: dodgerblue;
 }

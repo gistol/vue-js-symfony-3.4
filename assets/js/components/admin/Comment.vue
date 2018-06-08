@@ -1,23 +1,14 @@
 <template>
     <div class="container w40 w95sm">
         <div class="tile" v-for="(comment, key) in comments">
-            <p v-bind:style="style">Date: {{ comment.date|formatShortDate }}</p>
-            <p>Auteur: {{ comment.username }}</p>
-            <p v-bind:style="style">Email: {{ comment.email }}</p>
-            <p>Commentaire: {{ comment.comment }}</p>
+            <p v-bind:style="style">{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
+            <p>{{ comment.email }}</p>
+            <p>{{ comment.comment }}</p>
             <p v-bind:style="style">Article: {{ comment.article.title }}</p>
-            <p v-if="comment.published">Publié: Oui</p>
-            <p v-else>Publié: Non</p>
-            <div class="list_actions">
-                <p v-if="comment.published">
-                    <button v-on:click='updateStatus(false, comment.id, key)' class="button-delete">Masquer</button>
-                </p>
-                <p v-else>
-                    <button v-on:click='updateStatus(true, comment.id, key)' class="button-default">Publier</button>
-                </p>
-                <p>
-                    <button class="button-default">Supprimer</button>
-                </p>
+            <div class="button-group">
+                <button v-if="comment.published" v-on:click='updateStatus(false, comment.id, key)' class="button-delete">Masquer</button>
+                <button v-else v-on:click='updateStatus(true, comment.id, key)' class="button-default">Publier</button>
+                <button class="button-delete"><i class="fas fa-trash-alt"></i> Supprimer</button>
             </div>
         </div>
     </div>
@@ -39,7 +30,7 @@
         computed: {
             style() {
                 return {
-                    background: '#fafafa',
+                    borderBottom: '1px solid lightgrey',
                 }
             }
         },

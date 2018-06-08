@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\AppBundle;
 use AppBundle\Entity\Article;
+use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Service\Hydrator;
@@ -11,13 +13,11 @@ use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 
 class DefaultController extends Controller
 {
@@ -72,6 +72,16 @@ class DefaultController extends Controller
     public function getArticleAction($slug, ObjectManager $manager)
     {
         return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
+    }
+
+    /**
+     * @Route("/category/{category}", name="category")
+     * @param string $category
+     * @return Response
+     */
+    public function getArticlesByCategory($category, ObjectManager $manager)
+    {
+        return $this->getJson($manager->getRepository(Category::class)->findOneBy(['category' => $category])->getArticles());
     }
 
     /**
@@ -131,5 +141,15 @@ class DefaultController extends Controller
         } else {
             return new JsonResponse('Formulaire invalide');
         }
+    }
+
+    /**
+     * @Route("/categories", name="categories")
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function categoriesAction(ObjectManager $manager)
+    {
+        return $this->get('app.serializor')->serialize($manager->getRepository(Category::class)->findAll());
     }
 }

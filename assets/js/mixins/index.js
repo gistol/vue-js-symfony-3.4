@@ -32,8 +32,9 @@ const Mixins = {
                         position: 'fixed',
                         top: '60px',
                         right: '0',
-                        background: '#21292e',
-                        color: 'lightgrey',
+                        background: '#fff',
+                        boxShadow: '0 2px 3px rgb(163,175,183)',
+                        color: '#76838f',
                         fontSize: '.9em',
                     }
                 }
@@ -44,13 +45,13 @@ const Mixins = {
 
             template:
                 "<div style='margin: 10px auto;'>" +
-                "<label for='image'>Image</label>" +
+                "<label for='image' class='label-file'><i class='fas fa-image'></i> Image</label>" +
                 "<img v-if='this.$props.image.src !== undefined' v-bind:src='src'/>" +
                 "<img v-bind:src='preview'/>" +
                 "<input type='file' v-bind:name='fileName' v-on:change='loadFile'/>" +
                 "<label>Contenu</label>" +
                 "<textarea :value='image.content' v-bind:name='content' v-bind:style='textAreaH'></textarea>" +
-                "<button v-on:click='remove' class='button-delete mt5'>Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'><i class='fas fa-trash-alt'></i> Supprimer</button>" +
                 "</div>",
 
             data() {
@@ -87,7 +88,7 @@ const Mixins = {
                 "<div>" +
                 "<label v-bind:style='style' v-bind:for='cat'>Catégorie n°{{ index + 1 }}</label>" +
                 "<input type='text' v-bind:name='name' :id='cat' :value='this.$props.category.category'/>" +
-                "<button v-on:click='remove' class='button-delete mt5'>Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'><i class='fas fa-trash-alt'></i> Supprimer</button>" +
                 "</div>"
             ,
 
@@ -199,6 +200,10 @@ const Mixins = {
 
         formatFullDate(date) {
             return 'Le ' + new Date(date.timestamp*1000).toLocaleString();
+        },
+
+        capitalize(val) {
+            return val.charAt(0).toUpperCase() + val.slice(1);
         }
     },
 };

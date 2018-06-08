@@ -12,12 +12,12 @@
 
             <input type="hidden" name="csrf_token"/>
 
-            <input type="submit" class="button-submit"/>
+            <button type="submit" class="button-submit">Envoyer</button>
         </form>
 
-        <div class="list_actions">
-            <button v-on:click.prevent="addCategoryForm" class="button-default">Ajouter une Category</button>
-            <button v-on:click.prevent="addForm" class="button-default ml5">Ajouter une image</button>
+        <div class="button-group">
+            <button v-on:click.prevent="addCategoryForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Catégorie</button>
+            <button v-on:click.prevent="addForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Image</button>
         </div>
     </div>
 </template>

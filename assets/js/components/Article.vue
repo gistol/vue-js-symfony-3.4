@@ -6,6 +6,21 @@
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
+            <div class="tile" v-if="loaded">
+                <p>Catégories associées à l'article</p>
+                <div class="category">
+                    <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">{{ category.category|capitalize }}</router-link>
+                </div>
+            </div>
+            <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
+                <i class="fas fa-plus-circle" v-if='!displayComment'></i>
+                <i class="fas fa-minus-circle" v-if='displayComment'></i>
+                Commentaires
+                <div class="comment" v-if="displayComment && comment.published" v-for="comment in article.comments">
+                    <p>{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
+                    <p class="white_space">{{ comment.comment }}</p>
+                </div>
+            </div>
         </div>
         <div id="comment_modal" v-show="show">
             <button @click="showForm" class="button-delete">Fermer</button>
@@ -31,7 +46,7 @@
             </form>
         </div>
         <div v-if="loaded" class='container'>
-            <button @click="showForm" class="button-default mauto">Commenter</button>
+            <button @click="showForm" class="button-default mauto"><i class="far fa-comment"></i> Commenter</button>
         </div>
     </div>
 </template>
@@ -53,6 +68,7 @@
                 email: undefined,
                 comment: undefined,
                 show: false, /* Modal */
+                displayComment: false
             }
         },
 
@@ -62,8 +78,8 @@
 
             getArticle(slug) {
                 fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/article/' + slug)
-                    .then((data) => data.json())
-                    .then((data) => {
+                    .then(data => data.json())
+                    .then(data => {
                         this.article = data;
                         this.loaded = true;
                     })
@@ -95,6 +111,10 @@
 <style lang="scss" scoped>
 
     @import "../../../assets/css/variables";
+
+    .category {
+        @extend %flex;
+    }
 
     #comment_modal {
         position: fixed;

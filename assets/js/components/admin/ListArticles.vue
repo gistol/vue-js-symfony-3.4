@@ -4,14 +4,14 @@
         <div class="tile" v-for="article in articles">
             <p>{{ article.title }}</p>
             <img class='image' v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
-            <div class="list_actions">
-                <button class="button-default w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
+            <div class="button-group">
                 <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
-                    <button class="button-default w150 ml5">Editer</button>
+                    <button class="button-default w150">Editer</button>
                 </router-link>
+                <button class="button-delete w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
             </div>
         </div>
-        <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default button-add">Plus d'articles</button>
+        <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default">Plus d'articles</button>
     </div>
 </template>
 

@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import User from '../components/User';
 import Homepage from '../components/Homepage';
 import Article from '../components/Article';
+import Category from '../components/Category';
 import Admin from '../components/admin/Admin';
 import CreateArticle from '../components/admin/CreateArticle';
 import ListArticles from '../components/admin/ListArticles';
@@ -34,6 +35,18 @@ const Router = new VueRouter({
                     component: Article,
                     props: true
                 },
+                {
+                    path: 'category',
+                    name: 'categories',
+                    component: Category,
+                    props: true
+                },
+                {
+                    path: 'category/:category',
+                    name: 'category',
+                    component: Category,
+                    props: true
+                }
             ]
         },
         {
