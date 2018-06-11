@@ -1,6 +1,6 @@
 <template>
     <div class="container w40 w95sm">
-        <form name='create_edit_article' v-on:submit.prevent="handleCreation" :enctype="enctype">
+        <form name='create_edit_article' class='tile' v-on:submit.prevent="handleCreation" :enctype="enctype">
 
             <div>
                 <label for="title">Titre</label>

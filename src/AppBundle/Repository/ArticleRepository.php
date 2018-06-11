@@ -39,7 +39,8 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Function to get the number of articles having the same slug
-     * If one or more, must change the slug end value (-2, -3, ...-n)
+     * If one or more, must change the slug end value (slug-2, slug-3, ...slug-n)
+     *
      * @param $slug
      * @return array
      */
@@ -51,5 +52,20 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('slug', "$slug%");
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param $keyword
+     * @return array
+     */
+    public function myFindByKeyword($keyword)
+    {
+        $sql = "SELECT DISTINCT title 
+                FROM article 
+                WHERE title LIKE '%$keyword%'";
+
+        return $this->getEntityManager()
+            ->getConnection()
+            ->fetchAll($sql);
     }
 }

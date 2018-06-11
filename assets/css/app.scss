@@ -21,6 +21,10 @@ nav{
   background: $super-dark-grey;
   width: 100%;
   @include height(50px);
+  @extend %flex;
+  @extend %align-center;
+  justify-content: space-between;
+  z-index: 2;
 }
 
 nav ul{
@@ -29,6 +33,7 @@ nav ul{
   @include height(100%);
   align-items: center;
   list-style: none;
+  z-index: 1;
 }
 
 nav ul li {
@@ -100,6 +105,10 @@ th {
   @extend %space-around;
 }
 
+.w100 {
+  @include width(100%);
+}
+
 .w40 {
   @include width(40%);
 }
@@ -130,20 +139,31 @@ h2 {
   text-align: center;
 }
 
-form,
 .tile {
   padding: 15px;
   box-shadow: 0 2px 3px rgb(163,175,183);
   background: #fff;
-}
-
-.tile {
   @include widthArticle();
   margin: 20px auto;
 
   .image {
     @include width(100%);
   }
+}
+
+.tile-mh {
+  @extend .tile;
+  margin: 0;
+}
+
+.tile-mh:hover{
+  box-shadow: 0 2px 3px grey;
+}
+
+.no-shadow {
+  -webkit-box-shadow: none!important;
+  -moz-box-shadow: none!important;
+  box-shadow: none!important;
 }
 
 .tile-comment{
@@ -168,8 +188,7 @@ figcaption {
 /* form */
 
 form {
-  background: #fff;
-  @include width(100%);
+  position: relative;
   $array: 'select', 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="file"]', textarea;
 
   @include loopItem($array, 'width', 100%);
@@ -327,6 +346,10 @@ form {
     margin: 15px auto;
   }
 
+  .tile-mh {
+    width: auto;
+  }
+
   #app_user {
     footer form{
         width: 100%;
@@ -364,10 +387,52 @@ form {
 }
 
 .category_link{
-  margin: 0 5px;
+  margin: 0 2px;
   color: #76838f;
 }
 
 .category_link:hover{
   color: dodgerblue;
+}
+
+form[name='search'] {
+  margin-right: 20px;
+  height: 25px;
+
+  ul {
+    height: auto;
+    top: 30px;
+    position: absolute;
+    width: 100%;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    box-shadow: 0 2px 3px rgb(163, 175, 183);
+    background: #fff;
+    align-items: flex-start;
+
+    li {
+      display: block;
+      height: auto;
+      padding: 5px;
+      line-height: inherit;
+      background: #fff;
+      margin: 0;
+      text-align: left;
+    }
+
+    li:hover{
+      color: dodgerblue;
+    }
+  }
+
+  input {
+    border: none;
+    height: 100%;
+  }
+
+  button {
+    background: #fff;
+    border: none;
+    height: 100%;
+  }
 }

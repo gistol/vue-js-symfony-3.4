@@ -1,7 +1,7 @@
 <template>
     <div class="container w40 w95sm">
         <div class="tile" v-for="(comment, key) in comments">
-            <p v-bind:style="style">{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
+            <p v-bind:style="style">{{ comment.username }}, le {{ comment.date|formatShortDate }}</p>
             <p>{{ comment.email }}</p>
             <p>{{ comment.comment }}</p>
             <p v-bind:style="style">Article: {{ comment.article.title }}</p>

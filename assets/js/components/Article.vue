@@ -6,15 +6,18 @@
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
-            <div class="tile" v-if="loaded">
-                <p>Catégories associées à l'article</p>
-                <div class="category">
-                    <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">{{ category.category|capitalize }}</router-link>
-                </div>
+            <p v-if="loaded">Catégories associées à l'article</p>
+            <div class="category" v-if="loaded">
+                <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
+                    <div class="tile-mh">
+                        {{ category.category|capitalize }}
+                    </div>
+                </router-link>
             </div>
             <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
-                <i class="fas fa-plus-circle" v-if='!displayComment'></i>
-                <i class="fas fa-minus-circle" v-if='displayComment'></i>
+                <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
+                <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' />
+
                 Commentaires
                 <div class="comment" v-if="displayComment && comment.published" v-for="comment in article.comments">
                     <p>{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
@@ -24,7 +27,7 @@
         </div>
         <div id="comment_modal" v-show="show">
             <button @click="showForm" class="button-delete">Fermer</button>
-            <form autocomplete="off" name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
+            <form autocomplete="off" class="tile no-shadow" name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
                 <div class="field">
                     <label for="username">Nom</label>
                     <input type="text" id="username" name="username" v-model="username"/>
@@ -54,6 +57,9 @@
 <script>
 
     import Mixin from '../mixins';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+    import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+    import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
 
     export default {
 
@@ -68,11 +74,17 @@
                 email: undefined,
                 comment: undefined,
                 show: false, /* Modal */
-                displayComment: false
+                displayComment: false,
+                plusIcon: faPlus,
+                minusIcon: faMinus
             }
         },
 
         mixins: [Mixin],
+
+        components: {
+            FontAwesomeIcon
+        },
 
         methods: {
 
@@ -114,6 +126,8 @@
 
     .category {
         @extend %flex;
+        @extend %wrap;
+        margin: 20px auto;
     }
 
     #comment_modal {

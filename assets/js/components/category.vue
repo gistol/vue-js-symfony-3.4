@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="container w40 w95sm" v-if="loaded">
-            <form v-on:submit.prevent="handleSubmit">
+            <form v-on:submit.prevent="handleSubmit" class="tile w100">
                 <label for="choose_category">Rechercher par catégorie</label>
                 <select id='choose_category' name="category">
                     <option v-for='category in allCategories' v-bind:value="category.category">{{ category.category }}</option>
@@ -9,7 +9,7 @@
                 <input type="submit" class="button-submit" value="Envoyer"/>
             </form>
         </div>
-        <div class="container_flex">
+        <div class="container_flex w40 w95sm">
             <div v-if="loaded" v-for='article in articles' class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                     <div class='image' :style="{
@@ -72,23 +72,3 @@
         }
     }
 </script>
-<style scoped>
-    @media all and (min-width: 1024px) {
-        .tile {
-            width: 30%!important;
-        }
-    }
-
-    @media all and (min-width: 768px) and (max-width: 1023px) {
-        .tile {
-            width: 48%!important;
-        }
-    }
-
-    @media all and (max-width: 767px) {
-        .tile {
-            width: 95%!important;
-        }
-    }
-
-</style>

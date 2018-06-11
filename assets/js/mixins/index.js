@@ -11,6 +11,9 @@ const Mixins = {
             enctype: 'multipart/form-data',
             newsletter: undefined,
             newsletterFormValid: false,
+            timer: undefined,
+            searchResult: [],
+            showSuggestionList: false
         }
     },
 
@@ -73,7 +76,6 @@ const Mixins = {
             methods: {
                 remove(e) {
                     this.$el.remove();
-                    console.log(this.$parent.$children)
                 },
 
                 loadFile(e) {
@@ -139,7 +141,7 @@ const Mixins = {
         },
 
         setCsrfToken(formName, token) {
-            this.$el.querySelector('form[name=' + formName + '] > input[name=csrf_token]').value = token;
+            this.$el.querySelector("form[name=" + formName + "] > input[name=csrf_token]").value = token;
         },
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */
@@ -164,7 +166,12 @@ const Mixins = {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: formData
             }).then((data) => {
-                this.$store.commit('displayServerMessage', data);
+                if (formName === 'search') {
+                    this.searchResult = data;
+                    this.showSuggestionList = true;
+                } else {
+                    this.$store.commit('displayServerMessage', data);
+                }
             }).catch((err) => {
                 this.$store.commit('displayServerMessage', 'Erreur : ' + err)
             });
@@ -181,6 +188,17 @@ const Mixins = {
         handleComment() {
             this.handleSubmit('/article/' + this.$route.params.slug + '/comment', 'comment_article');
             this.showForm();
+        },
+
+        handleSearchSubmit() {
+
+            clearTimeout(this.timer);
+
+            this.timer = setTimeout(() => {
+                if (this.$el.querySelector('input[type="search"]').value.length > 0) {
+                    this.handleSubmit('/search', 'search');
+                }
+            }, 250);
         },
 
         addToNewsletter() {

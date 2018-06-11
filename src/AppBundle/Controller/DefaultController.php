@@ -32,6 +32,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function to return a specific csrf_token for each form present in components
+     *
      * @Route("/csrf_token", name="csrf_token")
      */
     public function getCsrfToken(TokenGeneratorInterface $generator, Request $request)
@@ -46,6 +48,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function to return the number of articles in db
+     *
      * @Route("/articlesCount", name="articles_count")
      */
     public function getNbArticlesAction(ObjectManager $manager)
@@ -55,6 +59,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function to fetch articles in db by slices of 9 or less (last request)
+     *
      * @Route("/articles/{id}", name="articles")
      */
     public function getArticlesAction(ObjectManager $manager, $id)
@@ -65,6 +71,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function to return a target article
+     *
      * @Route("/article/{slug}", name="article")
      * @param string $slug
      * @return Response
@@ -75,6 +83,8 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function to find articles linked to a target category
+     *
      * @Route("/category/{category}", name="category")
      * @param string $category
      * @return Response
@@ -94,10 +104,11 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/article/{slug}/comment", name="handle_comment")
+     * Function to add a user comment to a target article
+     *
+     * @Route("/article/{slug}/comment", name="user_comment")
      * @param string $slug
      * @param Request $request
-     * @param Hydrator $hydrator
      * @param MetaService $metaService
      * @return JsonResponse
      */
@@ -123,7 +134,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/newsletter", name="newsletter")
+     * Function to add a new user to the newsletter
+     *
+     * @Route("/newsletter", name="user_newsletter")
      */
     public function handleNewsletterAction(Hydrator $hydrator, Request $request, MetaService $metaService)
     {
@@ -144,12 +157,27 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/categories", name="categories")
+     * Function to return all categories in db
+     *
+     * @Route("/categories", name="user_categories")
      * @param ObjectManager $manager
      * @return Response
      */
     public function categoriesAction(ObjectManager $manager)
     {
         return $this->get('app.serializor')->serialize($manager->getRepository(Category::class)->findAll());
+    }
+
+    /**
+     * Function to get Articles by keyword
+     *
+     * @Route("/search", name="user_search")
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function searchAction(Request $request, ObjectManager $manager)
+    {
+        return $this->getJson($manager->getRepository(Article::class)->myFindByKeyword($request->get('search')));
     }
 }

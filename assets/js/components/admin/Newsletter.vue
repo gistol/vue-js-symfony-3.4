@@ -1,19 +1,21 @@
 <template>
     <div class="container w40 w95sm" v-if="newsletters.length > 0">
-        <table>
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Date de souscription</th>
-                </tr>
-            </thead>
-            <tbody v-for="newsletter in newsletters">
-                <tr>
-                    <td>{{ newsletter.email }}</td>
-                    <td>{{ newsletter.date|formatShortDate }} </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="tile">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Date de souscription</th>
+                    </tr>
+                </thead>
+                <tbody v-for="newsletter in newsletters">
+                    <tr>
+                        <td>{{ newsletter.email }}</td>
+                        <td>{{ newsletter.date|formatShortDate }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
