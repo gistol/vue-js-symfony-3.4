@@ -25,12 +25,12 @@ const Router = new VueRouter({
             component: User,
             children: [
                 {
-                    path: '',
+                    path: '/',
                     name: 'home_user',
                     component: Homepage,
                 },
                 {
-                    path: 'article/:slug',
+                    path: '/article/:slug',
                     name: 'article',
                     component: Article,
                     props: true
@@ -107,13 +107,13 @@ Router.beforeEach((to, from, next) => {
 
     /* Getting routes matching the current one, including the parent route */
     /* Then, only the parent route may contain the requiresAuth meta property */
-    const requiresAuth = to.matched.some((record) => {
+    const requiresAuth = to.matched.some(record => {
         return record.meta.requiresAuth;
     });
 
     if(requiresAuth) {
 
-        userAuthenticated().then((data) => {
+        userAuthenticated().then(data => {
             console.log('Succès : ' + data);
             next();
         }).catch((err) => {

@@ -10,6 +10,11 @@
             <child-form v-for="(image, i) in images" :item="i" :key='image' :image="image"></child-form>
             <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
 
+            <div>
+                <label for="newsletter">Envoyer la newsletter</label>
+                <input type="checkbox" name='newsletter' id="newsletter"/>
+            </div>
+
             <input type="hidden" name="csrf_token"/>
 
             <button type="submit" class="button-submit">Envoyer</button>

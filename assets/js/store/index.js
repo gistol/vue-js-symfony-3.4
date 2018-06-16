@@ -10,7 +10,8 @@ const Store = new Vuex.Store({
         lastId: 0,
         displayMessage: false,
         message: '',
-        timer: undefined
+        timer: undefined,
+        loaded: false
     },
 
     mutations: {
@@ -103,24 +104,28 @@ const Store = new Vuex.Store({
         },
 
         getArticles({commit}) {
-            fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
-                .then((res) => res.json())
-                .then((data) => {
-                    commit('hideMessage');
+            return new Promise(resolve => {
+                fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
+                    .then(res => res.json())
+                    .then(data => {
+                        commit('hideMessage');
 
-                    if (data.length > 0) {
-                        commit('addArticles', data);
-                    }
-                })
-                .catch((err) => {
-                    console.log('Erreur : ' + err)
-                })
+                        if (data.length > 0) {
+                            commit('addArticles', data);
+                        }
+
+                        resolve();
+                    })
+                    .catch((err) => {
+                        console.log('Erreur : ' + err)
+                    });
+            });
         },
 
         getNumberOfArticles({commit}) {
             fetch('/vue-js-symfony-3.4/web/app_dev.php/articlesCount')
-                .then((res) => res.json())
-                .then((data) => {
+                .then(res => res.json())
+                .then(data => {
                     commit('setNumberOfArticles', data);
             });
         },

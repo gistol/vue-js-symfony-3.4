@@ -16,7 +16,16 @@
             </form>
         </nav>
         <router-view></router-view>
-        <footer>
+        <div class="container" id="loaderContainer" v-show="this.loading">
+            <div id="loader">
+                <div id="loader2"></div>
+                <div id="loader3"></div>
+                <div id="loader4"></div>
+                <div id="loader5"></div>
+            </div>
+            <p>Chargement en cours</p>
+        </div>
+        <footer v-if="this.loaded">
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
                 <input type="hidden" name="csrf_token"/>
@@ -43,7 +52,14 @@
                 formNewsletterName: 'newsletter',
                 formSearchName: 'search',
                 searchIcon: faSearch,
-                showSuggestionList: false
+                showSuggestionList: false,
+                animation: undefined,
+                animation2: undefined,
+                counter: 0,
+                index: 0,
+                loaders: [],
+                loading: true,
+                loaded: false
             }
         },
 
@@ -57,6 +73,66 @@
             addSuggestion(e) {
                 this.$el.querySelector("input[name='search']").value = e.target.innerText;
                 this.showSuggestionList = false;
+            },
+
+            cancelAnimation() {
+                let cancelAnimationFrame =
+                    window.cancelAnimationFrame ||
+                    window.webkitCancelAnimationFrame;
+
+                cancelAnimationFrame(this.animation);
+                cancelAnimationFrame(this.animation2);
+
+                /* For next request */
+                this.loaded = true;
+                this.loading = false;
+
+                this.loaders.forEach((loader) => {
+                    loader.style.bottom = '0';
+                });
+            },
+
+            moveToTop() {
+                this.counter += 5;
+
+                if(this.counter <= 40){
+                    this.loaders[this.index].style.bottom = "" + this.counter + "px";
+                    this.animation = requestAnimationFrame(this.moveToTop);
+                }
+                else{
+                    ++this.index;
+                    this.animation2 = requestAnimationFrame(this.moveToBottom);
+                }
+            },
+
+            moveToBottom() {
+                this.counter -= 5;
+
+                if(this.counter >= 0){
+                    this.loaders[this.index-1].style.bottom = "" + this.counter + "px";
+                    this.animation2 = requestAnimationFrame(this.moveToBottom);
+                } else{
+                    if(this.index === 4){
+                        this.index = 0
+                    }
+                    this.animation = requestAnimationFrame(this.moveToTop);
+                }
+            },
+
+            loadAnimation() {
+
+                this.loading = true;
+
+                let requestAnimationFrame =
+                    window.requestAnimationFrame ||
+                    window.webkitRequestAnimationFrame;
+
+                /* Elements inside the loader square */
+                for(let i = 2; i < 6; ++i){
+                    this.loaders.push(document.getElementById("loader" + i + ""));
+                }
+
+                this.animation = requestAnimationFrame(this.moveToTop);
             }
         },
 
@@ -65,14 +141,22 @@
             'message',
         ]),
 
-        mounted() {
-            this.$store.dispatch('getCsrfToken', this.formNewsletterName).then(token => {
-                this.setCsrfToken(this.formNewsletterName, token)
-            });
+        watch: {
 
-            this.$store.dispatch('getCsrfToken', this.formSearchName).then(token => {
-                this.setCsrfToken(this.formSearchName, token)
-            });
-        }
+            loaded(val){
+
+                /* Must check whether true as setting back to false would execute code below */
+                if(val) {
+
+                    this.$store.dispatch('getCsrfToken', this.formNewsletterName).then(token => {
+                        this.setCsrfToken(this.formNewsletterName, token)
+                    });
+
+                    this.$store.dispatch('getCsrfToken', this.formSearchName).then(token => {
+                        this.setCsrfToken(this.formSearchName, token)
+                    });
+                }
+            }
+        },
     }
 </script>

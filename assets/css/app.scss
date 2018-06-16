@@ -436,3 +436,50 @@ form[name='search'] {
     height: 100%;
   }
 }
+
+#loader{
+  margin: 0 auto;
+  height: 50px;
+  width: 65px;
+  position: relative;
+}
+
+#loader2,
+#loader3,
+#loader4,
+#loader5{
+  position: absolute;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  height: 10px;
+  width: 10px;
+  bottom: 0;
+}
+
+#loader2{
+  left: 5px;
+  background: red;
+}
+
+#loader3{
+  left: 20px;
+  background: #1e90ff;
+}
+
+#loader4{
+  left: 35px;
+  background: orange;
+}
+
+#loader5{
+  left: 50px;
+  background: green;
+}
+
+#loaderContainer {
+  p {
+    margin-top: 20px;
+    text-align: center;
+  }
+}

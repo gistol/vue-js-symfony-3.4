@@ -32,6 +32,16 @@ class AdminController extends Controller
             if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
                 $article = $hydrator->hydrateObject(Article::class);
                 $metaService->persistAndFlush([$article]);
+
+                if ("on" === $request->get('newsletter')) {
+                    $this->get('app.mailer')
+                         ->send(
+                             $article,
+                             $metaService->getEntityManager()->getRepository(Newsletter::class)->myFindAll()[0],
+                             $this->getParameter('mailer_user')
+                         );
+                }
+
                 return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
             } else {
                 return new JsonResponse('Formulaire invalide');

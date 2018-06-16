@@ -6,20 +6,22 @@
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
-            <p v-if="loaded">Catégories associées à l'article</p>
-            <div class="category" v-if="loaded">
+            <p v-if="this.$parent.loaded && article.categories.length > 0">Catégories associées à l'article</p>
+            <div class="category" v-if="this.$parent.loaded">
                 <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
                     <div class="tile-mh">
                         {{ category.category|capitalize }}
                     </div>
                 </router-link>
             </div>
-            <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
+            <div class="tile-comment" v-if='this.$parent.loaded' v-on:click="displayComment = !displayComment">
                 <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
                 <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' />
 
                 Commentaires
-                <div class="comment" v-if="displayComment && comment.published" v-for="comment in article.comments">
+
+                <p v-if="displayComment && article.comments.length === 0">Aucun commentaire.</p>
+                <div class="comment" v-if="displayComment && comment.published && article.comments.length > 0" v-for="comment in article.comments">
                     <p>{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
                     <p class="white_space">{{ comment.comment }}</p>
                 </div>
@@ -48,8 +50,8 @@
                 <input type="submit" class="button-submit m10"/>
             </form>
         </div>
-        <div v-if="loaded" class='container'>
-            <button @click="showForm" class="button-default mauto"><i class="far fa-comment"></i> Commenter</button>
+        <div v-if="this.$parent.loaded" class='container'>
+            <button @click="showForm" class="button-default mauto"><font-awesome-icon v-bind:icon="commentIcon"></font-awesome-icon> Commenter</button>
         </div>
     </div>
 </template>
@@ -58,8 +60,9 @@
 
     import Mixin from '../mixins';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-    import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-    import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
+    import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle'
+    import faMinusCircle from '@fortawesome/fontawesome-free-solid/faMinusCircle'
+    import faComment from '@fortawesome/fontawesome-free-solid/faComment'
 
     export default {
 
@@ -69,14 +72,14 @@
             return {
                 formName: 'comment_article',
                 article: [],
-                loaded: false,
                 username: undefined,
                 email: undefined,
                 comment: undefined,
                 show: false, /* Modal */
                 displayComment: false,
-                plusIcon: faPlus,
-                minusIcon: faMinus
+                plusIcon: faPlusCircle,
+                minusIcon: faMinusCircle,
+                commentIcon: faComment
             }
         },
 
@@ -93,7 +96,7 @@
                     .then(data => data.json())
                     .then(data => {
                         this.article = data;
-                        this.loaded = true;
+                        this.$parent.cancelAnimation();
                     })
                     .catch((err) => {
                         console.log('Err => ' + err)
@@ -112,6 +115,9 @@
         },
 
         mounted() {
+
+            this.$parent.loadAnimation();
+
             this.$store.dispatch('getCsrfToken', this.formName)
                 .then(token => {
                     this.setCsrfToken(this.formName, token)

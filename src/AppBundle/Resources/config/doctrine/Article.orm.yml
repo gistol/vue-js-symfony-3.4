@@ -17,6 +17,9 @@ AppBundle\Entity\Article:
             length: 255
         date:
             type: datetime
+        newsletter:
+            type: boolean
+            nullable: true
 
     oneToMany:
         images:

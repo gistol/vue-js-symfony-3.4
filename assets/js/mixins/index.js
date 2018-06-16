@@ -165,7 +165,7 @@ const Mixins = {
             this.$store.dispatch('postData', {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: formData
-            }).then((data) => {
+            }).then(data => {
                 if (formName === 'search') {
                     this.searchResult = data;
                     this.showSuggestionList = true;

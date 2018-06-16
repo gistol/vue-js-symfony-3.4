@@ -10,4 +10,9 @@ namespace AppBundle\Repository;
  */
 class NewsletterRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function myFindAll()
+    {
+        return $this->_em->getConnection()
+            ->fetchAll('SELECT email FROM newsletter');
+    }
 }

@@ -126,7 +126,11 @@ class Hydrator
                     $object->setSlug($slug);
                 }
 
-                $object->$method(htmlspecialchars($value));
+                if ($object instanceof Article && $field === "newsletter") {
+                    $object->setNewsletter($value === "on");
+                } else {
+                    $object->$method(htmlspecialchars($value));
+                }
             }
         }
 
@@ -217,5 +221,4 @@ class Hydrator
 
         return $article;
     }
-
 }

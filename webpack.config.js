@@ -4,7 +4,7 @@ Encore
    .setOutputPath('web/build/')
    .setPublicPath('/build')
    .cleanupOutputBeforeBuild()
-   .enableSourceMaps(!Encore.isProduction())
+   .enableSourceMaps(Encore.isProduction())
    .addEntry('js/app', './assets/js/app.js')
    .addStyleEntry('css/app', './assets/css/app.scss')
    .enableSassLoader()
@@ -12,8 +12,6 @@ Encore
 
    // Enable Vue loader
    .enableVueLoader()
-
-    // .enablePostCssLoader()
 ;
 
 module.exports = Encore.getWebpackConfig();

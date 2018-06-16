@@ -3,12 +3,12 @@
         <div class="container_flex">
             <div v-for='article in articles' class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
-                    <div class='image' :style="{
+                    <div class='image' v-bind:style="{
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         height: '225px',
                         backgroundImage: 'url('+'./images/' + image.src +')'
-                     }" v-if="index === 0" v-for="(image, index) in article.images" :alt="image.title">
+                     }" v-if="index === 0" v-for="(image, index) in article.images" v-bind:alt="image.title">
                     </div>
                 </router-link>
                 <h2>{{ article.title }}</h2>
@@ -17,7 +17,7 @@
                 </router-link>
             </div>
         </div>
-        <div class="container">
+        <div class="container" v-if="articles.length > 0">
             <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-submit">Plus d'articles</button>
         </div>
     </div>
@@ -40,15 +40,30 @@
         mixins: [Mixin],
 
         methods: {
+            getArticles() {
+                this.$store.dispatch('getArticles')
+                    .then(() => {
+                        this.$parent.cancelAnimation();
+                    });
+            },
+
             addArticles() {
-                this.$store.dispatch('getArticles');
+                this.$parent.loadAnimation();
+                this.getArticles();
             }
         },
 
         created() {
-            this.$store.dispatch('getArticles');
+            this.getArticles();
             this.$store.dispatch('getNumberOfArticles');
         },
+
+        mounted() {
+            /* No animation launch if already cached articles */
+            if (this.articles.length === 0) {
+                this.$parent.loadAnimation();
+            }
+        }
     }
 </script>
 

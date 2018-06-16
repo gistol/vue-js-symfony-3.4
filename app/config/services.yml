@@ -65,5 +65,11 @@ services:
         public: true
         autowire: true
 
+    app.mailer:
+        class: AppBundle\Service\MailSender
+        arguments: ["@swiftmailer.mailer", "@templating.engine.twig"]
+        public: true
+        autowire: true
+
 
 

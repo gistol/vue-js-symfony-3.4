@@ -32,6 +32,8 @@ framework:
 #        base_path: '../public/'
     php_errors:
         log: true
+    templating:
+        engines: twig
 
 # Twig Configuration
 twig:
