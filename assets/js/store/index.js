@@ -59,7 +59,7 @@ const Store = new Vuex.Store({
 
         getCsrfToken({commit}, sender) {
 
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
 
                 const req = getRequestObject("POST", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
 

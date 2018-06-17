@@ -8,11 +8,12 @@
             </ul>
             <form name='search' v-on:submit.prevent="handleSearchSubmit" v-on:keyup="handleSearchSubmit">
                 <input type="search" name="search" autocomplete="off" />
+                <font-awesome-icon :icon="spinnerIcon" style="color: #fff;" v-show="showSpinner"/>
                 <ul v-if="showSuggestionList">
                    <li v-for="title in searchResult" v-on:click="addSuggestion">{{ title.title }}</li>
                 </ul>
                 <input type="hidden" name="csrf_token"/>
-                <button type="submit"><font-awesome-icon v-bind:icon="searchIcon" /></button>
+                <button type="submit"><font-awesome-icon v-bind:icon="searchIcon" style="color: #fff;"/></button>
             </form>
         </nav>
         <router-view></router-view>
@@ -37,11 +38,13 @@
 </template>
 
 <script>
+
     import Mixin from '../mixins/index';
     import MenuMixin from '../mixins/menuMixin';
     import { mapState } from 'vuex';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
+    import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
 
     export default {
 
@@ -52,7 +55,9 @@
                 formNewsletterName: 'newsletter',
                 formSearchName: 'search',
                 searchIcon: faSearch,
+                spinnerIcon: faSpinner,
                 showSuggestionList: false,
+                showSpinner: false,
                 animation: undefined,
                 animation2: undefined,
                 counter: 0,

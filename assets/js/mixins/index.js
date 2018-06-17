@@ -1,3 +1,6 @@
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+import faTrash from '@fortawesome/fontawesome-free-solid/faTrash';
+
 const Mixins = {
 
     data() {
@@ -21,7 +24,7 @@ const Mixins = {
         'server-message': {
             template:
             "<transition name='fade'>" +
-            "<div :style='style' v-show='displayMessage'>" +
+            "<div v-bind:style='style' v-show='displayMessage'>" +
             "<slot></slot>" +
             "</div>" +
             "</transition>",
@@ -54,7 +57,7 @@ const Mixins = {
                 "<input type='file' v-bind:name='fileName' v-on:change='loadFile'/>" +
                 "<label>Contenu</label>" +
                 "<textarea :value='image.content' v-bind:name='content' v-bind:style='textAreaH'></textarea>" +
-                "<button v-on:click='remove' class='button-delete mt5'><i class='fas fa-trash-alt'></i> Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'><font-awesome-icon v-bind:icon='trashIcon' /> Supprimer</button>" +
                 "</div>",
 
             data() {
@@ -67,11 +70,16 @@ const Mixins = {
                         resize: 'none'
                     },
                     fileName: 'image[' + (this.item) + ']',
-                    content: 'content[' + (this.item) + ']'
+                    content: 'content[' + (this.item) + ']',
+                    trashIcon: faTrash
                 }
             },
 
             props: ['item', 'image'],
+
+            components: {
+                FontAwesomeIcon
+            },
 
             methods: {
                 remove(e) {
@@ -157,7 +165,9 @@ const Mixins = {
                 }
             }
 
-            this.$store.commit('displaySendingRequest');
+            if (formName !== "search") {
+                this.$store.commit('displaySendingRequest');
+            }
 
             let formData = new FormData(this.$el.querySelector('form[name=' + formName + ']'));
             formData.append('sender', formName);
@@ -166,9 +176,20 @@ const Mixins = {
                 url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
                 value: formData
             }).then(data => {
+
                 if (formName === 'search') {
-                    this.searchResult = data;
+
+                    /* Array of suggestions or article directly (if title sent via form) */
+                    if (Array.isArray(data)) {
+                        this.searchResult = data.splice(0,10).sort()
+                    } else {
+                        this.$router.push({name: 'article', params: {'slug' : data.slug} });
+                        this.$router.go();
+                    }
+
                     this.showSuggestionList = true;
+                    this.showSpinner = false;
+                    this.$el.querySelector("svg[data-icon='spinner']").classList.remove("fa-spin");
                 } else {
                     this.$store.commit('displayServerMessage', data);
                 }
@@ -197,8 +218,16 @@ const Mixins = {
             this.timer = setTimeout(() => {
                 if (this.$el.querySelector('input[type="search"]').value.length > 0) {
                     this.handleSubmit('/search', 'search');
+                    this.showSpinner = true;
+                    this.$el.querySelector("svg[data-icon='spinner']").classList.add("fa-spin");
                 }
             }, 250);
+
+            this.$el.addEventListener("click", () => {
+                if (this.showSuggestionList) {
+                    this.showSuggestionList = false;
+                }
+            });
         },
 
         addToNewsletter() {

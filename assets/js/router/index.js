@@ -116,7 +116,7 @@ Router.beforeEach((to, from, next) => {
         userAuthenticated().then(data => {
             console.log('Succès : ' + data);
             next();
-        }).catch((err) => {
+        }).catch(err => {
             console.log('Erreur : ' + err);
             next('/login');
         });

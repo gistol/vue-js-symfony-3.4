@@ -178,6 +178,8 @@ class DefaultController extends Controller
      */
     public function searchAction(Request $request, ObjectManager $manager)
     {
-        return $this->getJson($manager->getRepository(Article::class)->myFindByKeyword($request->get('search')));
+        return !empty($article = $manager->getRepository(Article::class)->findOneBy(["title" => $search = $request->get('search')]))
+            ? $this->getJson($article)
+            : $this->getJson($manager->getRepository(Article::class)->myFindByKeyword($search));
     }
 }

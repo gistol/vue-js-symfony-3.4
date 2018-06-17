@@ -10,7 +10,7 @@
             </form>
         </div>
         <div class="container_flex w95sm">
-            <div v-if="loaded" v-for='article in articles' class="tile">
+            <div v-if="this.$parent.loaded" v-for='article in articles' class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                     <div class='image' :style="{
                             backgroundSize: 'cover',

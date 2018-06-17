@@ -14,8 +14,8 @@
             <input type="submit" class="button-submit"/>
         </form>
         <div class="button-group">
-            <button v-on:click.prevent="addCategoryForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Catégorie</button>
-            <button v-on:click.prevent="addForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Image</button>
+            <button v-on:click.prevent="addCategoryForm" class="button-default w150"><font-awesome-icon :icon="plusIcon"/> Catégorie</button>
+            <button v-on:click.prevent="addForm" class="button-default w150"><font-awesome-icon :icon="plusIcon"/> Image</button>
         </div>
     </div>
 </template>
@@ -23,6 +23,8 @@
 <script>
 
     import Mixin from '../../mixins';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+    import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
 
     export default {
 
@@ -30,11 +32,16 @@
 
         data() {
             return {
-                formName: 'create_edit_article'
+                formName: 'create_edit_article',
+                plusIcon: faPlusCircle,
             }
         },
 
         mixins: [Mixin],
+
+        components: {
+            FontAwesomeIcon
+        },
 
         computed: {
             csrf_token() {

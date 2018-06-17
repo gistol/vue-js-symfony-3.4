@@ -2,7 +2,8 @@
 
 body{
   font-family: 'Open Sans', sans-serif;
-  color: #76838f;
+  //color: #76838f;
+  color: #34495e;
   background: #f1f4f5;
 }
 
@@ -401,9 +402,9 @@ form[name='search'] {
 
   ul {
     height: auto;
-    top: 30px;
+    top: 28px;
     position: absolute;
-    width: 100%;
+    width: 200px;
     flex-direction: column;
     -webkit-flex-direction: column;
     box-shadow: 0 2px 3px rgb(163, 175, 183);
@@ -426,14 +427,19 @@ form[name='search'] {
   }
 
   input {
+    width: 200px;
     border: none;
     height: 100%;
   }
 
   button {
-    background: #fff;
+    background: transparent;
     border: none;
     height: 100%;
+  }
+
+  button:hover{
+    cursor: pointer;
   }
 }
 

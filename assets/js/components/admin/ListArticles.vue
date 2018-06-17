@@ -8,10 +8,10 @@
                 <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
                     <button class="button-default w150">Editer</button>
                 </router-link>
-                <button class="button-delete w150" v-on:click="deleteArticle" :data-id="article.id">Supprimer</button>
+                <button class="button-delete w150" v-on:click="deleteArticle" v-bind:data-id="article.id"><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button>
             </div>
         </div>
-        <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default">Plus d'articles</button>
+        <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default"><font-awesome-icon v-bind:icon="plusIcon"></font-awesome-icon> Plus d'articles</button>
     </div>
 </template>
 
@@ -19,10 +19,24 @@
 
     import Mixin from '../../mixins';
     import { mapState } from 'vuex';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+    import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
+    import faTrash from '@fortawesome/fontawesome-free-solid/faTrash';
 
     export default {
 
         name: 'ListArticles',
+
+        data() {
+            return {
+                trashIcon: faTrash,
+                plusIcon: faPlusCircle
+            }
+        },
+
+        components: {
+            FontAwesomeIcon
+        },
 
         computed : mapState({
             articles: (state) => state.articles,
