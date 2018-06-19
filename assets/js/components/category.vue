@@ -9,15 +9,15 @@
                 <input type="submit" class="button-submit" value="Envoyer"/>
             </form>
         </div>
-        <div class="container_flex w95sm">
-            <div v-if="this.$parent.loaded" v-for='article in articles' class="tile">
+        <div v-show="this.$parent.loaded" class="container_flex w95sm">
+            <div v-for='article in articles' class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                     <div class='image' :style="{
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             height: '225px',
                             backgroundImage: 'url('+'./images/' + image.src +')'
-                         }" v-if="index === 0" v-for="(image, index) in article.images" :alt="image.title">
+                         }" v-if="index === 0" v-for="(image, index) in article.images" v-bind:alt="image.title">
                     </div>
                 </router-link>
                 <h2>{{ article.title }}</h2>
@@ -31,6 +31,7 @@
 <script>
     export default {
         name: 'category',
+
         data() {
             return {
                 articles: [],
@@ -47,13 +48,13 @@
                 fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/category/' + category)
                     .then(data => data.json())
                     .then(articles => {
-                        this.articles = articles;
                         this.$parent.cancelAnimation();
+                        this.articles = articles;
                     });
             }
         },
 
-        created() {
+        mounted() {
 
             /* If not coming from an article */
             if (this.$route.name === "category") {
@@ -69,10 +70,8 @@
                 .then(categories => {
                     this.allCategories = categories;
                     this.$parent.cancelAnimation();
-                })
-        },
+                });
 
-        mounted() {
             if (this.allCategories.length === 0) {
                 this.$parent.loadAnimation();
             }

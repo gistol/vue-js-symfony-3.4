@@ -76,25 +76,10 @@
 
         methods: {
             addSuggestion(e) {
-                this.$el.querySelector("input[name='search']").value = e.target.innerText;
+                if (e.target.innerText !== "Aucune suggestion") {
+                    this.$el.querySelector("input[name='search']").value = e.target.innerText;
+                }
                 this.showSuggestionList = false;
-            },
-
-            cancelAnimation() {
-                let cancelAnimationFrame =
-                    window.cancelAnimationFrame ||
-                    window.webkitCancelAnimationFrame;
-
-                cancelAnimationFrame(this.animation);
-                cancelAnimationFrame(this.animation2);
-
-                /* For next request */
-                this.loaded = true;
-                this.loading = false;
-
-                this.loaders.forEach((loader) => {
-                    loader.style.bottom = '0';
-                });
             },
 
             moveToTop() {
@@ -138,7 +123,25 @@
                 }
 
                 this.animation = requestAnimationFrame(this.moveToTop);
-            }
+            },
+
+            cancelAnimation() {
+                let cancelAnimationFrame =
+                    window.cancelAnimationFrame ||
+                    window.webkitCancelAnimationFrame;
+
+                cancelAnimationFrame(this.animation);
+                cancelAnimationFrame(this.animation2);
+
+                /* For next request */
+                this.loaded = true;
+                this.loading = false;
+                this.index = 0;
+
+                this.loaders.forEach((loader) => {
+                    loader.style.bottom = '0';
+                });
+            },
         },
 
         computed: mapState([

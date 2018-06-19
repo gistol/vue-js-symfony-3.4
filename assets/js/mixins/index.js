@@ -181,19 +181,31 @@ const Mixins = {
 
                     /* Array of suggestions or article directly (if title sent via form) */
                     if (Array.isArray(data)) {
-                        this.searchResult = data.splice(0,10).sort()
+                        if (data.length > 0) {
+                            this.searchResult = data.splice(0, 10).sort()
+                        } else {
+                            this.searchResult = [{title: "Aucune suggestion"}];
+                        }
                     } else {
                         this.$router.push({name: 'article', params: {'slug' : data.slug} });
+                        /* Force reloading */
                         this.$router.go();
                     }
 
                     this.showSuggestionList = true;
+
+                    if (data.length === 0) {
+                        setTimeout(() => {
+                            this.showSuggestionList = false;
+                        }, 2000);
+                    }
+
                     this.showSpinner = false;
                     this.$el.querySelector("svg[data-icon='spinner']").classList.remove("fa-spin");
                 } else {
                     this.$store.commit('displayServerMessage', data);
                 }
-            }).catch((err) => {
+            }).catch(err => {
                 this.$store.commit('displayServerMessage', 'Erreur : ' + err)
             });
         },

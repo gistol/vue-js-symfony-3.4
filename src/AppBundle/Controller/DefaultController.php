@@ -165,7 +165,7 @@ class DefaultController extends Controller
      */
     public function categoriesAction(ObjectManager $manager)
     {
-        return $this->get('app.serializor')->serialize($manager->getRepository(Category::class)->findAll());
+        return $this->get('app.serializor')->serialize($manager->getRepository(Category::class)->myFindAllCategories());
     }
 
     /**

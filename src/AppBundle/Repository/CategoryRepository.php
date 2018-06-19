@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
+use AppBundle\Entity\Article;
 
 /**
  * CategoryRepository
@@ -10,4 +11,11 @@ namespace AppBundle\Repository;
  */
 class CategoryRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function myFindAllCategories()
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin("a.articles", "articles")
+            ->where("articles.id is not null")
+            ->getQuery()->getResult();
+    }
 }
