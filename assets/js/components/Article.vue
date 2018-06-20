@@ -6,15 +6,15 @@
                 <img :src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
-            <p v-if="this.$parent.loaded && article.categories.length > 0">Catégories associées à l'article</p>
-            <div class="category" v-if="this.$parent.loaded">
+            <p v-if="loaded && article.categories.length > 0">Catégories associées à l'article</p>
+            <div class="category" v-if="loaded">
                 <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
                     <div class="tile-mh">
                         {{ category.category|capitalize }}
                     </div>
                 </router-link>
             </div>
-            <div class="tile-comment" v-if='this.$parent.loaded' v-on:click="displayComment = !displayComment">
+            <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
                 <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
                 <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' />
 
@@ -45,12 +45,12 @@
                     <textarea id="comment" name="comment" v-model="comment"></textarea>
                 </div>
 
-                <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.comment_csrf_token"/>
+                <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
                 <input type="submit" class="button-submit m10"/>
             </form>
         </div>
-        <div v-if="this.$parent.loaded" class='container'>
+        <div v-if="loaded" class='container'>
             <button @click="showForm" class="button-default mauto"><font-awesome-icon v-bind:icon="commentIcon"></font-awesome-icon> Commenter</button>
         </div>
     </div>
@@ -88,6 +88,16 @@
             FontAwesomeIcon
         },
 
+        computed: {
+            loaded() {
+                return this.$parent.loaded
+            },
+
+            csrf_token() {
+                return this.$store.state.comment_article_csrf_token
+            },
+        },
+
         methods: {
 
             getArticle(slug) {
@@ -116,6 +126,7 @@
 
         mounted() {
             this.$parent.loadAnimation();
+            this.$store.dispatch('getCsrfToken', 'comment_article');
         },
     }
 </script>

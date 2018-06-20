@@ -15,7 +15,7 @@
                 <input type="checkbox" name='newsletter' id="newsletter"/>
             </div>
 
-            <input type="hidden" name="csrf_token"/>
+            <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
             <button type="submit" class="button-submit">Envoyer</button>
         </form>
@@ -30,31 +30,22 @@
 <script>
 
     import Mixin from '../../mixins';
+    import { mapState } from 'vuex';
 
     export default {
 
         name: 'CreateArticle',
 
-        data() {
-            return {
-                formName: 'create_edit_article',
-            }
-        },
-
         mixins: [Mixin],
 
-        computed: {
-            csrf_token() {
-                return this.$store.state.csrf_token;
-            }
-        },
+        computed: mapState({
+            csrf_token: (state) => state.create_edit_article_csrf_token
+        }),
 
         mounted() {
             this.addForm();
-            this.$store.dispatch('getCsrfToken', this.formName)
-                .then(token => {
-                    this.setCsrfToken(this.formName, token);
-                });
+
+            this.$store.dispatch('getCsrfToken', "create_edit_article");
         }
     }
 

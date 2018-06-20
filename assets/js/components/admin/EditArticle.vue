@@ -6,10 +6,10 @@
                 <input type="text" id="title" name="title" v-model="title"/>
             </div>
 
-            <child-form v-for="(image, i) in images" :item="i" :image="image"></child-form>
-            <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
+            <child-form v-for="(image, i) in images" :item="i" v-bind:image="image"></child-form>
+            <category-form v-for="(category, index) in categories" v-bind:index="index" :category="category"></category-form>
 
-            <input type="hidden" name="csrf_token"/>
+            <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
             <input type="submit" class="button-submit"/>
         </form>
@@ -23,6 +23,7 @@
 <script>
 
     import Mixin from '../../mixins';
+    import { mapState } from 'vuex';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
     import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
 
@@ -32,7 +33,6 @@
 
         data() {
             return {
-                formName: 'create_edit_article',
                 plusIcon: faPlusCircle,
             }
         },
@@ -43,11 +43,9 @@
             FontAwesomeIcon
         },
 
-        computed: {
-            csrf_token() {
-                return this.$store.state.csrf_token;
-            }
-        },
+        computed: ({
+           csrf_token: (state) => state.create_edit_article_csrf_token
+        }),
 
         created() {
             fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/articles/edit/' + this.$route.params.id)
@@ -73,10 +71,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('getCsrfToken', this.formName)
-                .then(token => {
-                    this.setCsrfToken(this.formName, token);
-                });
+            this.$store.dispatch('getCsrfToken', "create_edit_article");
         }
     }
 </script>

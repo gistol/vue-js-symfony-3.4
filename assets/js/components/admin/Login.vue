@@ -7,11 +7,11 @@
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password"/>
 
-            <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.login_csrf_token"/>
+            <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
             <input type="submit" class="button-submit"/>
         </form>
-        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
+        <server-message v-bind:displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 
@@ -25,7 +25,6 @@
 
         data() {
             return {
-                formName: 'login',
                 username: undefined,
                 password: undefined,
                 style: {
@@ -34,7 +33,11 @@
             }
         },
 
-        computed: mapState(['displayMessage', 'message']),
+        computed: mapState({
+            displayMessage: (state) => state.displayMessage,
+            message: (state) => state.message,
+            csrf_token : (state) => state.login_csrf_token
+        }),
 
         mixins: [Mixin],
 
@@ -69,9 +72,7 @@
         },
 
         mounted() {
-            this.$store.dispatch('getCsrfToken', this.formName).then(token => {
-                this.setCsrfToken(this.formName, token)
-            });
+            this.$store.dispatch('getCsrfToken', 'login');
         },
     }
 </script>

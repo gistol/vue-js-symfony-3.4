@@ -82,7 +82,7 @@ const Mixins = {
             },
 
             methods: {
-                remove(e) {
+                remove() {
                     this.$el.remove();
                 },
 
@@ -146,24 +146,6 @@ const Mixins = {
         addCategoryForm() {
             this.categories.push(this.nbCategories);
             this.nbCategories++;
-        },
-
-        setCsrfToken(formName, token) {
-            if (formName === "comment_article") {
-                this.$store.state.comment_csrf_token = token;
-            }
-
-            if (formName === "search") {
-                this.$store.state.search_csrf_token = token;
-            }
-
-            if (formName === "newsletter") {
-                this.$store.state.newsletter_csrf_token = token;
-            }
-
-            if (formName === "login") {
-                this.$store.state.login_csrf_token = token;
-            }
         },
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */
@@ -239,6 +221,7 @@ const Mixins = {
 
         handleSearchSubmit() {
 
+            /* Resetting the timer */
             clearTimeout(this.timer);
 
             this.timer = setTimeout(() => {

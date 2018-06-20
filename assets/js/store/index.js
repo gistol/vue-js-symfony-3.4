@@ -4,7 +4,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const Store = new Vuex.Store({
-    state:{
+    state: {
         articles: [],
         articlesCount: undefined,
         lastId: 0,
@@ -12,10 +12,11 @@ const Store = new Vuex.Store({
         message: '',
         timer: undefined,
         loaded: false,
-        comment_csrf_token: undefined,
+        comment_article_csrf_token: undefined,
         search_csrf_token: undefined,
         newsletter_csrf_token: undefined,
-        login_csrf_token: undefined
+        login_csrf_token: undefined,
+        create_edit_article_csrf_token: undefined
     },
 
     mutations: {
@@ -56,6 +57,10 @@ const Store = new Vuex.Store({
         hideMessage(state) {
             state.displayMessage = false;
             clearTimeout(state.timer);
+        },
+
+        setCsrfToken(state, data) {
+            state[data.prop] = data.csrf_token;
         }
     },
 
@@ -63,26 +68,27 @@ const Store = new Vuex.Store({
 
         getCsrfToken({commit}, sender) {
 
-            return new Promise(resolve => {
+            const req = getRequestObject("POST", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
 
-                const req = getRequestObject("POST", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
+            req.addEventListener("load", () => {
 
-                req.addEventListener("load", () => {
+                if (req.status >= 200 && req.status < 400) {
 
-                    if (req.status >= 200 && req.status < 400) {
-                        const resp = JSON.parse(req.responseText);
-                        resolve(resp.csrf_token);
-                    } else {
-                        if (this.$route.name === 'login') {
-                            this.$store.push({name: 'login'})
-                        }
+                    commit("setCsrfToken", {
+                        prop: sender.concat('_csrf_token'), /* E.g : comment_article_csrf_token */
+                        csrf_token: JSON.parse(req.responseText).csrf_token
+                    });
+
+                } else {
+                    if (this.$route.name === 'login') {
+                        this.$store.push({name: 'login'})
                     }
-                });
-
-                req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-                req.send('sender=' + sender);
+                }
             });
+
+            req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            req.send('sender=' + sender);
         },
 
         postData(context, data) {

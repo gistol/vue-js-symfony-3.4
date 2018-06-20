@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="container w95sm" v-if="this.$parent.loaded">
+        <div class="container w95sm" v-if="loaded">
             <form v-on:submit.prevent="handleSubmit" class="tile w100">
                 <label for="choose_category">Rechercher par catégorie</label>
                 <select id='choose_category' name="category">
@@ -9,7 +9,7 @@
                 <input type="submit" class="button-submit" value="Envoyer"/>
             </form>
         </div>
-        <div v-show="this.$parent.loaded" class="container_flex w95sm">
+        <div v-show="loaded" class="container_flex w95sm">
             <div v-for='article in articles' class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                     <div class='image' :style="{
@@ -39,10 +39,18 @@
             }
         },
 
+        computed: {
+            loaded() {
+                return this.$parent.loaded;
+            }
+        },
+
         methods: {
             handleSubmit(e) {
                 const category = e.target.elements.category.value;
 
+                if (category === '') return;
+                
                 this.$parent.loadAnimation();
 
                 fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/category/' + category)
@@ -56,7 +64,7 @@
 
         mounted() {
 
-            /* If not coming from an article */
+            /* If coming from an article */
             if (this.$route.name === "category") {
                 fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/category/' + this.$route.params.category)
                     .then(data => data.json())
@@ -65,6 +73,7 @@
                     });
             }
 
+            /* If not coming from an article */
             fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/categories')
                 .then(data => data.json())
                 .then(categories => {
@@ -72,6 +81,7 @@
                     this.$parent.cancelAnimation();
                 });
 
+            /* If not aready cached */
             if (this.allCategories.length === 0) {
                 this.$parent.loadAnimation();
             }

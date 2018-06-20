@@ -16,7 +16,7 @@
 /vendor/
 /node_modules
 /web/bundles/
-!./idea
+.idea/
 /web/build
 /web/images
 /src/AppBundle/token
