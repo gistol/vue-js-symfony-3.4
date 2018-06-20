@@ -11,7 +11,11 @@ const Store = new Vuex.Store({
         displayMessage: false,
         message: '',
         timer: undefined,
-        loaded: false
+        loaded: false,
+        comment_csrf_token: undefined,
+        search_csrf_token: undefined,
+        newsletter_csrf_token: undefined,
+        login_csrf_token: undefined
     },
 
     mutations: {

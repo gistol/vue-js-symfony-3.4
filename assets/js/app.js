@@ -7,3 +7,4 @@ new Vue({
     router: Router,
     store: Store
 });
+

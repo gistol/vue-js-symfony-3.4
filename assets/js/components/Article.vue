@@ -45,7 +45,7 @@
                     <textarea id="comment" name="comment" v-model="comment"></textarea>
                 </div>
 
-                <input type="hidden" name="csrf_token"/>
+                <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.comment_csrf_token"/>
 
                 <input type="submit" class="button-submit m10"/>
             </form>
@@ -70,7 +70,6 @@
 
         data() {
             return {
-                formName: 'comment_article',
                 article: [],
                 username: undefined,
                 email: undefined,
@@ -97,6 +96,7 @@
                     .then(data => {
                         this.article = data;
                         this.$parent.cancelAnimation();
+                        this.$parent.loaded = true;
                     })
                     .catch((err) => {
                         console.log('Err => ' + err)
@@ -115,14 +115,8 @@
         },
 
         mounted() {
-
             this.$parent.loadAnimation();
-
-            this.$store.dispatch('getCsrfToken', this.formName)
-                .then(token => {
-                    this.setCsrfToken(this.formName, token)
-                });
-        }
+        },
     }
 </script>
 

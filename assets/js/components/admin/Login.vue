@@ -7,7 +7,7 @@
             <label for="password">Mot de passe</label>
             <input type="password" id="password" name="password"/>
 
-            <input type="hidden" name="csrf_token"/>
+            <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.login_csrf_token"/>
 
             <input type="submit" class="button-submit"/>
         </form>

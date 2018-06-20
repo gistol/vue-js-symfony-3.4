@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="container_flex">
-            <div v-for='article in articles' class="tile">
+        <transition-group name="fade" class="container_flex">
+            <div v-for='article in articles' v-bind:key="article.id" class="tile">
                 <router-link v-bind:to="{name: 'article', params: {slug: article.slug} }">
                     <div class='image' v-bind:style="{
                         backgroundSize: 'cover',
@@ -16,7 +16,8 @@
                     <button class="button-default m10">En savoir plus</button>
                 </router-link>
             </div>
-        </div>
+        </transition-group>
+
         <div class="container" v-if="articles.length > 0">
             <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-submit">Plus d'articles</button>
         </div>

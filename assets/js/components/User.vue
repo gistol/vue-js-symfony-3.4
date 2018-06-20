@@ -12,7 +12,7 @@
                 <ul v-if="showSuggestionList">
                    <li v-for="title in searchResult" v-on:click="addSuggestion">{{ title.title }}</li>
                 </ul>
-                <input type="hidden" name="csrf_token"/>
+                <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.search_csrf_token"/>
                 <button type="submit"><font-awesome-icon v-bind:icon="searchIcon" style="color: #fff;"/></button>
             </form>
         </nav>
@@ -29,7 +29,7 @@
         <footer v-if="this.loaded">
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
-                <input type="hidden" name="csrf_token"/>
+                <input type="hidden" name="csrf_token" v-bind:value="this.$store.state.newsletter_csrf_token"/>
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>
         </footer>
@@ -52,8 +52,6 @@
 
         data() {
             return {
-                formNewsletterName: 'newsletter',
-                formSearchName: 'search',
                 searchIcon: faSearch,
                 spinnerIcon: faSpinner,
                 showSuggestionList: false,
@@ -156,13 +154,20 @@
                 /* Must check whether true as setting back to false would execute code below */
                 if(val) {
 
-                    this.$store.dispatch('getCsrfToken', this.formNewsletterName).then(token => {
-                        this.setCsrfToken(this.formNewsletterName, token)
+                    this.$store.dispatch('getCsrfToken', 'newsletter')
+                        .then(token => {
+                            this.setCsrfToken('newsletter', token);
                     });
 
-                    this.$store.dispatch('getCsrfToken', this.formSearchName).then(token => {
-                        this.setCsrfToken(this.formSearchName, token)
+                    this.$store.dispatch('getCsrfToken', 'search')
+                        .then(token => {
+                            this.setCsrfToken('search', token);
                     });
+
+                    this.$store.dispatch('getCsrfToken', 'comment_article')
+                        .then(token => {
+                            this.setCsrfToken('comment_article', token);
+                        });
                 }
             }
         },

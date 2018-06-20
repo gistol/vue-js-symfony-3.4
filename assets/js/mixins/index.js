@@ -149,7 +149,21 @@ const Mixins = {
         },
 
         setCsrfToken(formName, token) {
-            this.$el.querySelector("form[name=" + formName + "] > input[name=csrf_token]").value = token;
+            if (formName === "comment_article") {
+                this.$store.state.comment_csrf_token = token;
+            }
+
+            if (formName === "search") {
+                this.$store.state.search_csrf_token = token;
+            }
+
+            if (formName === "newsletter") {
+                this.$store.state.newsletter_csrf_token = token;
+            }
+
+            if (formName === "login") {
+                this.$store.state.login_csrf_token = token;
+            }
         },
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */
