@@ -53,7 +53,7 @@
                 
                 this.$parent.loadAnimation();
 
-                fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/category/' + category)
+                fetch('/category/' + category)
                     .then(data => data.json())
                     .then(articles => {
                         this.$parent.cancelAnimation();
@@ -66,7 +66,7 @@
 
             /* If coming from an article */
             if (this.$route.name === "category") {
-                fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/category/' + this.$route.params.category)
+                fetch('/category/' + this.$route.params.category)
                     .then(data => data.json())
                     .then(articles => {
                         this.articles = articles;
@@ -74,7 +74,7 @@
             }
 
             /* If not coming from an article */
-            fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/categories')
+            fetch('/categories')
                 .then(data => data.json())
                 .then(categories => {
                     this.allCategories = categories;

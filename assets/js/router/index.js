@@ -25,7 +25,7 @@ const Router = new VueRouter({
             component: User,
             children: [
                 {
-                    path: '/',
+                    path: '',
                     name: 'home_user',
                     component: Homepage,
                 },
@@ -36,13 +36,13 @@ const Router = new VueRouter({
                     props: true
                 },
                 {
-                    path: 'category',
+                    path: '/category',
                     name: 'categories',
                     component: Category,
                     props: true
                 },
                 {
-                    path: 'category/:category',
+                    path: '/category/:category',
                     name: 'category',
                     component: Category,
                     props: true

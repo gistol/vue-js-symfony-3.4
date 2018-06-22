@@ -68,7 +68,7 @@ const Store = new Vuex.Store({
 
         getCsrfToken({commit}, sender) {
 
-            const req = getRequestObject("POST", '/vue-js-symfony-3.4/web/app_dev.php/csrf_token');
+            const req = getRequestObject("POST", '/csrf_token');
 
             req.addEventListener("load", () => {
 
@@ -115,7 +115,7 @@ const Store = new Vuex.Store({
 
         getArticles({commit}) {
             return new Promise(resolve => {
-                fetch('/vue-js-symfony-3.4/web/app_dev.php/articles/' + this.lastId)
+                fetch('/articles/' + this.lastId)
                     .then(res => res.json())
                     .then(data => {
                         commit('hideMessage');
@@ -133,13 +133,20 @@ const Store = new Vuex.Store({
         },
 
         getNumberOfArticles({commit}) {
-            fetch('/vue-js-symfony-3.4/web/app_dev.php/articlesCount')
+            fetch('/articlesCount')
                 .then(res => res.json())
                 .then(data => {
                     commit('setNumberOfArticles', data);
             });
         },
+
+        saveVisitedUrl(context, fullPath) {
+            const form = new FormData();
+            form.append("url", fullPath);
+            getRequestObject("POST", "/statistics").send(form);
+        }
     }
+
 });
 
 function getRequestObject(method, url) {

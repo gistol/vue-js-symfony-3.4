@@ -8,7 +8,7 @@
             </figure>
             <p v-if="loaded && article.categories.length > 0">Catégories associées à l'article</p>
             <div class="category" v-if="loaded">
-                <router-link v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
+                <router-link v-if="article.categories.length > 0" v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
                     <div class="tile-mh">
                         {{ category.category|capitalize }}
                     </div>
@@ -101,7 +101,7 @@
         methods: {
 
             getArticle(slug) {
-                fetch('http://localhost/vue-js-symfony-3.4/web/app_dev.php/article/' + slug)
+                fetch('/article/' + slug)
                     .then(data => data.json())
                     .then(data => {
                         this.article = data;
@@ -125,8 +125,10 @@
         },
 
         mounted() {
+
             this.$parent.loadAnimation();
             this.$store.dispatch('getCsrfToken', 'comment_article');
+            this.$store.dispatch('saveVisitedUrl', this.$route.fullPath)
         },
     }
 </script>

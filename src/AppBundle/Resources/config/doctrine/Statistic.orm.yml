@@ -1,0 +1,19 @@
+AppBundle\Entity\Statistic:
+    type: entity
+    table: null
+    repositoryClass: AppBundle\Repository\StatisticRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        date:
+            type: datetime
+        url:
+            type: string
+            length: 255
+        bot:
+            type: boolean
+    lifecycleCallbacks: {  }

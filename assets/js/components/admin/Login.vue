@@ -51,7 +51,7 @@
                 formData.append('sender', 'login');
 
                 this.$store.dispatch('postData', {
-                    url: '/vue-js-symfony-3.4/web/app_dev.php/login',
+                    url: '/login',
                     value: formData,
                     contentType: false
 

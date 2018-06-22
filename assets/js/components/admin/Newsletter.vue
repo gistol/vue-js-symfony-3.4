@@ -36,7 +36,7 @@
 
         methods: {
             getNewsletters() {
-                fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/newsletters')
+                fetch('/admin/newsletters')
                     .then(response => response.json())
                     .then(newsletters => {
                         this.$store.commit('hideMessage');

@@ -51,7 +51,7 @@
             deleteArticle(e) {
 
                 this.$store.dispatch('postData', {
-                   url: '/vue-js-symfony-3.4/web/app_dev.php/admin/articles/delete/' + e.target.getAttribute('data-id')
+                   url: '/admin/articles/delete/' + e.target.getAttribute('data-id')
                 })
                 .then((data) => {
                     this.$store.commit('displayServerMessage', data);

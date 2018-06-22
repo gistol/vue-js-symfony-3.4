@@ -39,7 +39,7 @@
 
         methods: {
             getComments() {
-                fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/comments')
+                fetch('/admin/comments')
                     .then(response => response.json())
                     .then(comments => {
                         this.$store.commit('hideMessage');
@@ -49,7 +49,7 @@
 
             updateStatus(bool, id, key) {
                 this.$store.dispatch('postData', {
-                    url: "/vue-js-symfony-3.4/web/app_dev.php/admin/comment/status",
+                    url: "/admin/comment/status",
                     contentType: 'application/x-www-form-urlencoded',
                     value: 'published=' + bool + '&id=' + id
                 }).then(() => {

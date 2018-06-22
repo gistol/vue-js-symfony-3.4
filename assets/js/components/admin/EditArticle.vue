@@ -48,7 +48,7 @@
         }),
 
         created() {
-            fetch('/vue-js-symfony-3.4/web/app_dev.php/admin/articles/edit/' + this.$route.params.id)
+            fetch('/admin/articles/edit/' + this.$route.params.id)
                 .then((data) => data.json())
                 .then((data) => {
                     this.title = data.title;

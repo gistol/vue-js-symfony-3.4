@@ -10,6 +10,7 @@ use AppBundle\Entity\Newsletter;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use AppBundle\Service\Serializor;
+use AppBundle\Service\TraficSaver;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -181,5 +182,14 @@ class DefaultController extends Controller
         return !empty($article = $manager->getRepository(Article::class)->findOneBy(["title" => $search = $request->get('search')]))
             ? $this->getJson($article)
             : $this->getJson($manager->getRepository(Article::class)->myFindByKeyword($search));
+    }
+
+    /**
+     * @Route("/statistics", name="user_stat")
+     */
+    public function statAction(Request $request, TraficSaver $traficSaver)
+    {
+        dump($request);
+        $traficSaver->registerUrl(filter_input(INPUT_POST, "url", FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     }
 }

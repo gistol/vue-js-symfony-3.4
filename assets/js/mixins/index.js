@@ -150,7 +150,7 @@ const Mixins = {
 
         /* Common to CreateArticle, EditArticle and Article component (comments) */
 
-        handleSubmit(uri, formName) {
+        handleSubmit(url, formName) {
 
             const route = this.$route.name;
 
@@ -169,7 +169,7 @@ const Mixins = {
             formData.append('sender', formName);
 
             this.$store.dispatch('postData', {
-                url: '/vue-js-symfony-3.4/web/app_dev.php' + uri,
+                url: url,
                 value: formData
             }).then(data => {
 
