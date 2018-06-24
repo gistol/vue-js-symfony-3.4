@@ -191,7 +191,7 @@ figcaption {
 
 form {
   position: relative;
-  $array: 'select', 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="file"]', textarea;
+  $array: 'select', 'input[type="text"]', 'input[type="password"]', 'input[type="email"]', 'input[type="date"]', 'input[type="file"]', textarea;
 
   @include loopItem($array, 'width', 100%);
   @include loopItem($array, 'display', 'block');
@@ -203,6 +203,7 @@ form {
   @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="password"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="email"]', 'border-bottom', 1px solid lightgrey);
+  @include loopItem('input[type="date"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('textarea', 'border', 1px solid lightgrey);
   @include loopItem('textarea', 'display', 'block');
   @include loopItem('textarea', 'margin-top', '10px');
