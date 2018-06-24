@@ -18,7 +18,7 @@
             </div>
         </transition-group>
 
-        <div class="container" v-if="articles.length > 0">
+        <div v-if="articles.length > 0" style="margin-bottom: 50px;">
             <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-submit">Plus d'articles</button>
         </div>
     </div>
@@ -51,6 +51,10 @@
             addArticles() {
                 this.$parent.loadAnimation();
                 this.getArticles();
+
+                setTimeout(() => {
+                    window.scrollTo(0, document.body.scrollHeight + 500);
+                }, 200);
             }
         },
 

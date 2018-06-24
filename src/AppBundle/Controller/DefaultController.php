@@ -2,19 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Newsletter;
+use AppBundle\Service\DataSaver;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
-use AppBundle\Service\Serializor;
-use AppBundle\Service\TraficSaver;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -187,9 +184,9 @@ class DefaultController extends Controller
     /**
      * @Route("/statistics", name="user_stat")
      */
-    public function statAction(Request $request, TraficSaver $traficSaver)
+    public function statAction(Request $request, DataSaver $traficSaver)
     {
         dump($request);
-        $traficSaver->registerUrl(filter_input(INPUT_POST, "url", FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+        $traficSaver->registerData(filter_input(INPUT_POST, "data", FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     }
 }

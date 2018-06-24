@@ -126,10 +126,7 @@ const Mixins = {
     watch: {
         newsletter(val) {
             const field = this.$refs.newsletter;
-            if (!new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,4}$/).test(val)) {
-                field.style.border = "2px solid red";
-            } else {
-                field.style.border = "2px solid green";
+            if (new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,4}$/).test(val)) {
                 this.newsletterFormValid = true;
             }
         }
@@ -181,6 +178,9 @@ const Mixins = {
                             this.searchResult = data.splice(0, 10).sort()
                         } else {
                             this.searchResult = [{title: "Aucune suggestion"}];
+                            setTimeout(() => {
+                                this.showSuggestionList = false;
+                            }, 2000);
                         }
                     } else {
                         this.$router.push({name: 'article', params: {'slug' : data.slug} });
@@ -189,12 +189,6 @@ const Mixins = {
                     }
 
                     this.showSuggestionList = true;
-
-                    if (data.length === 0) {
-                        setTimeout(() => {
-                            this.showSuggestionList = false;
-                        }, 2000);
-                    }
 
                     this.showSpinner = false;
                     this.$el.querySelector("svg[data-icon='spinner']").classList.remove("fa-spin");

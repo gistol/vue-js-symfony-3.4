@@ -140,10 +140,8 @@ const Store = new Vuex.Store({
             });
         },
 
-        saveVisitedUrl(context, fullPath) {
-            const form = new FormData();
-            form.append("url", fullPath);
-            getRequestObject("POST", "/statistics").send(form);
+        saveData(context, data) {
+            getRequestObject("POST", "/statistics").send(new FormData().append("data", data));
         }
     }
 

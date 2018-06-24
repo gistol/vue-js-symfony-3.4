@@ -125,10 +125,9 @@
         },
 
         mounted() {
-
             this.$parent.loadAnimation();
             this.$store.dispatch('getCsrfToken', 'comment_article');
-            this.$store.dispatch('saveVisitedUrl', this.$route.fullPath)
+            this.$store.dispatch('saveData', this.$route.fullPath)
         },
     }
 </script>

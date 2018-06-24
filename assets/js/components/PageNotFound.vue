@@ -8,5 +8,9 @@
 
     export default {
         name: 'PageNotFound',
+
+        mounted() {
+            console.log(this.$route.name);
+        }
     }
 </script>

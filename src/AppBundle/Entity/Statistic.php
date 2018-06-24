@@ -109,5 +109,62 @@ class Statistic
     {
         return $this->bot;
     }
-}
+    /**
+     * @var string
+     */
+    private $data;
 
+    /**
+     * @var string
+     */
+    private $type;
+
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     *
+     * @return Statistic
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return string
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Statistic
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+}

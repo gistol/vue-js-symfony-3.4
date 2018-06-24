@@ -7,7 +7,7 @@
                 <router-link v-bind:to="{name: 'categories'}" tag="li">Catégories</router-link>
             </ul>
             <form name='search' v-on:submit.prevent="handleSearchSubmit" v-on:keyup="handleSearchSubmit">
-                <input type="search" name="search" autocomplete="off" />
+                <input type="search" name="search" autocomplete="off" placeholder="Rechercher"/>
                 <font-awesome-icon :icon="spinnerIcon" style="color: #fff;" v-show="showSpinner"/>
                 <ul v-if="showSuggestionList">
                    <li v-for="title in searchResult" v-on:click="addSuggestion">{{ title.title }}</li>
@@ -17,7 +17,7 @@
             </form>
         </nav>
         <router-view></router-view>
-        <div class="container" id="loaderContainer" v-show="this.loading">
+        <div id="loaderContainer" v-show="this.loading">
             <div id="loader">
                 <div id="loader2"></div>
                 <div id="loader3"></div>
@@ -26,7 +26,7 @@
             </div>
             <p>Chargement en cours</p>
         </div>
-        <footer v-if="this.loaded">
+        <footer>
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
                 <input type="hidden" name="csrf_token" v-bind:value="newsletter_csrf_token"/>
@@ -62,7 +62,7 @@
                 index: 0,
                 loaders: [],
                 loading: true,
-                loaded: false
+                loaded: false,
             }
         },
 
@@ -158,7 +158,12 @@
                     this.$store.dispatch('getCsrfToken', 'newsletter');
                     this.$store.dispatch('getCsrfToken', 'search');
                 }
-            }
+            },
         },
+
+        mounted() {
+
+            // this.$store.dispatch('saveData', this.$route.name)
+        }
     }
 </script>

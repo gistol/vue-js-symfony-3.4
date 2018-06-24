@@ -1,12 +1,5 @@
 @import "variables";
 
-body{
-  font-family: 'Open Sans', sans-serif;
-  //color: #76838f;
-  color: #34495e;
-  background: #f1f4f5;
-}
-
 /* Admin */
 #logout:hover{
   @extend %pointer;
@@ -16,6 +9,13 @@ body{
 html, body, #app, nav, nav ul{
   padding: 0;
   margin: 0;
+}
+
+body{
+  font-family: 'Open Sans', sans-serif;
+  //color: #76838f;
+  color: #34495e;
+  background: #f1f4f5;
 }
 
 nav{
@@ -42,7 +42,7 @@ nav ul li {
   height: 50px;
   line-height: 50px;
   @extend %text-center;
-  color: lightgrey;
+  color: darkgrey;
   @extend %pointer;
   font-size: .9em;
 }
@@ -87,6 +87,7 @@ th {
 }
 
 .container {
+
   margin: 50px auto;
 
   @media all and (min-width: 1024px){
@@ -285,12 +286,14 @@ form {
 
 #app_user {
   position: relative;
+  @extend %flex;
+  @extend %column;
+  justify-content: space-between;
   min-height: 100vh;
-
   /* Footer */
 
   footer{
-    @include padding(20px);
+    padding: 1px 0 1px 0;
     @include width(100%);
     @extend %border-box;
     @extend %flex;
@@ -299,13 +302,16 @@ form {
 
     form {
       padding: 0;
-      input[type='email'] {
-        margin: 0 auto 10px auto;
-      }
       box-shadow: none;
       background: $super-dark-grey;
       width: 30%;
       @extend %margin-auto;
+      @extend %flex;
+      @extend %align-center;
+      input[type='email']{
+        border: none;
+        color: $super-dark-grey;
+      }
     }
   }
 }
@@ -430,6 +436,7 @@ form[name='search'] {
     width: 200px;
     border: none;
     height: 100%;
+    text-indent: 5px;
   }
 
   button {
@@ -484,6 +491,18 @@ form[name='search'] {
 }
 
 #loaderContainer {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  background: rgb(255,255,255);
+  @extend %flex;
+  @extend %column;
+  @extend %align-center;
+  @extend %justify-center;
+  z-index: 2;
+
   p {
     margin-top: 20px;
     text-align: center;

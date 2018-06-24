@@ -11,9 +11,11 @@ AppBundle\Entity\Statistic:
     fields:
         date:
             type: datetime
-        url:
+        data:
             type: string
             length: 255
+        type:
+            type: string
         bot:
             type: boolean
     lifecycleCallbacks: {  }

@@ -64,6 +64,8 @@
 
         mounted() {
 
+            console.log(this.$route.path);
+
             /* If coming from an article */
             if (this.$route.name === "category") {
                 fetch('/category/' + this.$route.params.category)
