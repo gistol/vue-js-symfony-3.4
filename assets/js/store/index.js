@@ -141,7 +141,10 @@ const Store = new Vuex.Store({
         },
 
         saveData(context, data) {
-            getRequestObject("POST", "/statistics").send(new FormData().append("data", data));
+            const form = new FormData();
+            form.append("data", data.data);
+            form.append("type", data.type);
+            getRequestObject("POST", "/statistics").send(form);
         }
     }
 

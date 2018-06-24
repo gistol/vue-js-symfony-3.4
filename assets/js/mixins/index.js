@@ -224,7 +224,14 @@ const Mixins = {
                     this.showSpinner = true;
                     this.$el.querySelector("svg[data-icon='spinner']").classList.add("fa-spin");
                 }
-            }, 250);
+
+                this.$store.dispatch('saveData', {
+                    data: this.$el.querySelector('input[type="search"]').value,
+                    type: 'search'
+                });
+            }, 700);
+
+
 
             this.$el.addEventListener("click", () => {
                 if (this.showSuggestionList) {

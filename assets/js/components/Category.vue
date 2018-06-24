@@ -64,7 +64,10 @@
 
         mounted() {
 
-            console.log(this.$route.path);
+            this.$store.dispatch('saveData', {
+                data: this.$route.fullPath,
+                type: 'navigation'
+            });
 
             /* If coming from an article */
             if (this.$route.name === "category") {

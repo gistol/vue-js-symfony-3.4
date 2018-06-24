@@ -127,7 +127,10 @@
         mounted() {
             this.$parent.loadAnimation();
             this.$store.dispatch('getCsrfToken', 'comment_article');
-            this.$store.dispatch('saveData', this.$route.fullPath)
+            this.$store.dispatch('saveData', {
+                data: this.$route.fullPath,
+                type: 'navigation'
+            });
         },
     }
 </script>

@@ -27,13 +27,14 @@ class DataSaver
     /**
      * @param $data
      */
-    public function registerData($data)
+    public function registerData($data, $type)
     {
         $this->metaService->persistAndFlush([
             (new Statistic())
                 ->setData($data)
                 ->setDate(new \DateTime())
                 ->setBot($this->checkIfBot())
+                ->setType($type)
         ]);
     }
 
@@ -45,7 +46,7 @@ class DataSaver
         $array = explode(" ", $this->metaService->getRequest()->server->get("HTTP_USER_AGENT"));
 
         foreach ($array as $value) {
-            if(preg_match("/YandexBot|YandexImages|GigablastOpenSource|Mail.RU_Bot|Pinterestbot|MJ12bot|ScoutJet|Snarfer|SimplePie|AdsBot-Google-Mobile|sogou|BLEXBot|Sitebot|zspider|Charlotte|Gigabot|msnbot|okhttp|ips-agent|SiteLockSpider|MSRbot|mxbot|Googlebot|bingbot|AdsBot-Google-Mobile|Googlebot-Mobile|Slurp|DuckDuckBot|Baiduspider|facebookexternalhit|Exabot|Konqueror|Trident|facebot|ia_archiver/", $value)){
+            if (preg_match("/YandexBot|YandexImages|GigablastOpenSource|Mail.RU_Bot|Pinterestbot|MJ12bot|ScoutJet|Snarfer|SimplePie|AdsBot-Google-Mobile|sogou|BLEXBot|Sitebot|zspider|Charlotte|Gigabot|msnbot|okhttp|ips-agent|SiteLockSpider|MSRbot|mxbot|Googlebot|bingbot|AdsBot-Google-Mobile|Googlebot-Mobile|Slurp|DuckDuckBot|Baiduspider|facebookexternalhit|Exabot|Konqueror|Trident|facebot|ia_archiver/", $value)) {
                 return true;
             }
         }

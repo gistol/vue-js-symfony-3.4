@@ -55,7 +55,7 @@
                     value: formData,
                     contentType: false
 
-                }).then((data) => {
+                }).then(data => {
 
                     if (!data.token) {
                         this.$store.commit('displayServerMessage', data);

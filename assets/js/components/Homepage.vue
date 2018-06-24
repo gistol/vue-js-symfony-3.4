@@ -64,6 +64,12 @@
         },
 
         mounted() {
+
+            this.$store.dispatch('saveData', {
+                data: this.$route.fullPath,
+                type: 'navigation'
+            });
+            
             /* No animation launch if already cached articles */
             if (this.articles.length === 0) {
                 this.$parent.loadAnimation();

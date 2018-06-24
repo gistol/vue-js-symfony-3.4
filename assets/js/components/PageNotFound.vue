@@ -10,7 +10,11 @@
         name: 'PageNotFound',
 
         mounted() {
-            console.log(this.$route.name);
+
+            this.$store.dispatch('saveData', {
+                data: "pathError",
+                type: 'navigation'
+            });
         }
     }
 </script>

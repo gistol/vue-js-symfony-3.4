@@ -160,10 +160,5 @@
                 }
             },
         },
-
-        mounted() {
-
-            // this.$store.dispatch('saveData', this.$route.name)
-        }
     }
 </script>

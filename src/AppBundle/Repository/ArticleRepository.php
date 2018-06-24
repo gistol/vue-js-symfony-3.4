@@ -60,6 +60,8 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
      */
     public function myFindByKeyword($keyword)
     {
+        $keyword = preg_replace("/'/", "\'", $keyword);
+
         $sql = "SELECT DISTINCT title 
                 FROM article 
                 WHERE title LIKE '%$keyword%'";

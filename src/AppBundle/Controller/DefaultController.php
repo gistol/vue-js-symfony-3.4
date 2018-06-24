@@ -6,6 +6,7 @@ use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Newsletter;
+use AppBundle\Service\AppTools;
 use AppBundle\Service\DataSaver;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
@@ -184,9 +185,13 @@ class DefaultController extends Controller
     /**
      * @Route("/statistics", name="user_stat")
      */
-    public function statAction(Request $request, DataSaver $traficSaver)
+    public function statAction(DataSaver $dataSaver)
     {
-        dump($request);
-        $traficSaver->registerData(filter_input(INPUT_POST, "data", FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+        $dataSaver->registerData(
+            $data = filter_input(INPUT_POST, "data", FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+            $type = filter_input(INPUT_POST, "type", FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+        );
+
+        return new Response($data);
     }
 }

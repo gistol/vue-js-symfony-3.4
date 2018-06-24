@@ -72,7 +72,7 @@ services:
         autowire: true
 
     app.stat:
-        class: AppBundle\Service\TraficSaver
+        class: AppBundle\Service\DataSaver
         arguments: ["@app.meta_service"]
         public: true
         autowire: true

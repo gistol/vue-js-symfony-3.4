@@ -139,7 +139,7 @@ function userAuthenticated() {
             new XMLHttpRequest() :
             new ActiveXObject("Microsoft.XMLHTTP");
 
-        req.open("GET", '/vue-js-symfony-3.4/web/app_dev.php/getSessionToken');
+        req.open("GET", '/getSessionToken');
         req.addEventListener("load", () => {
 
             if (req.status >= 200 && req.status < 400) {
