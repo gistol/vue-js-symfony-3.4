@@ -141,11 +141,11 @@ const Store = new Vuex.Store({
         },
 
         saveData(context, data) {
-            const form = new FormData();
-            form.append("data", data.data);
-            form.append("type", data.type);
-            getRequestObject("POST", "/statistics").send(form);
-        }
+            const formData = new FormData();
+            formData.append("data", data.data);
+            formData.append("type", data.type);
+            getRequestObject("POST", "/statistics").send(formData);
+        },
     }
 
 });

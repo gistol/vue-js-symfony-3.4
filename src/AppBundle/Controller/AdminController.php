@@ -7,6 +7,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Newsletter;
+use AppBundle\Entity\Statistic;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -133,6 +134,20 @@ class AdminController extends Controller
     public function newsletterAction(ObjectManager $manager)
     {
         return $this->get('app.serializor')->serialize($manager->getRepository(Newsletter::class)->findAll());
+    }
+
+    /**
+     * @Route("/admin/statistics", name="admin_statistics")
+     */
+    public function getStatAction(Request $request, ObjectManager $manager)
+    {
+        $type = $request->get("type");
+        $bot = $request->get("bot");
+        $start = $request->get("start");
+        $end = $request->get("end");
+
+        return $manager->getRepository(Statistic::class)
+            ->myFindBy($type, $bot, $start, $end);
     }
 
     /**
