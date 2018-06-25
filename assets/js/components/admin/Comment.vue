@@ -8,7 +8,7 @@
             <div class="button-group">
                 <button v-if="comment.published" v-on:click='updateStatus(false, comment.id, key)' class="button-delete">Masquer</button>
                 <button v-else v-on:click='updateStatus(true, comment.id, key)' class="button-default">Publier</button>
-                <button class="button-delete"><i class="fas fa-trash-alt"></i> Supprimer</button>
+                <button class="button-delete"><i class="fas fa-trash-alt"></i><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button>
             </div>
         </div>
     </div>
@@ -17,14 +17,21 @@
 <script>
 
     import Mixin from './../../mixins';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+    import faTrash from '@fortawesome/fontawesome-free-solid/faTrash';
 
     export default {
         name: 'Comment',
 
         data() {
             return {
-                comments: []
+                comments: [],
+                trashIcon: faTrash
             }
+        },
+
+        components: {
+            FontAwesomeIcon
         },
 
         computed: {

@@ -21,8 +21,8 @@
         </form>
 
         <div class="button-group">
-            <button v-on:click.prevent="addCategoryForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Catégorie</button>
-            <button v-on:click.prevent="addForm" class="button-default w150"><i class="fas fa-plus-circle"></i> Image</button>
+            <button v-on:click.prevent="addCategoryForm" class="button-default w150"><font-awesome-icon v-bind:icon='plusIcon'></font-awesome-icon> Catégorie</button>
+            <button v-on:click.prevent="addForm" class="button-default w150"><font-awesome-icon v-bind:icon='plusIcon'></font-awesome-icon> Image</button>
         </div>
     </div>
 </template>
@@ -31,12 +31,24 @@
 
     import Mixin from '../../mixins';
     import { mapState } from 'vuex';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+    import faPlus from '@fortawesome/fontawesome-free-solid/faPlusCircle';
 
     export default {
 
         name: 'CreateArticle',
 
         mixins: [Mixin],
+
+        data() {
+            return {
+                plusIcon: faPlus
+            }
+        },
+
+        components: {
+            FontAwesomeIcon
+        },
 
         computed: mapState({
             csrf_token: (state) => state.create_edit_article_csrf_token

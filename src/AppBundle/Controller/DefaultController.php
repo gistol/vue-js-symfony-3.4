@@ -185,10 +185,10 @@ class DefaultController extends Controller
     /**
      * @Route("/statistics", name="user_stat")
      */
-    public function statAction(DataSaver $dataSaver)
+    public function statAction(Request $request, DataSaver $dataSaver)
     {
         $dataSaver->registerData(
-            $data = filter_input(INPUT_POST, "data", FILTER_SANITIZE_FULL_SPECIAL_CHARS),
+            $data = htmlspecialchars($request->get("data")),
             $type = filter_input(INPUT_POST, "type", FILTER_SANITIZE_FULL_SPECIAL_CHARS)
         );
 

@@ -11,6 +11,7 @@
             <div class="field">
                 <label for="bot">Bot</label>
                 <select name="bot" id="bot">
+                    <option selected></option>
                     <option value="0">Non bot</option>
                     <option value="1">Bot</option>
                 </select>
@@ -25,22 +26,25 @@
             <input type="submit" class="button-submit"/>
         </form>
 
-        <transition name="fade">
-            <table v-if="stats.length > 0">
+        <transition name="fade" class="m10">
+            <table v-if="total !== 0">
                 <thead>
                     <tr>
-                        <th>Type</th>
-                        <th>Uri</th>
+                        <th>Détail</th>
                         <th>Total</th>
-                        <th>Bot</th>
+                        <th>%</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="stat in stats">
-                        <td>{{ stat.date }}</td>
-                        <td>{{ stat.uri }}</td>
-                        <td>{{ stat.total }}</td>
-                        <td>{{ stat.bot }}</td>
+                    <tr v-for="(stat, key) in stats">
+                        <td>{{ key }}</td>
+                        <td>{{ stat }}</td>
+                        <td>{{ ((stat/total)*100).toFixed(0) }}%</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ total }}</td>
+                        <td>100%</td>
                     </tr>
                 </tbody>
             </table>
@@ -57,17 +61,26 @@
 
         data() {
             return {
-                stats: []
+                stats: [],
+                total: 0,
             }
         },
 
         methods: {
             handleStatistics(e) {
+                const el = this;
                 const formData = new FormData(e.target);
+                el.total = 0;
                 this.$store.dispatch('postData', {
                     value: formData,
                     url: "/admin/statistics"
-                });
+                }).then(stats =>{
+                    Object.values(stats).forEach(stat => {
+                        el.total+=Number(stat);
+                    });
+
+                    this.stats = stats;
+                })
             }
         },
 

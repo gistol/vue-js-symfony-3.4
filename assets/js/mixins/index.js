@@ -98,12 +98,13 @@ const Mixins = {
                 "<div>" +
                 "<label v-bind:style='style' v-bind:for='cat'>Catégorie n°{{ index + 1 }}</label>" +
                 "<input type='text' v-bind:name='name' :id='cat' :value='this.$props.category.category'/>" +
-                "<button v-on:click='remove' class='button-delete mt5'><i class='fas fa-trash-alt'></i> Supprimer</button>" +
+                "<button v-on:click='remove' class='button-delete mt5'><font-awesome-icon v-bind:icon='trashIcon'></font-awesome-icon> Supprimer</button>" +
                 "</div>"
             ,
 
             data() {
                 return {
+                    trashIcon: faTrash,
                     style: {
                         marginTop: '10px',
                         display: 'block'
@@ -111,6 +112,10 @@ const Mixins = {
                     cat: 'category_' + this.index,
                     name: 'category[' + this.index + ']',
                 }
+            },
+
+            components: {
+                FontAwesomeIcon
             },
 
             methods: {
@@ -223,12 +228,13 @@ const Mixins = {
                     this.handleSubmit('/search', 'search');
                     this.showSpinner = true;
                     this.$el.querySelector("svg[data-icon='spinner']").classList.add("fa-spin");
-                }
 
-                this.$store.dispatch('saveData', {
-                    data: this.$el.querySelector('input[type="search"]').value,
-                    type: 'search'
-                });
+                    /* Stats */
+                    this.$store.dispatch('saveData', {
+                        data: this.$el.querySelector('input[type="search"]').value,
+                        type: 'search'
+                    });
+                }
             }, 700);
 
 

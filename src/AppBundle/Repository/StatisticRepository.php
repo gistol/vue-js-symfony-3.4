@@ -10,20 +10,23 @@ namespace AppBundle\Repository;
  */
 class StatisticRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function myFindBy($type, $bot = false, $start = null, $end = null)
+    public function myFindBy($type, $bot, $start, $end)
     {
-        $sql = "SELECT * FROM statistic";
-        $sql .= "WHERE type = $type";
-        $sql .= "AND bot = $bot";
-        if (!is_null($start)) {
-            $sql .= "AND date >= $start";
+        $dbh = $this->_em->getConnection();
+        $sql = "SELECT * FROM statistic WHERE type='$type' ";
+        if ("" !== $bot) {
+            $sql .= " AND bot='$bot'";
         }
 
-        if (!is_null($end)) {
-            $sql .= "AND date <= $end";
+        if ("" !== $start) {
+            $sql .= " AND date >= '$start. 00:00:00'";
         }
 
-        $result = $this->_em->getConnection()->fetchAll($sql);
-        return $result;
+        if ("" !== $end) {
+            $sql .= " AND date <= '$end . 23:59:59'";
+        }
+        $sth = $dbh->prepare($sql);
+        $sth->execute();
+        return $dbh->fetchAll($sql);
     }
 }

@@ -6,12 +6,14 @@
                     <tr>
                         <th>Email</th>
                         <th>Date de souscription</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody v-for="newsletter in newsletters">
                     <tr>
                         <td>{{ newsletter.email }}</td>
                         <td>{{ newsletter.date|formatShortDate }} </td>
+                        <td><button class="button-delete"><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -22,14 +24,21 @@
 <script>
 
     import Mixin from './../../mixins';
+    import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
+    import faTrash from '@fortawesome/fontawesome-free-solid/faTrash';
 
     export default {
         name: 'Newsletter',
 
         data() {
             return {
-                newsletters: []
+                newsletters: [],
+                trashIcon: faTrash
             }
+        },
+
+        components: {
+            FontAwesomeIcon
         },
 
         mixins: [Mixin],

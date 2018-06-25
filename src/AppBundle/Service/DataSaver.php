@@ -10,6 +10,8 @@ use AppBundle\Entity\Statistic;
  */
 class DataSaver
 {
+    protected $data = [];
+
     /**
      * @var MetaService
      */
@@ -54,8 +56,25 @@ class DataSaver
         return false;
     }
 
-    public function getStatistics($start, $end)
+    /**
+     * @param $statistics
+     * @return array
+     */
+    public function getStatistics($statistics)
     {
+        array_walk($statistics, [$this, "treat"]);
 
+        return $this->data;
+    }
+
+    private function treat($value)
+    {
+        if (!empty($data = $value['data'])) {
+            if (array_key_exists($data, $this->data)) {
+                $this->data[$data]++;
+            } else {
+                $this->data[$data] = 1;
+            }
+        }
     }
 }
