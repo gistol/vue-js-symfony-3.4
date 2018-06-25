@@ -9,6 +9,11 @@
             <child-form v-for="(image, i) in images" :item="i" v-bind:image="image"></child-form>
             <category-form v-for="(category, index) in categories" v-bind:index="index" :category="category"></category-form>
 
+            <div class="field">
+                <label for="pdf">PDF</label>
+                <input type="file" name="pdf" id="pdf"/>
+            </div>
+
             <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
             <input type="submit" class="button-submit"/>

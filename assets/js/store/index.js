@@ -16,7 +16,8 @@ const Store = new Vuex.Store({
         search_csrf_token: undefined,
         newsletter_csrf_token: undefined,
         login_csrf_token: undefined,
-        create_edit_article_csrf_token: undefined
+        create_edit_article_csrf_token: undefined,
+        statistic_csrf_token: undefined
     },
 
     mutations: {

@@ -23,6 +23,8 @@
                 <input type="date" name="end" id="end"/>
             </div>
 
+            <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
+
             <input type="submit" class="button-submit"/>
         </form>
 
@@ -79,11 +81,33 @@
                         el.total+=Number(stat);
                     });
 
-                    this.stats = stats;
+                    if (stats.length > 0) {
+                        this.stats = this.sortData(stats);
+                    } else {
+                        this.$store.commit("displayServerMessage", "Aucun résultat.")
+                    }
                 })
+            },
+
+            sortData(obj) {
+                let sortedObjArray = Object.keys(obj).sort((a, b) => obj[b] - obj[a]);
+                let newObj = {};
+                sortedObjArray.forEach(key => {newObj[key] = obj[key]});
+                obj = {};
+                return newObj;
             }
         },
 
-        mixins: [Mixin]
+        computed: {
+            csrf_token() {
+                return this.$store.state.statistic_csrf_token;
+            },
+        },
+
+        mixins: [Mixin],
+
+        mounted() {
+            this.$store.dispatch('getCsrfToken', "statistic");
+        }
     }
 </script>

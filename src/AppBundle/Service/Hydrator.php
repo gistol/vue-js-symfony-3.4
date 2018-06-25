@@ -90,6 +90,7 @@ class Hydrator
             $object->setDate(new \DateTime());
             $this->imageCreator($object);
             $this->categoryCreator($object);
+            $this->addPDF($object);
         }
 
         return $object;
@@ -220,5 +221,14 @@ class Hydrator
         }
 
         return $article;
+    }
+
+    private function addPDF(Article $article)
+    {
+        $pdf = $this->metaService->getRequest()->files->get("pdf");
+
+        $filename = $this->metaService->getFileUploader()->uploadFile($pdf);
+
+        $article->setPdf($filename);
     }
 }

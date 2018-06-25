@@ -59,6 +59,7 @@ nav ul li:hover {
 .container, table {
   a {
     @extend %no-underline;
+    color: #34495e;
   }
 }
 
@@ -517,3 +518,4 @@ form[name='search'] {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+

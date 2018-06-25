@@ -142,15 +142,20 @@ class AdminController extends Controller
      */
     public function getStatAction(Request $request, ObjectManager $manager, DataSaver $dataSaver)
     {
-        $type = $request->get("type");
-        $bot = $request->get("bot");
-        $start = $request->get("start");
-        $end = $request->get("end");
+        if ($request->get("csrf_token") === $request->getSession()->get("statistic")) {
 
-        $statistics = $manager->getRepository(Statistic::class)
-            ->myFindBy($type, $bot, $start, $end);
+            $type = $request->get("type");
+            $bot = $request->get("bot");
+            $start = $request->get("start");
+            $end = $request->get("end");
 
-        return new Response(json_encode($dataSaver->getStatistics($statistics)));
+            $statistics = $manager->getRepository(Statistic::class)
+                ->myFindBy($type, $bot, $start, $end);
+
+            return new Response(json_encode($dataSaver->getStatistics($statistics)));
+        } else {
+            return new JsonResponse("Formulaire invalide.");
+        }
     }
 
     /**

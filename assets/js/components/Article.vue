@@ -3,7 +3,7 @@
         <div class='container w40 w95sm'>
             <h2>{{ article.title }}</h2>
             <figure class='tile' v-for="image in article.images">
-                <img :src="'./images/' + image.src" :alt='image.title' />
+                <img v-bind:src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
             <p v-if="loaded && article.categories.length > 0">Catégories associées à l'article</p>
@@ -13,6 +13,9 @@
                         {{ category.category|capitalize }}
                     </div>
                 </router-link>
+            </div>
+            <div class="tile" v-if="null !== article.pdf">
+                <a v-bind:href="'./images/' + article.pdf"><font-awesome-icon v-bind:icon="pdfIcon"></font-awesome-icon> Télécharger le PDF</a>
             </div>
             <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
                 <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
@@ -63,6 +66,7 @@
     import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle'
     import faMinusCircle from '@fortawesome/fontawesome-free-solid/faMinusCircle'
     import faComment from '@fortawesome/fontawesome-free-solid/faComment'
+    import faPDF from '@fortawesome/fontawesome-free-solid/faFilePdf'
 
     export default {
 
@@ -78,7 +82,8 @@
                 displayComment: false,
                 plusIcon: faPlusCircle,
                 minusIcon: faMinusCircle,
-                commentIcon: faComment
+                commentIcon: faComment,
+                pdfIcon: faPDF
             }
         },
 

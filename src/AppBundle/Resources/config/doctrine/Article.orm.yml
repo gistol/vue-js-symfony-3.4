@@ -20,6 +20,9 @@ AppBundle\Entity\Article:
         newsletter:
             type: boolean
             nullable: true
+        pdf:
+            type: string
+            nullable: true
 
     oneToMany:
         images:

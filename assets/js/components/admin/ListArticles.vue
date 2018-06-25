@@ -53,9 +53,9 @@
                 this.$store.dispatch('postData', {
                    url: '/admin/articles/delete/' + e.target.getAttribute('data-id')
                 })
-                .then((data) => {
+                .then(data => {
                     this.$store.commit('displayServerMessage', data);
-                    e.target.parentNode.parentNode.parentNode.parentNode.remove();
+                    e.target.parentNode.parentNode.remove();
                 })
                 .catch((err) => {
                     this.$store.commit('displayServerMessage', err);

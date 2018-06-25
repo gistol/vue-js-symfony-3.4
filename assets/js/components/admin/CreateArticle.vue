@@ -2,7 +2,7 @@
     <div class="container w40 w95sm">
         <form name='create_edit_article' class='tile' v-on:submit.prevent="handleCreation" :enctype="enctype">
 
-            <div>
+            <div class="field">
                 <label for="title">Titre</label>
                 <input type="text" id="title" name="title" v-model="title"/>
             </div>
@@ -10,7 +10,12 @@
             <child-form v-for="(image, i) in images" :item="i" :key='image' :image="image"></child-form>
             <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
 
-            <div>
+            <div class="field">
+                <label for="pdf">PDF</label>
+                <input type="file" name="pdf" id="pdf"/>
+            </div>
+
+            <div class="field">
                 <label for="newsletter">Envoyer la newsletter</label>
                 <input type="checkbox" name='newsletter' id="newsletter"/>
             </div>

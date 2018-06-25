@@ -264,4 +264,33 @@ class Article
     {
         return $this->newsletter;
     }
+    /**
+     * @var string
+     */
+    private $pdf;
+
+
+    /**
+     * Set pdf
+     *
+     * @param string $pdf
+     *
+     * @return Article
+     */
+    public function setPdf($pdf)
+    {
+        $this->pdf = $pdf;
+
+        return $this;
+    }
+
+    /**
+     * Get pdf
+     *
+     * @return string
+     */
+    public function getPdf()
+    {
+        return $this->pdf;
+    }
 }
