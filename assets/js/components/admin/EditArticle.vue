@@ -1,6 +1,6 @@
 <template>
     <div class="container w40 w95sm">
-        <form name='create_edit_article' v-on:submit.prevent="handleEdition" :enctype="enctype">
+        <form name='create_edit_article' v-on:submit.prevent="handleEdition" v-bind:enctype="enctype" class="tile">
             <div>
                 <label for="title">Titre</label>
                 <input type="text" id="title" name="title" v-model="title"/>
@@ -12,8 +12,8 @@
             <div class="field">
                 <label for="pdf">PDF</label>
                 <input type="file" name="pdf" id="pdf"/>
+                <font-awesome-icon v-if="pdf !== undefined" v-bind:icon="deleteIcon" v-on:click="deletePDF"/>
             </div>
-
             <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
             <input type="submit" class="button-submit"/>
@@ -31,6 +31,7 @@
     import { mapState } from 'vuex';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
     import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
+    import faTime from '@fortawesome/fontawesome-free-solid/faTimes';
 
     export default {
 
@@ -39,6 +40,7 @@
         data() {
             return {
                 plusIcon: faPlusCircle,
+                deleteIcon: faTime,
             }
         },
 
@@ -48,20 +50,42 @@
             FontAwesomeIcon
         },
 
-        computed: ({
-           csrf_token: (state) => state.create_edit_article_csrf_token
+        computed: mapState({
+            csrf_token: (state) => state.create_edit_article_csrf_token
         }),
+
+        methods: {
+            deletePDF() {
+                const formData = new FormData();
+                formData.append("pdf", this.pdf);
+
+                this.$store.dispatch('postData', {
+                        url: '/delete/pdf',
+                        value: formData,
+                    })
+                    .then((resp) => {
+                        this.$store.commit("displayServerMessage", resp);
+                        this.pdf = undefined;
+                    })
+                    .catch((err) => {
+                        console.log("Erreur : " + err);
+                    });
+            }
+        },
 
         created() {
             fetch('/admin/articles/edit/' + this.$route.params.id)
-                .then((data) => data.json())
-                .then((data) => {
+                .then(data => data.json())
+                .then(data => {
                     this.title = data.title;
+                    if (null !== data.pdf) {
+                        this.pdf = data.pdf;
+                    }
                     data.images.forEach((image) => {
                         this.images.push(image);
                     });
 
-                    data.categories.forEach((category) => {
+                    data.categories.forEach(category => {
                         this.categories.push(category);
                     });
 

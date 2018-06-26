@@ -9,6 +9,7 @@ use AppBundle\Entity\Image;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Statistic;
 use AppBundle\Service\DataSaver;
+use AppBundle\Service\FileUploader;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -45,12 +46,12 @@ class AdminController extends Controller
                 }
 
                 return new JsonResponse("Création réussie.", Response::HTTP_CREATED);
-            } else {
-                return new JsonResponse('Formulaire invalide');
             }
-        } else {
-            return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
+
+            return new JsonResponse('Formulaire invalide');
         }
+
+        return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -59,17 +60,21 @@ class AdminController extends Controller
      * @param ObjectManager $manager
      * @return JsonResponse
      */
-    public function deleteArticleAction($id, ObjectManager $manager)
+    public function deleteArticleAction($id, ObjectManager $manager, Request $request)
     {
-        $ret = $this->getArticle($id);
+        if ($request->isXmlHttpRequest()) {
+            $ret = $this->getArticle($id);
 
-        if ($ret instanceof Article) {
-            $manager->remove($ret);
-            $manager->flush();
-            return new JsonResponse("L'article a été supprimé.");
-        } else {
+            if ($ret instanceof Article) {
+                $manager->remove($ret);
+                $manager->flush();
+                return new JsonResponse("L'article a été supprimé.");
+            }
+
             return $ret;
         }
+
+        return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -90,12 +95,12 @@ class AdminController extends Controller
                 } else {
                     return $ret;
                 }
-            } else {
-                return new JsonResponse('Formulaire invalide');
             }
-        } else {
-            return $this->get('app.serializor')->serialize($this->getArticle($id));
+
+            return new JsonResponse('Formulaire invalide');
         }
+
+        return $this->get('app.serializor')->serialize($this->getArticle($id));
     }
 
     /**
@@ -106,15 +111,19 @@ class AdminController extends Controller
      */
     public function changeCommentStatus(Request $request, ObjectManager $manager)
     {
-        $comment = $manager->getRepository(Comment::class)->findOneBy([
-            "id" => $request->get('id')
-        ]);
+        if ($request->isXmlHttpRequest()) {
+            $comment = $manager->getRepository(Comment::class)->findOneBy([
+                "id" => $request->get('id')
+            ]);
 
-        $comment->setPublished("true" === $request->get('published'));
+            $comment->setPublished("true" === $request->get('published'));
 
-        $manager->flush();
+            $manager->flush();
 
-        return new JsonResponse("Mise à jour réussie");
+            return new JsonResponse("Mise à jour réussie");
+        }
+
+        return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -153,9 +162,31 @@ class AdminController extends Controller
                 ->myFindBy($type, $bot, $start, $end);
 
             return new Response(json_encode($dataSaver->getStatistics($statistics)));
-        } else {
-            return new JsonResponse("Formulaire invalide.");
         }
+
+        return new JsonResponse("Formulaire invalide.");
+    }
+
+    /**
+     * @Route("/delete/pdf", name="delete_pdf")
+     */
+    public function deletePDF(Request $request, ObjectManager $manager, FileUploader $fileUploader)
+    {
+        if ($request->isXmlHttpRequest()) {
+            $pdf = $request->get("pdf");
+
+            $article = $manager->getRepository(Article::class)->findOneBy(["pdf" => $pdf]);
+
+            $article->setPdf(null);
+
+            $manager->flush();
+
+            $fileUploader->removeFile($pdf);
+
+            return new JsonResponse("PDF supprimé.");
+        }
+
+        return new JsonResponse("Méthode invalide.");
     }
 
     /**
@@ -166,8 +197,8 @@ class AdminController extends Controller
     {
         if(!is_null($article = $this->getDoctrine()->getRepository(Article::class)->find($id))) {
             return $article;
-        } else {
-            return new JsonResponse("L'article n'existe pas.", Response::HTTP_BAD_REQUEST);
         }
+
+        return new JsonResponse("L'article n'existe pas.", Response::HTTP_BAD_REQUEST);
     }
 }

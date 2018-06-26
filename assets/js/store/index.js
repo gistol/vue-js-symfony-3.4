@@ -146,7 +146,7 @@ const Store = new Vuex.Store({
             formData.append("data", data.data);
             formData.append("type", data.type);
             getRequestObject("POST", "/statistics").send(formData);
-        },
+        }
     }
 
 });

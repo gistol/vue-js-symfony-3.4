@@ -7,6 +7,7 @@ const Mixins = {
         return {
             value: '',
             title: '',
+            pdf: undefined,
             images: [],
             nbImages: 0,
             categories: [],
@@ -237,8 +238,6 @@ const Mixins = {
                 }
             }, 700);
 
-
-
             this.$el.addEventListener("click", () => {
                 if (this.showSuggestionList) {
                     this.showSuggestionList = false;
@@ -252,7 +251,7 @@ const Mixins = {
             } else {
                 alert("Adresse email invalide !");
             }
-        },
+        }
     },
 
     filters: {

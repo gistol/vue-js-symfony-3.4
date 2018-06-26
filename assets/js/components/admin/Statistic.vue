@@ -12,8 +12,8 @@
                 <label for="bot">Bot</label>
                 <select name="bot" id="bot">
                     <option selected></option>
-                    <option value="0">Non bot</option>
-                    <option value="1">Bot</option>
+                    <option value="0">Non</option>
+                    <option value="1">Oui</option>
                 </select>
             </div>
             <div class="field">
@@ -81,7 +81,7 @@
                         el.total+=Number(stat);
                     });
 
-                    if (stats.length > 0) {
+                    if (el.total > 0) {
                         this.stats = this.sortData(stats);
                     } else {
                         this.$store.commit("displayServerMessage", "Aucun résultat.")
@@ -90,6 +90,7 @@
             },
 
             sortData(obj) {
+                console.log(obj);
                 let sortedObjArray = Object.keys(obj).sort((a, b) => obj[b] - obj[a]);
                 let newObj = {};
                 sortedObjArray.forEach(key => {newObj[key] = obj[key]});

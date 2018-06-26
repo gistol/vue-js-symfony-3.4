@@ -106,6 +106,7 @@ class Hydrator
         if ($object instanceof Article) {
             $this->imageCreator($object);
             $this->categoryCreator($object);
+            $this->addPDF($object);
         }
 
         $this->metaService->flush();
@@ -185,8 +186,6 @@ class Hydrator
                 }
             }
         }
-
-        return $object;
     }
 
     private function categoryCreator(Article $article)
@@ -219,16 +218,18 @@ class Hydrator
                 }
             }
         }
-
-        return $article;
     }
 
     private function addPDF(Article $article)
     {
-        $pdf = $this->metaService->getRequest()->files->get("pdf");
+        if (!is_null($pdf = $this->metaService->getRequest()->files->get("pdf"))) {
 
-        $filename = $this->metaService->getFileUploader()->uploadFile($pdf);
+            if (!is_null($article->getPdf())) {
+                $this->metaService->getFileUploader()->removeFile($article->getPdf());
+            }
 
-        $article->setPdf($filename);
+            $filename = $this->metaService->getFileUploader()->uploadFile($pdf);
+            $article->setPdf($filename);
+        }
     }
 }
