@@ -62,9 +62,13 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
     {
         $keyword = preg_replace("/'/", "\'", $keyword);
 
-        $sql = "SELECT DISTINCT title 
-                FROM article 
-                WHERE title LIKE '%$keyword%'";
+        $sql = "SELECT DISTINCT a.title 
+                FROM article a
+                INNER JOIN image i 
+                ON a.id = i.article_id
+                WHERE a.title LIKE '%$keyword%'
+                OR i.content LIKE '%$keyword%'
+               ";
 
         return $this->getEntityManager()
             ->getConnection()

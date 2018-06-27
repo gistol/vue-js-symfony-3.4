@@ -6,7 +6,7 @@
                 <select id='choose_category' name="category">
                     <option v-for='category in allCategories' v-bind:value="category.category">{{ category.category }}</option>
                 </select>
-                <input type="submit" class="button-submit" value="Envoyer"/>
+                <input type="submit" class="button-submit" value="Rechercher"/>
             </form>
         </div>
         <div v-show="loaded" class="container_flex w95sm">
@@ -82,7 +82,9 @@
             fetch('/categories')
                 .then(data => data.json())
                 .then(categories => {
-                    this.allCategories = categories;
+                    /* { {},{},...} */
+                    this.allCategories = Object.values(categories)
+                        .map(cat => Object.assign(cat, {category: cat.category.slice(0, 1).toUpperCase() + cat.category.slice(1)}));
                     this.$parent.cancelAnimation();
                 });
 
