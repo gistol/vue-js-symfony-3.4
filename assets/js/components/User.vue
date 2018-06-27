@@ -32,6 +32,7 @@
                 <input type="hidden" name="csrf_token" v-bind:value="newsletter_csrf_token"/>
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>
+            <router-link v-bind:to="{name: 'legal'}">Mentions légales</router-link>
         </footer>
         <server-message :displayMessage="displayMessage">{{ message }}</server-message>
     </div>

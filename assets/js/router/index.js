@@ -6,6 +6,7 @@ import User from '../components/User';
 import Homepage from '../components/Homepage';
 import Article from '../components/Article';
 import Category from '../components/Category';
+import LegalUser from '../components/Legal';
 import Admin from '../components/admin/Admin';
 import CreateArticle from '../components/admin/CreateArticle';
 import ListArticles from '../components/admin/ListArticles';
@@ -13,6 +14,7 @@ import EditArticle from '../components/admin/EditArticle';
 import Comment from '../components/admin/Comment';
 import Newsletter from '../components/admin/Newsletter';
 import Statistic from '../components/admin/Statistic';
+import LegalAdmin from '../components/admin/Legal';
 import PageNotFound from '../components/PageNotFound';
 import Login from '../components/admin/Login';
 
@@ -47,6 +49,11 @@ const Router = new VueRouter({
                     name: 'category',
                     component: Category,
                     props: true
+                },
+                {
+                    path: '/mentions-legales',
+                    name: 'legal',
+                    component: LegalUser
                 }
             ]
         },
@@ -81,6 +88,11 @@ const Router = new VueRouter({
                     path: 'statistic',
                     name: 'statistic',
                     component: Statistic
+                },
+                {
+                    path: 'legal',
+                    name: 'legal-admin',
+                    component: LegalAdmin
                 },
                 {
                     path: 'comments',

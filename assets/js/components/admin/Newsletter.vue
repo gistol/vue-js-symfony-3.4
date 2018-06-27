@@ -13,7 +13,7 @@
                     <tr>
                         <td>{{ newsletter.email }}</td>
                         <td>{{ newsletter.date|formatShortDate }} </td>
-                        <td><button class="button-delete"><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button></td>
+                        <td><button class="button-delete" v-bind:data-id='newsletter.id' v-on:click='unsubscribe'><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -51,6 +51,18 @@
                         this.$store.commit('hideMessage');
                         this.newsletters = newsletters;
                     });
+            },
+
+            unsubscribe(e) {
+
+                this.$store.dispatch('postData', {
+                        url: "/newsletter/remove/" + e.target.getAttribute('data-id') + "/" + localStorage.getItem('token')
+                }).then(resp => {
+                    this.$store.commit('displayServerMessage', resp)
+                    e.target.parentNode.parentNode.remove();
+                }).catch(err => {
+                    console.log(err);
+                })
             }
         },
 

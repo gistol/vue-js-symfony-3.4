@@ -219,6 +219,10 @@ const Mixins = {
             this.showForm();
         },
 
+        handleLegal() {
+            this.handleSubmit('/admin/legal', 'legal');
+        },
+
         handleSearchSubmit() {
 
             /* Resetting the timer */

@@ -8,11 +8,12 @@
                 <router-link v-bind:to="{name: 'comments'}" tag="li">Commentaires</router-link>
                 <router-link v-bind:to="{name: 'newsletter'}" tag="li">Newsletter</router-link>
                 <router-link v-bind:to="{name: 'statistic'}" tag="li">Statistiques</router-link>
+                <router-link v-bind:to="{name: 'legal-admin'}" tag="li">Mentions légales</router-link>
                 <router-link v-bind:to="{name: 'logout'}" tag="li">Déconnexion</router-link>
             </ul>
         </nav>
         <router-view></router-view>
-        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
+        <server-message v-bind:displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 

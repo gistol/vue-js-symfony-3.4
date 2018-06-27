@@ -5,11 +5,13 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Service\AppTools;
 use AppBundle\Service\DataSaver;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
+use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,7 +28,6 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        // replace this example code with whatever you need
         return $this->render('default/index.html.twig');
     }
 
@@ -124,12 +125,12 @@ class DefaultController extends Controller
                 $comment->setArticle($article);
                 $metaService->persistAndFlush([$comment]);
                 return new JsonResponse("Votre commentaire a bien été envoyé !");
-            } else {
-                return new JsonResponse('Formulaire invalide');
             }
-        } else {
-            return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
+
+            return new JsonResponse('Formulaire invalide');
         }
+
+        return new JsonResponse('Requête non valide', Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -150,9 +151,9 @@ class DefaultController extends Controller
             }
 
             return new JsonResponse("Vous êtes déjà abonné(e).");
-        } else {
-            return new JsonResponse('Formulaire invalide');
         }
+
+        return new JsonResponse('Formulaire invalide');
     }
 
     /**
@@ -193,5 +194,19 @@ class DefaultController extends Controller
         );
 
         return new Response($data);
+    }
+
+    /**
+     * @Route("/legal", name="legal_mentions")
+     * @param ObjectManager $manager
+     * @return Response
+     */
+    public function legalAction(ObjectManager $manager)
+    {
+        if (!empty($legal = $manager->getRepository(Legal::class)->findAll())) {
+            return $this->getJson($legal);
+        }
+
+        return new Response();
     }
 }

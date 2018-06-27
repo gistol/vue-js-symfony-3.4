@@ -58,6 +58,7 @@ class AdminController extends Controller
      * @Route("/admin/articles/delete/{id}", name="delete_article")
      * @param int $id
      * @param ObjectManager $manager
+     * @param Request $request
      * @return JsonResponse
      */
     public function deleteArticleAction($id, ObjectManager $manager, Request $request)
@@ -80,7 +81,8 @@ class AdminController extends Controller
     /**
      * @Route("/admin/articles/edit/{id}", name="edit_article")
      * @param int $id
-     * @param ObjectManager $manager
+     * @param Request $request
+     * @param Hydrator $hydrator
      * @return JsonResponse
      */
     public function editArticleAction($id, Request $request, Hydrator $hydrator)
@@ -187,6 +189,23 @@ class AdminController extends Controller
         }
 
         return new JsonResponse("Méthode invalide.");
+    }
+
+    /**
+     * @Route("/newsletter/remove/{id}/{token}", name="admin_unsubscribe")
+     */
+    public function unsubscribe($id, $token, Request $request, ObjectManager $manager)
+    {
+        if ($request->isXmlHttpRequest() && $request->getSession()->get("token") == $token) {
+            $newsletter = $manager->getRepository(Newsletter::class)->find($id);
+
+            $manager->remove($newsletter);
+            $manager->flush();
+
+            return new JsonResponse("Suppression réussie.");
+        }
+
+        return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
     /**

@@ -296,11 +296,12 @@ form {
   /* Footer */
 
   footer{
-    padding: 1px 0 1px 0;
     @include width(100%);
+    @include padding(20px);
     @extend %border-box;
     @extend %flex;
     @extend %align-center;
+    @extend %column;
     background: $super-dark-grey;
 
     form {
