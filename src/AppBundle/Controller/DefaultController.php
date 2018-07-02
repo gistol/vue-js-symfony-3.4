@@ -203,7 +203,7 @@ class DefaultController extends Controller
      */
     public function legalAction(ObjectManager $manager)
     {
-        if (!empty($legal = $manager->getRepository(Legal::class)->findAll())) {
+        if (!empty($legal = $manager->getRepository(Legal::class)->findOneBy([]))) {
             return $this->getJson($legal);
         }
 

@@ -297,10 +297,11 @@ form {
 
   footer{
     @include width(100%);
-    @include padding(20px);
+    @include padding(20px 0 5px 0);
     @extend %border-box;
     @extend %flex;
     @extend %align-center;
+    @extend %justify-center;
     @extend %column;
     background: $super-dark-grey;
 
@@ -315,6 +316,23 @@ form {
       input[type='email']{
         border: none;
         color: $super-dark-grey;
+      }
+    }
+
+    #legal_mentions {
+      margin-top: 1em;
+      @extend %flex;
+      @extend %justify-center;
+      color: white;
+      font-size: .8em;
+
+      a {
+        color: white;
+        text-decoration: none;
+      }
+
+      a:hover{
+        cursor: pointer;
       }
     }
   }

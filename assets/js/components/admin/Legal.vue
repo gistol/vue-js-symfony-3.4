@@ -3,8 +3,9 @@
        <form name='legal' class="tile" v-on:submit.prevent="handleLegal">
            <div class="field">
                <label for="content">Mentions Légales</label>
-               <textarea id="content" name="content">{{ legal }}</textarea>
+               <textarea id="content" name="content" v-model="content"></textarea>
            </div>
+           <input type="hidden" name='update' v-if="toUpdate" value="true"/>
            <input type="hidden" name='csrf_token' v-bind:value="csrf_token" />
            <input type="submit" class="button-submit"/>
        </form>
@@ -22,7 +23,8 @@
 
         data() {
             return {
-                legal: undefined
+                content: '',
+                toUpdate: false
             }
         },
 
@@ -39,7 +41,10 @@
             fetch('/legal')
                 .then(data => data.json())
                 .then(legal => {
-                    this.legal = legal;
+                    if (legal instanceof Object) {
+                        this.content = legal.content;
+                        this.toUpdate = true;
+                    }
                 })
                 .catch(err => {
                     console.log("Erreur : " + err);

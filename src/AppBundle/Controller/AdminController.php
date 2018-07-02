@@ -6,6 +6,7 @@ use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Statistic;
 use AppBundle\Service\DataSaver;
@@ -15,6 +16,7 @@ use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -150,6 +152,10 @@ class AdminController extends Controller
 
     /**
      * @Route("/admin/statistics", name="admin_statistics")
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param DataSaver $dataSaver
+     * @return JsonResponse|Response
      */
     public function getStatAction(Request $request, ObjectManager $manager, DataSaver $dataSaver)
     {
@@ -171,6 +177,10 @@ class AdminController extends Controller
 
     /**
      * @Route("/delete/pdf", name="delete_pdf")
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @param FileUploader $fileUploader
+     * @return JsonResponse
      */
     public function deletePDF(Request $request, ObjectManager $manager, FileUploader $fileUploader)
     {
@@ -203,6 +213,35 @@ class AdminController extends Controller
             $manager->flush();
 
             return new JsonResponse("Suppression réussie.");
+        }
+
+        return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route("/admin/legal", name="admin_legal_mentions")
+     * @param Request $request
+     * @param Hydrator $hydrator
+     * @param ObjectManager $manager
+     * @return JsonResponse
+     */
+    public function legalAction(Request $request, Hydrator $hydrator, ObjectManager $manager)
+    {
+        if ($request->isXmlHttpRequest()) {
+            if (!is_null($request->get("update") && 'true' === $request->get("update"))) {
+                $legal = $manager->getRepository(Legal::class)->findOneBy([]);
+                $legal->setContent($request->get("content"));
+            } else {
+                if ($hydrator->isFormValid([Legal::class], 'legal')) {
+                    $legal = $hydrator->hydrateObject(Legal::class);
+                    $manager->persist($legal);
+                } else {
+                    return new JsonResponse("Formulaire invalide");
+                }
+            }
+
+            $manager->flush();
+            return new JsonResponse("Mise à jour réussie.");
         }
 
         return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
