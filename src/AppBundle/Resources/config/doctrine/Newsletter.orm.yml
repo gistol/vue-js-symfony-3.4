@@ -14,6 +14,11 @@ AppBundle\Entity\Newsletter:
             length: 255
             nullable: false
             unique: true
+        token:
+            type: string
+            length: 255
+            nullable: false
+            unique: true
         date:
             type: datetimetz
 

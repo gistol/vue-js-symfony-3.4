@@ -83,6 +83,7 @@
                 .then(data => data.json())
                 .then(categories => {
                     /* { {},{},...} */
+                    /* Ucfirst */
                     this.allCategories = Object.values(categories)
                         .map(cat => Object.assign(cat, {category: cat.category.slice(0, 1).toUpperCase() + cat.category.slice(1)}));
                     this.$parent.cancelAnimation();

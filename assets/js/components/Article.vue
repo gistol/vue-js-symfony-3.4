@@ -152,7 +152,7 @@
 
     #comment_modal {
         position: fixed;
-        z-index: 1;
+        z-index: 3;
         background: rgba(0,0,0,.7);
         top: 0;
         bottom: 0;

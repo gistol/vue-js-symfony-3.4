@@ -27,6 +27,6 @@ class StatisticRepository extends \Doctrine\ORM\EntityRepository
         }
         $sth = $dbh->prepare($sql);
         $sth->execute();
-        return $dbh->fetchAll($sql);
+        return $sth->fetchAll($sql);
     }
 }

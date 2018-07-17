@@ -381,7 +381,9 @@ form {
 
   #app_user {
     footer form{
-        width: 100%;
+        flex-direction: column;
+      -webkit-flex-direction: column;
+        width: 95%;
       }
   }
 }
@@ -431,6 +433,7 @@ form[name='search'] {
   ul {
     height: auto;
     top: 28px;
+    left: 0;
     position: absolute;
     width: 200px;
     flex-direction: column;
@@ -442,11 +445,12 @@ form[name='search'] {
     li {
       display: block;
       height: auto;
-      padding: 5px;
+      padding: 5px 0;
       line-height: inherit;
       background: #fff;
       margin: 0;
       text-align: left;
+      text-indent: 5px;
     }
 
     li:hover{

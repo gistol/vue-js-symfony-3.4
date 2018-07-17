@@ -1,68 +1,82 @@
+<html>
+    <head>
+        <style>
+
+            body{
+                background: #f1f4f5;
+            }
+
+            #container {
+                font-family: 'Helvetica', sans-serif;
+                margin: 0 auto;
+                width: 40%;
+                color: rgb(163,175,183);
+            }
+
+            #container h2 {
+                text-align: center;
+            }
+
+            .tile {
+                padding: 15px;
+                box-shadow: 0 2px 3px rgb(163,175,183);
+                margin: 20px auto;
+                background: #fff;
+            }
+
+            .tile img {
+                width: 100%;
+            }
+
+            #link {
+                padding: 7px;
+                background: darkslategray;
+                text-decoration: none;
+                display: block;
+                margin: 20px auto;
+                border: none;
+                color: #fff;
+                width: 150px;
+                text-align: center;
+                font-size: .85em;
+            }
+
+            #link:hover{
+                background: slategray;
+            }
+
+            #unsubscribe {
+                color: rgb(163,175,183);
+                text-decoration: none;
+                display: block;
+                width: 150px;
+                text-align: center;
+            }
+
+            @media all and (max-width: 1024px) {
+                #container {
+                    width: 95%;
+                }
+
+                #link {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+</html>
 <div id="container">
     <h2>{{ article.title }}</h2>
     {% for index, image in article.images %}
         {% if index == 0 %}
             <div class="tile">
-                <img src="{{ asset("images/" ~ image.src) }}"/>
+                <img src="{{ src }}"/>
                 <p>{{ image.content|slice(0, 200) }}...</p>
             </div>
         {% endif %}
     {% endfor %}
-    <a href="{{ path('article', {slug: article.slug} ) }}" id="link">En savoir plus</a>
+    <a href="{{ articleUrl }}" target="_blank" id="link">En savoir plus</a>
+    <a href="{{ unsubscribeUrl }}" id="unsubscribe"> Me désabonner </a>
 </div>
 
-<style>
 
-    body{
-        background: #f1f4f5;
-    }
-
-    #container {
-        font-family: 'Helvetica', sans-serif;
-        margin: 0 auto;
-        width: 40%;
-        color: rgb(163,175,183);
-    }
-
-    #container h2 {
-        text-align: center;
-    }
-
-    .tile {
-        padding: 15px;
-        box-shadow: 0 2px 3px rgb(163,175,183);
-        margin: 20px auto;
-        background: #fff;
-    }
-
-    .tile img {
-        width: 100%;
-    }
-
-    #link {
-        padding: 7px;
-        background: darkslategray;
-        text-decoration: none;
-        display: block;
-        margin: 20px auto;
-        border: none;
-        color: #fff;
-        width: 150px;
-        text-align: center;
-        font-size: .85em;
-    }
-
-    #link:hover{
-        background: slategray;
-    }
-
-    @media all and (max-width: 1024px) {
-        #container {
-            width: 95%;
-        }
-
-        #link {
-            width: 100%;
-        }
-    }
-</style>

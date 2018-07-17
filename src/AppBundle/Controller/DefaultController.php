@@ -145,7 +145,7 @@ class DefaultController extends Controller
             $email = htmlspecialchars($request->request->get('email'));
 
             if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
-                $newsletter = (new Newsletter())->setEmail($email);
+                $newsletter = (new Newsletter())->setEmail($email)->setToken(md5(uniqid()));
                 $metaService->persistAndFlush([$newsletter]);
                 return new JsonResponse('Votre abonnement a bien été pris en compte.');
             }
@@ -208,5 +208,24 @@ class DefaultController extends Controller
         }
 
         return new Response();
+    }
+
+    /**
+     * @Route("/unsubscribe/{token}", name="user_unsubscribe")
+     */
+    public function unsubscribeAction($token, ObjectManager $manager)
+    {
+        try {
+            $user = $manager->getRepository(Newsletter::class)->findOneBy([
+                "token" => $token
+            ]);
+
+            $manager->remove($user);
+            $manager->flush();
+
+            return new Response("Votre désabonnement a bien été pris en compte.");
+        } catch (\Exception $exception) {
+            return new Response("L'utilisateur n'existe pas !");
+        }
     }
 }

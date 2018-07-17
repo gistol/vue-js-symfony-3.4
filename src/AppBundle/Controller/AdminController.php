@@ -16,7 +16,6 @@ use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,8 +41,11 @@ class AdminController extends Controller
                     $this->get('app.mailer')
                          ->send(
                              $article,
-                             $metaService->getEntityManager()->getRepository(Newsletter::class)->myFindAll()[0],
-                             $this->getParameter('mailer_user')
+                             $metaService->getEntityManager()->getRepository(Newsletter::class)->myFindAll(),
+                             $this->getParameter('mailer_user'),
+                             $this->getParameter('images_directory'),
+                             $this->get('router'),
+                             $request
                          );
                 }
 
@@ -54,6 +56,18 @@ class AdminController extends Controller
         }
 
         return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route("/admin/newsletter", name="newsletter")
+     */
+    public function newsAction(ObjectManager $manager)
+    {
+        $article = $manager->getRepository(Article::class)->findOneBy([]);
+
+        return $this->render("default/newsletter.html.twig", [
+            "article" => $article
+        ]);
     }
 
     /**
@@ -166,10 +180,11 @@ class AdminController extends Controller
             $start = $request->get("start");
             $end = $request->get("end");
 
-            $statistics = $manager->getRepository(Statistic::class)
-                ->myFindBy($type, $bot, $start, $end);
+            $statistics = $manager->getRepository(Statistic::class)->myFindBy($type, $bot, $start, $end);
 
-            return new Response(json_encode($dataSaver->getStatistics($statistics)));
+            $response = $dataSaver->getStatistics($statistics);
+
+            return new JsonResponse($response);
         }
 
         return new JsonResponse("Formulaire invalide.");

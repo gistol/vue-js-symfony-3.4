@@ -249,9 +249,10 @@ const Mixins = {
             });
         },
 
-        addToNewsletter() {
+        addToNewsletter(e) {
             if (this.newsletterFormValid) {
                 this.handleSubmit('/newsletter', 'newsletter');
+                e.target.elements.email = "";
             } else {
                 alert("Adresse email invalide !");
             }

@@ -90,7 +90,6 @@
             },
 
             sortData(obj) {
-                console.log(obj);
                 let sortedObjArray = Object.keys(obj).sort((a, b) => obj[b] - obj[a]);
                 let newObj = {};
                 sortedObjArray.forEach(key => {newObj[key] = obj[key]});
