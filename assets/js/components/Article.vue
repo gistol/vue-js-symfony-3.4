@@ -105,19 +105,6 @@
 
         methods: {
 
-            getArticle(slug) {
-                fetch('/article/' + slug)
-                    .then(data => data.json())
-                    .then(data => {
-                        this.article = data;
-                        this.$parent.cancelAnimation();
-                        this.$parent.loaded = true;
-                    })
-                    .catch((err) => {
-                        console.log('Err => ' + err)
-                    })
-            },
-
             /* Function to open or close the modal */
             /* Also called in the mixin when the user submits their message */
             showForm(e) {
@@ -126,7 +113,18 @@
         },
 
         created() {
-            this.getArticle(this.$route.params.slug);
+            this.$store.dispatch('getArticle', '/article/' + this.$route.params.slug)
+                .then(data => {
+                    console.log(data);
+                    this.article = data;
+                    this.$parent.cancelAnimation();
+                    this.$parent.loaded = true;
+                })
+                .catch((err) => {
+                    console.log('Err => ' + err)
+                })
+
+            // this.getArticle(this.$route.params.slug);
         },
 
         mounted() {

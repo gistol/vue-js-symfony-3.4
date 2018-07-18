@@ -2,18 +2,22 @@
     <head>
         <style>
 
-            body{
-                background: #f1f4f5;
-            }
-
             #container {
                 font-family: 'Helvetica', sans-serif;
                 margin: 0 auto;
-                width: 40%;
-                color: rgb(163,175,183);
+                width: 50%;
+                color: #263238;
+                background: #f1f4f5;
+                padding: 20px;
+            }
+            
+            #container * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
             }
 
-            #container h2 {
+            #container h2, a {
                 text-align: center;
             }
 
@@ -38,7 +42,6 @@
                 color: #fff;
                 width: 150px;
                 text-align: center;
-                font-size: .85em;
             }
 
             #link:hover{
@@ -46,11 +49,14 @@
             }
 
             #unsubscribe {
-                color: rgb(163,175,183);
                 text-decoration: none;
                 display: block;
-                width: 150px;
                 text-align: center;
+            }
+
+            #unsubscribe,
+            #link {
+                font-size: .85em;
             }
 
             @media all and (max-width: 1024px) {

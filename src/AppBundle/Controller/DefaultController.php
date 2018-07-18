@@ -7,6 +7,7 @@ use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
 use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
+use AppBundle\Entity\Statistic;
 use AppBundle\Service\AppTools;
 use AppBundle\Service\DataSaver;
 use AppBundle\Service\Hydrator;
@@ -15,7 +16,9 @@ use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
@@ -77,9 +80,35 @@ class DefaultController extends Controller
      * @param string $slug
      * @return Response
      */
-    public function getArticleAction($slug, ObjectManager $manager)
+    public function getArticleAction($slug, ObjectManager $manager, Request $request)
     {
         return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
+    }
+
+    /**
+    * @Route("/pullIn/article/{slug}", name="pull_in")
+    * @param Request $request
+    * @param ObjectManager $manager
+    * @return \Symfony\Component\HttpFoundation\RedirectResponse
+    */
+    public function pullInAction($slug, Request $request, ObjectManager $manager)
+    {
+        $url = $_SERVER['HTTP_HOST'] . "/#/" . "article/$slug";
+
+        if (!preg_match("/^(http|https):\/\//", $url)) {
+            $url = 'https://' . $url;
+        }
+
+        $statistic = (new Statistic())
+            ->setData(substr($request->getRequestUri(), 7))
+            ->setType('newsletter')
+            ->setDate(new \DateTime())
+            ->setBot(false);
+
+        $manager->persist($statistic);
+        $manager->flush();
+
+        return new RedirectResponse("http://$url");
     }
 
     /**

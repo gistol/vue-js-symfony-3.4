@@ -35,10 +35,9 @@ class MailSender
 
     public function send(Article $article, $subscribers, $sender, $targetDir, Router $router, Request $request)
     {
-        $httpReferer = $_SERVER['HTTP_REFERER'];
-        $articleUrl = $router->generate('article', ['slug' => $article->getSlug()], UrlGeneratorInterface::ABSOLUTE_PATH);
-
-        $articleUrl = $httpReferer . "#" . $articleUrl;
+        $articleUrl = $router->generate('pull_in', ['slug' => $article->getSlug()], UrlGeneratorInterface::ABSOLUTE_PATH);
+        $articleUrl = substr($articleUrl, 1); // to remove "/"
+        $articleUrl = $_SERVER['HTTP_REFERER'] . $articleUrl;
 
         foreach ($subscribers as $subscriber) {
             $unsubscribeUrl = $router->generate('user_unsubscribe', ['token' => $subscriber['token']], UrlGeneratorInterface::ABSOLUTE_URL);

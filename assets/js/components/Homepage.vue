@@ -45,7 +45,10 @@
                 this.$store.dispatch('getArticles')
                     .then(() => {
                         this.$parent.cancelAnimation();
-                    });
+                    })
+                    .catch(err => {
+                        console.log('Erreur : ' + err);
+                    })
             },
 
             addArticles() {

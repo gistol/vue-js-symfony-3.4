@@ -13,7 +13,7 @@ class StatisticRepository extends \Doctrine\ORM\EntityRepository
     public function myFindBy($type, $bot, $start, $end)
     {
         $dbh = $this->_em->getConnection();
-        $sql = "SELECT * FROM statistic WHERE type='$type' ";
+        $sql = "SELECT * FROM statistic WHERE type='$type'";
         if ("" !== $bot) {
             $sql .= " AND bot='$bot'";
         }

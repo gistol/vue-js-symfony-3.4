@@ -115,22 +115,48 @@ const Store = new Vuex.Store({
             });
         },
 
-        getArticles({commit}) {
-            return new Promise(resolve => {
-                fetch('/articles/' + this.lastId)
-                    .then(res => res.json())
-                    .then(data => {
+        getArticle({commit}, url) {
+            return new Promise((resolve, reject) => {
+                const req = getRequestObject("GET", url);
+
+                req.addEventListener("load", () => {
+                    if (req.status >= 200 && req.status < 400) {
                         commit('hideMessage');
+
+                        let data = JSON.parse(req.responseText);
+
+                        resolve(data);
+                    } else {
+                        reject(req.responseText);
+                    }
+                });
+
+                req.send();
+            });
+        },
+
+        getArticles({commit}) {
+            return new Promise((resolve, reject) => {
+
+                const req = getRequestObject("GET", '/articles/' + this.lastId);
+
+                req.addEventListener("load", () => {
+                    if (req.status >= 200 && req.status < 400) {
+                        commit('hideMessage');
+
+                        let data = JSON.parse(req.responseText);
 
                         if (data.length > 0) {
                             commit('addArticles', data);
                         }
 
                         resolve();
-                    })
-                    .catch((err) => {
-                        console.log('Erreur : ' + err)
-                    });
+                    } else {
+                        reject(req.responseText);
+                    }
+                });
+
+                req.send();
             });
         },
 

@@ -58,17 +58,17 @@ class AdminController extends Controller
         return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
-    /**
-     * @Route("/admin/newsletter", name="newsletter")
-     */
-    public function newsAction(ObjectManager $manager)
-    {
-        $article = $manager->getRepository(Article::class)->findOneBy([]);
-
-        return $this->render("default/newsletter.html.twig", [
-            "article" => $article
-        ]);
-    }
+//    /**
+//     * @Route("/admin/newsletter", name="newsletter")
+//     */
+//    public function newsAction(ObjectManager $manager)
+//    {
+//        $article = $manager->getRepository(Article::class)->findOneBy([]);
+//
+//        return $this->render("default/newsletter.html.twig", [
+//            "article" => $article
+//        ]);
+//    }
 
     /**
      * @Route("/admin/articles/delete/{id}", name="delete_article")
