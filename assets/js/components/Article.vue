@@ -2,9 +2,10 @@
     <div>
         <div class='container w40 w95sm'>
             <h2>{{ article.title }}</h2>
-            <figure class='tile' v-for="image in article.images">
-                <img v-bind:src="'./images/' + image.src" :alt='image.title' />
-                <figcaption class="white_space">{{ image.content }}</figcaption>
+            <figure class='tile' v-for="(image, index) in article.images">
+                <img v-bind:src="'./images/' + image.src" :alt='image.title'/>
+                <a v-bind:style='pdfStyle' v-if="null !== article.pdf && index === 0" v-bind:href="'./images/' + article.pdf"><font-awesome-icon v-bind:icon="pdfIcon" size="lg"/> Télécharger la recette en PDF</a>
+                <figcaption class="white_space" v-html="image.content"></figcaption>
             </figure>
             <p v-if="loaded && article.categories !== undefined && article.categories.length > 0">Catégories associées à l'article</p>
             <div class="category" v-if="loaded">
@@ -13,9 +14,6 @@
                         {{ category.category|capitalize }}
                     </div>
                 </router-link>
-            </div>
-            <div class="tile" v-if="null !== article.pdf">
-                <a v-bind:href="'./images/' + article.pdf"><font-awesome-icon v-bind:icon="pdfIcon" size="lg"/> Télécharger le PDF</a>
             </div>
 
             <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
@@ -100,6 +98,16 @@
         },
 
         computed: {
+
+            pdfStyle() {
+                return {
+                    display: 'block',
+                    margin: '20px 0',
+                    padding: '10px 0',
+                    borderBottom: '1px solid lightgrey'
+                }
+            },
+
             loaded() {
                 return this.$parent.loaded
             },
