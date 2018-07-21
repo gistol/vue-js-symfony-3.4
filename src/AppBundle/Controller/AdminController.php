@@ -58,18 +58,6 @@ class AdminController extends Controller
         return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
     }
 
-//    /**
-//     * @Route("/admin/newsletter", name="newsletter")
-//     */
-//    public function newsAction(ObjectManager $manager)
-//    {
-//        $article = $manager->getRepository(Article::class)->findOneBy([]);
-//
-//        return $this->render("default/newsletter.html.twig", [
-//            "article" => $article
-//        ]);
-//    }
-
     /**
      * @Route("/admin/articles/delete/{id}", name="delete_article")
      * @param int $id
@@ -187,7 +175,7 @@ class AdminController extends Controller
             return new JsonResponse($response);
         }
 
-        return new JsonResponse("Formulaire invalide.");
+        return new Response("Formulaire invalide.");
     }
 
     /**
@@ -260,6 +248,17 @@ class AdminController extends Controller
         }
 
         return new JsonResponse("Requête invalide", Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route("/admin/comment/delete/{id}", name="delete_comment")
+     */
+    public function deleteCommentAction(Comment $comment, ObjectManager $manager)
+    {
+        $manager->remove($comment);
+        $manager->flush();
+
+        return new Response('Le commentaire a bien été supprimé.');
     }
 
     /**

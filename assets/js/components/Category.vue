@@ -2,7 +2,7 @@
     <div>
         <div class="container w95sm" v-if="loaded">
             <form v-on:submit.prevent="handleSubmit" class="tile w100">
-                <label for="choose_category">Rechercher par catégorie</label>
+                <label for="choose_category">Rechercher des recettes par catégorie</label>
                 <select id='choose_category' name="category">
                     <option v-for='category in allCategories' v-bind:value="category.category">{{ category.category }}</option>
                 </select>
@@ -29,6 +29,9 @@
     </div>
 </template>
 <script>
+
+    import Mixin from '../mixins'
+
     export default {
         name: 'category',
 
@@ -45,21 +48,28 @@
             }
         },
 
+        mixins: [Mixin],
+
         methods: {
             handleSubmit(e) {
                 const category = e.target.elements.category.value;
 
+                /* If no category selected */
                 if (category === '') return;
                 
                 this.$parent.loadAnimation();
 
-                fetch('/category/' + category)
-                    .then(data => data.json())
-                    .then(articles => {
+                const req = this.ajaxRequest('GET', '/category/' + category);
+
+                req.onload = () => {
+                    if (req.status >= 200 && req.status < 400) {
                         this.$parent.cancelAnimation();
-                        this.articles = articles;
-                    });
-            }
+                        this.articles = JSON.parse(req.responseText);
+                    }
+                };
+
+                req.send();
+            },
         },
 
         mounted() {
@@ -71,23 +81,30 @@
 
             /* If coming from an article */
             if (this.$route.name === "category") {
-                fetch('/category/' + this.$route.params.category)
-                    .then(data => data.json())
-                    .then(articles => {
-                        this.articles = articles;
-                    });
+
+                const req = this.ajaxRequest('GET', '/category/' + this.$route.params.category);
+
+                req.onload = () => {
+                    if (req.status >= 200 && req.status < 400) {
+                        this.articles = JSON.parse(req.responseText);
+                    }
+                };
+
+                req.send();
             }
 
             /* If not coming from an article */
-            fetch('/categories')
-                .then(data => data.json())
-                .then(categories => {
-                    /* { {},{},...} */
-                    /* Ucfirst */
-                    this.allCategories = Object.values(categories)
+            const req = this.ajaxRequest('GET', '/categories');
+
+            req.onload = () => {
+                if (req.status >= 200 && req.status < 400) {
+                    this.allCategories = Object.values(JSON.parse(req.responseText))
                         .map(cat => Object.assign(cat, {category: cat.category.slice(0, 1).toUpperCase() + cat.category.slice(1)}));
                     this.$parent.cancelAnimation();
-                });
+                }
+            };
+
+            req.send();
 
             /* If not aready cached */
             if (this.allCategories.length === 0) {

@@ -121,12 +121,6 @@ th {
   @include width(150px);
 }
 
-@media all and (max-width: 1024px) {
-  .w95sm {
-    @include width(95%);
-  }
-}
-
 .m10 {
   margin: 10px auto;
 }
@@ -141,6 +135,7 @@ th {
 
 h2 {
   text-align: center;
+  margin: 50px auto;
 }
 
 .tile {
@@ -199,17 +194,17 @@ form {
   @include loopItem($array, 'display', 'block');
   @include loopItem($array, 'padding', 7px);
   @include loopItem($array, 'color', #76838f);
-  @include loopItem($array, 'margin', 5px auto);
   @include loopItem($array, 'border', 'none');
   @include loopItem('select', 'border', '1px solid lightgrey');
+  @include loopItem('select', 'margin', '15px auto');
   @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="password"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="email"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('input[type="date"]', 'border-bottom', 1px solid lightgrey);
   @include loopItem('textarea', 'border', 1px solid lightgrey);
   @include loopItem('textarea', 'display', 'block');
-  @include loopItem('textarea', 'margin-top', '10px');
   @include loopItem('textarea', 'font-size', '.9em');
+  @include loopItem('textarea', 'margin', '15px 0');
   @include loopItem('textarea', 'height', '150px');
   @include loopItem('textarea', 'resize', 'none');
   @include focused($array, 'border-color', 'dodgerblue');
@@ -217,7 +212,7 @@ form {
   label {
     display: block;
     padding: 0;
-    margin: 15px auto 0 auto;
+    margin: 15px 0 0 0;
     font-size: .9em;
   }
 
@@ -229,12 +224,18 @@ form {
   input[type='file'] {
     color: lightgrey;
     padding: 0;
+    margin: 10px 0;
   }
 
   textarea {
-    font-family: 'Helvetica', sans-serif;
+    font-family: 'Open Sans', sans-serif;
   }
 }
+
+form * {
+  @extend %border-box;
+}
+
 /* buttons */
 
 .mauto {
@@ -297,7 +298,7 @@ form {
 
   footer{
     @include width(100%);
-    @include padding(20px 0 5px 0);
+    @include padding(20px 0 10px 0);
     @extend %border-box;
     @extend %flex;
     @extend %align-center;
@@ -403,8 +404,8 @@ form {
 
 .button-group{
   margin-top: 5px;
-  display: flex;
-  display: -webkit-flex;
+  @extend %flex;
+  @extend %justify-center;
 }
 
 .button-group button {
@@ -542,3 +543,31 @@ form[name='search'] {
   opacity: 0;
 }
 
+@media all and (max-width: 1024px) {
+  .w95sm {
+    @include width(95%);
+  }
+
+  .button-group {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 10px auto;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: space-around;
+    -webkit-justify-content: space-around;
+  }
+
+  .button-group button,
+  .button-group a {
+    width: 100%;
+    margin: 5px auto;
+  }
+}
+
+.error {
+  color: $dark-red;
+  font-size: .9em;
+}

@@ -80,7 +80,7 @@ class DefaultController extends Controller
      * @param string $slug
      * @return Response
      */
-    public function getArticleAction($slug, ObjectManager $manager, Request $request)
+    public function getArticleAction($slug, ObjectManager $manager)
     {
         return $this->getJson($manager->getRepository(Article::class)->findOneBy(["slug" => $slug]));
     }
@@ -96,7 +96,7 @@ class DefaultController extends Controller
         $url = $_SERVER['HTTP_HOST'] . "/#/" . "article/$slug";
 
         if (!preg_match("/^(http|https):\/\//", $url)) {
-            $url = 'https://' . $url;
+            $url = 'http://' . $url;
         }
 
         $statistic = (new Statistic())
@@ -108,7 +108,7 @@ class DefaultController extends Controller
         $manager->persist($statistic);
         $manager->flush();
 
-        return new RedirectResponse("http://$url");
+        return new RedirectResponse($url);
     }
 
     /**
@@ -139,7 +139,7 @@ class DefaultController extends Controller
      * @param string $slug
      * @param Request $request
      * @param MetaService $metaService
-     * @return JsonResponse
+     * @return Response
      */
     public function handleCommentAction($slug, ObjectManager $manager, Request $request, Hydrator $hydrator, MetaService $metaService)
     {
@@ -244,17 +244,18 @@ class DefaultController extends Controller
      */
     public function unsubscribeAction($token, ObjectManager $manager)
     {
-        try {
-            $user = $manager->getRepository(Newsletter::class)->findOneBy([
-                "token" => $token
-            ]);
+        $user = $manager->getRepository(Newsletter::class)->findOneBy([
+            "token" => $token
+        ]);
+
+        if (!is_null($user)) {
 
             $manager->remove($user);
             $manager->flush();
 
-            return new Response("Votre désabonnement a bien été pris en compte.");
-        } catch (\Exception $exception) {
-            return new Response("L'utilisateur n'existe pas !");
+            return new JsonResponse("Votre désabonnement a bien été pris en compte.");
         }
+
+        return new JsonResponse("L'utilisateur n'existe pas !");
     }
 }

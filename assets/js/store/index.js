@@ -99,13 +99,14 @@ const Store = new Vuex.Store({
 
                 const req = getRequestObject("POST", data.url);
 
-                req.addEventListener("load", () => {
+                req.onload = () => {
+                    const response = req.responseText;
                     if (req.status >= 200 && req.status < 400) {
-                        resolve(JSON.parse(req.responseText));
+                        resolve(JSON.parse(response));
                     } else {
-                        reject(req.responseText);
+                        reject(response);
                     }
-                });
+                };
 
                 if (data.contentType) {
                     req.setRequestHeader("Content-Type", data.contentType);
@@ -140,7 +141,7 @@ const Store = new Vuex.Store({
 
                 const req = getRequestObject("GET", '/articles/' + this.lastId);
 
-                req.addEventListener("load", () => {
+                req.onload = () => {
                     if (req.status >= 200 && req.status < 400) {
                         commit('hideMessage');
 
@@ -154,18 +155,23 @@ const Store = new Vuex.Store({
                     } else {
                         reject(req.responseText);
                     }
-                });
+                };
 
                 req.send();
             });
         },
 
         getNumberOfArticles({commit}) {
-            fetch('/articlesCount')
-                .then(res => res.json())
-                .then(data => {
-                    commit('setNumberOfArticles', data);
-            });
+
+            const req = getRequestObject("GET", '/articlesCount');
+
+            req.onload = () => {
+                if (req.status >= 200 && req.status < 400) {
+                    commit('setNumberOfArticles', req.responseText);
+                }
+            };
+
+            req.send();
         },
 
         saveData(context, data) {

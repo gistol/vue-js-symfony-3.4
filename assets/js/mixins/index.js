@@ -131,14 +131,15 @@ const Mixins = {
 
     watch: {
         newsletter(val) {
-            const field = this.$refs.newsletter;
-            if (new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,4}$/).test(val)) {
-                this.newsletterFormValid = true;
-            }
+            this.newsletterFormValid = this.checkEmail(val)
         }
     },
 
     methods: {
+
+        checkEmail(val) {
+            return new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]{2,4}$/).test(val);
+        },
 
         /* Common to CreateArticle and EditArticle components */
         addForm() {
@@ -201,8 +202,6 @@ const Mixins = {
                 } else {
                     this.$store.commit('displayServerMessage', data);
                 }
-            }).catch(err => {
-                this.$store.commit('displayServerMessage', 'Erreur : ' + err)
             });
         },
 
@@ -214,8 +213,39 @@ const Mixins = {
             this.handleSubmit('/admin/articles/edit/' + this.$route.params.id, 'create_edit_article');
         },
 
-        handleComment() {
+        handleComment(e) {
+            let username = e.target.elements.username.value;
+            let email = e.target.elements.email.value;
+            let comment= e.target.elements.comment.value;
+
+            /* undefined : In case the user wants
+               to send another comment or send the same from again because rejected
+               prevent from displaying potential previous errors
+             */
+            if(username === '') {
+                this.username_error = "Veuillez saisir un nom d'utilisateur."
+            } else {
+                this.username_error = undefined;
+            }
+
+            if(!this.checkEmail(email)) {
+                this.email_error = "Veuillez saisir une adresse email valide."
+            } else {
+                this.email_error = undefined;
+            }
+
+            if(comment === '') {
+                this.comment_error = "Veuillez saisir un commentaire."
+            } else {
+                this.comment_error = undefined;
+            }
+
+            if(username === '' || !this.checkEmail(email) || comment === '') {
+                return;
+            }
+
             this.handleSubmit('/article/' + this.$route.params.slug + '/comment', 'comment_article');
+
             this.showForm();
         },
 
@@ -252,10 +282,21 @@ const Mixins = {
         addToNewsletter(e) {
             if (this.newsletterFormValid) {
                 this.handleSubmit('/newsletter', 'newsletter');
-                e.target.elements.email = "";
             } else {
                 alert("Adresse email invalide !");
             }
+        },
+
+        ajaxRequest(method, url) {
+            const req = window.XMLHttpRequest ?
+                new XMLHttpRequest() :
+                new ActiveXObject("Microsoft.XMLHTTP");
+
+            req.open(method, url);
+
+            req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+            return req;
         }
     },
 

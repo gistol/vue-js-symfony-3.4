@@ -28,7 +28,7 @@
         </div>
         <footer>
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
-                <input type="email" v-model="newsletter" name="email" ref="newsletter" id="email" placeholder="Votre email"/>
+                <input type="email" v-model="newsletter" name="email" id="email" placeholder="Votre email"/>
                 <input type="hidden" name="csrf_token" v-bind:value="newsletter_csrf_token"/>
                 <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
             </form>

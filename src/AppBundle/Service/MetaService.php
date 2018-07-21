@@ -136,9 +136,9 @@ class MetaService
             if (is_object($entity)) {
                 $this->persist($entity);
             }
-
-            $this->flush();
         }
+
+        $this->flush();
     }
 
     /**

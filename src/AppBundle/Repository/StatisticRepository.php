@@ -14,19 +14,19 @@ class StatisticRepository extends \Doctrine\ORM\EntityRepository
     {
         $dbh = $this->_em->getConnection();
         $sql = "SELECT * FROM statistic WHERE type='$type'";
-        if ("" !== $bot) {
+        if (!empty($bot)) {
             $sql .= " AND bot='$bot'";
         }
 
-        if ("" !== $start) {
-            $sql .= " AND date >= '$start. 00:00:00'";
+        if (!empty($start)) {
+            $sql .= " AND date >= '$start 00:00:00'";
         }
 
-        if ("" !== $end) {
-            $sql .= " AND date <= '$end . 23:59:59'";
+        if (!empty($end)) {
+            $sql .= " AND date <= '$end 23:59:59'";
         }
         $sth = $dbh->prepare($sql);
         $sth->execute();
-        return $sth->fetchAll($sql);
+        return $sth->fetchAll();
     }
 }

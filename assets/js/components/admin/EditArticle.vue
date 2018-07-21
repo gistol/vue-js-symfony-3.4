@@ -10,9 +10,13 @@
             <category-form v-for="(category, index) in categories" v-bind:index="index" :category="category"></category-form>
 
             <div class="field">
-                <label for="pdf">PDF</label>
+                <font-awesome-icon v-bind:icon="pdfIcon" size="lg"/>
+                <label for="pdf" style="display: inline-block;">PDF</label>
                 <input type="file" name="pdf" id="pdf"/>
-                <font-awesome-icon v-if="pdf !== undefined" v-bind:icon="deleteIcon" v-on:click="deletePDF"/>
+                <button class="button-delete" v-if="pdf !== undefined">
+                    <font-awesome-icon v-bind:icon="trashIcon" v-on:click="deletePDF"/>
+                    Supprimer
+                </button>
             </div>
             <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
 
@@ -31,7 +35,8 @@
     import { mapState } from 'vuex';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
     import faPlusCircle from '@fortawesome/fontawesome-free-solid/faPlusCircle';
-    import faTime from '@fortawesome/fontawesome-free-solid/faTimes';
+    import faTrash from '@fortawesome/fontawesome-free-solid/faTrash';
+    import faPDF from '@fortawesome/fontawesome-free-solid/faFilePdf';
 
     export default {
 
@@ -40,7 +45,8 @@
         data() {
             return {
                 plusIcon: faPlusCircle,
-                deleteIcon: faTime,
+                trashIcon: faTrash,
+                pdfIcon: faPDF
             }
         },
 

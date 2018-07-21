@@ -6,7 +6,7 @@
                 <img v-bind:src="'./images/' + image.src" :alt='image.title' />
                 <figcaption class="white_space">{{ image.content }}</figcaption>
             </figure>
-            <p v-if="loaded && article.categories.length > 0">Catégories associées à l'article</p>
+            <p v-if="loaded && article.categories !== undefined && article.categories.length > 0">Catégories associées à l'article</p>
             <div class="category" v-if="loaded">
                 <router-link v-if="article.categories.length > 0" v-for='category in article.categories' v-bind:to="{name: 'category', params: {category: category.category} }" class="category_link">
                     <div class="tile-mh">
@@ -15,41 +15,38 @@
                 </router-link>
             </div>
             <div class="tile" v-if="null !== article.pdf">
-                <a v-bind:href="'./images/' + article.pdf"><font-awesome-icon v-bind:icon="pdfIcon"></font-awesome-icon> Télécharger le PDF</a>
+                <a v-bind:href="'./images/' + article.pdf"><font-awesome-icon v-bind:icon="pdfIcon" size="lg"/> Télécharger le PDF</a>
             </div>
+
             <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
                 <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
                 <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' />
-
                 Commentaires
-
                 <p v-if="displayComment && article.comments.length === 0">Aucun commentaire.</p>
                 <div class="comment" v-if="displayComment && comment.published && article.comments.length > 0" v-for="comment in article.comments">
-                    <p>{{ comment.username }} le {{ comment.date|formatShortDate }}</p>
-                    <p class="white_space">{{ comment.comment }}</p>
+                    <p>{{ comment.username }}, le {{ comment.date|formatShortDate }}</p>
+                    <p class="white_space">
+                        <font-awesome-icon v-bind:icon="faQuoteLeftIcon" size="xs"/>&nbsp;&nbsp;{{ comment.comment }}&nbsp;&nbsp;<font-awesome-icon v-bind:icon="faQuoteRightIcon" size="xs"/>
+                    </p>
                 </div>
             </div>
         </div>
         <div id="comment_modal" v-show="show">
-            <button @click="showForm" class="button-delete">Fermer</button>
-            <form autocomplete="off" class="tile no-shadow" name='comment_article' v-on:submit.prevent="handleComment" :enctype="enctype">
-                <div class="field">
-                    <label for="username">Nom</label>
-                    <input type="text" id="username" name="username" v-model="username"/>
-                </div>
-
-                <div class="field">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" name="email" v-model="email"/>
-                </div>
-
-                <div class="field">
-                    <label for="comment">Commentaire</label>
-                    <textarea id="comment" name="comment" v-model="comment"></textarea>
-                </div>
-
+            <button v-on:click="showForm" class="button-delete">
+                <font-awesome-icon v-bind:icon="closeIcon" />
+                Fermer
+            </button>
+            <form autocomplete="off" class="tile no-shadow" name='comment_article' v-on:submit.prevent="handleComment" v-bind:enctype="enctype">
+                <label for="username">Nom</label>
+                <input type="text" id="username" name="username" v-model="username"/>
+                <p v-if="username_error !== undefined" class="error">{{ username_error }}</p>
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" v-model="email"/>
+                <p v-if="email_error !== undefined" class="error">{{ email_error }}</p>
+                <label for="comment">Commentaire</label>
+                <textarea id="comment" name="comment" v-model="comment"></textarea>
+                <p v-if="comment_error !== undefined" class="error">{{ comment_error }}</p>
                 <input type="hidden" name="csrf_token" v-bind:value="csrf_token"/>
-
                 <input type="submit" class="button-submit m10"/>
             </form>
         </div>
@@ -67,6 +64,9 @@
     import faMinusCircle from '@fortawesome/fontawesome-free-solid/faMinusCircle'
     import faComment from '@fortawesome/fontawesome-free-solid/faComment'
     import faPDF from '@fortawesome/fontawesome-free-solid/faFilePdf'
+    import faClose from '@fortawesome/fontawesome-free-solid/faWindowClose'
+    import faQuoteLeft from '@fortawesome/fontawesome-free-solid/faQuoteLeft';
+    import faQuoteRight from '@fortawesome/fontawesome-free-solid/faQuoteRight';
 
     export default {
 
@@ -83,7 +83,13 @@
                 plusIcon: faPlusCircle,
                 minusIcon: faMinusCircle,
                 commentIcon: faComment,
-                pdfIcon: faPDF
+                pdfIcon: faPDF,
+                closeIcon: faClose,
+                faQuoteLeftIcon: faQuoteLeft,
+                faQuoteRightIcon: faQuoteRight,
+                username_error: undefined,
+                email_error: undefined,
+                comment_error: undefined,
             }
         },
 
@@ -115,16 +121,10 @@
         created() {
             this.$store.dispatch('getArticle', '/article/' + this.$route.params.slug)
                 .then(data => {
-                    console.log(data);
                     this.article = data;
                     this.$parent.cancelAnimation();
                     this.$parent.loaded = true;
                 })
-                .catch((err) => {
-                    console.log('Err => ' + err)
-                })
-
-            // this.getArticle(this.$route.params.slug);
         },
 
         mounted() {

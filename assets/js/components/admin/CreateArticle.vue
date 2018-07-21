@@ -11,6 +11,7 @@
             <category-form v-for="(category, index) in categories" :index="index" :category="category"></category-form>
 
             <div class="field">
+                <font-awesome-icon v-bind:icon="pdfIcon"></font-awesome-icon>
                 <label for="pdf">PDF</label>
                 <input type="file" name="pdf" id="pdf"/>
             </div>
@@ -38,6 +39,7 @@
     import { mapState } from 'vuex';
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome';
     import faPlus from '@fortawesome/fontawesome-free-solid/faPlusCircle';
+    import faPDF from '@fortawesome/fontawesome-free-solid/faFilePdf';
 
     export default {
 
@@ -47,7 +49,8 @@
 
         data() {
             return {
-                plusIcon: faPlus
+                plusIcon: faPlus,
+                pdfIcon: faPDF,
             }
         },
 

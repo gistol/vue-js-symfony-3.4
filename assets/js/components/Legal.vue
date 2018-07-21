@@ -1,7 +1,9 @@
 <template>
-    <div class="container w40 w95sm">
+    <div>
         <h2>Mentions légales</h2>
-        <p class="tile white_space" v-html="content"></p>
+        <div class="container w40 w95sm">
+            <p class="tile white_space" v-html="content"></p>
+        </div>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
-    <div class="container w40 w95sm" v-if="newsletters.length > 0">
-        <div class="tile">
+    <div class="container w40 w95sm">
+        <div class="tile" v-if="newsletters.length > 0">
             <table>
                 <thead>
                     <tr>
@@ -17,6 +17,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div v-else>
+            <p>Aucun abonné.</p>
         </div>
     </div>
 </template>
@@ -45,24 +48,29 @@
 
         methods: {
             getNewsletters() {
-                fetch('/admin/newsletters')
-                    .then(response => response.json())
-                    .then(newsletters => {
+
+                const req = this.ajaxRequest('GET', '/admin/newsletters');
+
+                req.onload = () => {
+                    if (req.status >= 200 && req.status < 400) {
                         this.$store.commit('hideMessage');
-                        this.newsletters = newsletters;
-                    });
+                        this.newsletters = JSON.parse(req.responseText);
+                    }
+                };
+
+                req.send();
             },
 
             unsubscribe(e) {
 
                 this.$store.dispatch('postData', {
-                        url: "/newsletter/remove/" + e.target.getAttribute('data-id') + "/" + localStorage.getItem('token')
+                    url: "/newsletter/remove/" + e.target.getAttribute('data-id') + "/" + localStorage.getItem('token')
                 }).then(resp => {
-                    this.$store.commit('displayServerMessage', resp)
+                    this.$store.commit('displayServerMessage', resp);
                     e.target.parentNode.parentNode.remove();
                 }).catch(err => {
-                    console.log(err);
-                })
+                    console.log('Error : ' + err);
+                });
             }
         },
 
