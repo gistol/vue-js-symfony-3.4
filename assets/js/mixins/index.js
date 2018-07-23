@@ -213,6 +213,33 @@ const Mixins = {
             this.handleSubmit('/admin/articles/edit/' + this.$route.params.id, 'create_edit_article');
         },
 
+        handleContact(e) {
+            let message = e.target.elements.message.value;
+            let email = e.target.elements.email.value;
+
+            if(message === '') {
+                this.message_error = "Veuillez saisir un message."
+            } else {
+                this.message_error = undefined;
+            }
+
+            if(!this.checkEmail(email)) {
+                this.email_error = "Veuillez saisir une adresse email valide."
+            } else {
+                this.email_error = undefined;
+            }
+
+            if(message === '' || !this.checkEmail(email)) {
+                return;
+            }
+
+            setTimeout(() => {
+                e.target.reset();
+            }, 5000);
+
+            this.handleSubmit('/contact', 'contact');
+        },
+
         handleComment(e) {
             let username = e.target.elements.username.value;
             let email = e.target.elements.email.value;
@@ -287,7 +314,7 @@ const Mixins = {
             }
         },
 
-        ajaxRequest(method, url) {
+        ajaxRequest(method, url, contentType) {
             const req = window.XMLHttpRequest ?
                 new XMLHttpRequest() :
                 new ActiveXObject("Microsoft.XMLHTTP");
@@ -295,6 +322,10 @@ const Mixins = {
             req.open(method, url);
 
             req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+            if (undefined !== contentType) {
+                req.setRequestHeader('Content-Type', contentType);
+            }
 
             return req;
         }

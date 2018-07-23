@@ -75,23 +75,26 @@
         methods: {
             handleStatistics(e) {
                 const el = this;
-                const formData = new FormData(e.target);
                 el.total = 0;
-                this.$store.dispatch('postData', {
-                    value: formData,
-                    url: "/admin/statistics"
-                }).then(stats =>{
 
-                    Object.values(stats).map(stat => {
-                        el.total+=Number(stat);
-                    });
+                const req = this.ajaxRequest('POST', '/admin/statistics');
 
-                    if (el.total > 0) {
-                        this.stats = this.sortData(stats);
-                    } else {
-                        this.$store.commit("displayServerMessage", "Aucun résultat.")
+                req.onload = () => {
+                    if (req.status >= 200 && req.status < 400) {
+                        const stats = JSON.parse(req.responseText);
+                        Object.values(stats).map(stat => {
+                            el.total+=Number(stat);
+                        });
+
+                        if (el.total > 0) {
+                            this.stats = this.sortData(stats);
+                        } else {
+                            this.$store.commit("displayServerMessage", "Aucun résultat.")
+                        }
                     }
-                })
+                };
+
+                req.send(new FormData(e.target));
             },
 
             sortData(obj) {

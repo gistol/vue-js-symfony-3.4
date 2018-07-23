@@ -5,6 +5,7 @@
             <ul id="menu">
                 <router-link v-bind:to="{name: 'home_user'}" tag="li">Accueil</router-link>
                 <router-link v-bind:to="{name: 'categories'}" tag="li">Catégories</router-link>
+                <router-link v-bind:to="{name: 'contact'}" tag="li">Contact</router-link>
             </ul>
             <form name='search' v-on:submit.prevent="handleSearchSubmit" v-on:keyup="handleSearchSubmit">
                 <input type="search" name="search" autocomplete="off" placeholder="Rechercher"/>

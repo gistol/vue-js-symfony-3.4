@@ -9,12 +9,11 @@ use AppBundle\Entity\Image;
 use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Statistic;
-use AppBundle\Service\DataSaver;
 use AppBundle\Service\FileUploader;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,32 +152,6 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/statistics", name="admin_statistics")
-     * @param Request $request
-     * @param ObjectManager $manager
-     * @param DataSaver $dataSaver
-     * @return JsonResponse|Response
-     */
-    public function getStatAction(Request $request, ObjectManager $manager, DataSaver $dataSaver)
-    {
-        if ($request->get("csrf_token") === $request->getSession()->get("statistic")) {
-
-            $type = $request->get("type");
-            $bot = $request->get("bot");
-            $start = $request->get("start");
-            $end = $request->get("end");
-
-            $statistics = $manager->getRepository(Statistic::class)->myFindBy($type, $bot, $start, $end);
-
-            $response = $dataSaver->getStatistics($statistics);
-
-            return new JsonResponse($response);
-        }
-
-        return new Response("Formulaire invalide.");
-    }
-
-    /**
      * @Route("/delete/pdf", name="delete_pdf")
      * @param Request $request
      * @param ObjectManager $manager
@@ -272,5 +245,30 @@ class AdminController extends Controller
         }
 
         return new JsonResponse("L'article n'existe pas.", Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @Route("/admin/statistics", name="admin_statistics", methods={"POST"})
+     * @param Request $request
+     * @param ObjectManager $manager
+     * @return JsonResponse|Response
+     */
+    public function statisticsAction(Request $request, ObjectManager $manager)
+    {
+        if ($request->get("csrf_token") === $request->getSession()->get("statistic")) {
+
+            $type = $request->get("type");
+            $bot = $request->get("bot");
+            $start = $request->get("start");
+            $end = $request->get("end");
+
+            $statistics = $manager->getRepository(Statistic::class)->myFindBy($type, $bot, $start, $end);
+
+            $response = !empty($statistics) ? $this->get("app.stat")->getStatistics($statistics) : [];
+
+            return new JsonResponse($response);
+        }
+
+        return new JsonResponse("Formulaire invalide.");
     }
 }

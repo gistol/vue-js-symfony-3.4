@@ -17,11 +17,13 @@ import Statistic from '../components/admin/Statistic';
 import LegalAdmin from '../components/admin/Legal';
 import PageNotFound from '../components/PageNotFound';
 import Login from '../components/admin/Login';
+import Contact from '../components/Contact';
 
 Vue.use(VueRouter);
 
 /* Registering the app routes */
 const Router = new VueRouter({
+
     routes: [
         {
             path: '/',
@@ -54,7 +56,12 @@ const Router = new VueRouter({
                     path: '/mentions-legales',
                     name: 'legal',
                     component: LegalUser
-                }
+                },
+                {
+                    path: 'contact',
+                    name: 'contact',
+                    component: Contact
+                },
             ]
         },
         {

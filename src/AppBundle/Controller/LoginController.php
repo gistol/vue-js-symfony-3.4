@@ -2,21 +2,22 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\User;
 use AppBundle\Service\Hydrator;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class LoginController extends Controller
 {
     /**
      * @Route("/login", name="login")
+     * @param  ObjectManager $manager
+     * @param Request $manager
+     * @param Hydrator $hydrator
      * @return JsonResponse|Response
      */
     public function loginAction(ObjectManager $manager, Request $request, Hydrator $hydrator)
@@ -26,14 +27,14 @@ class LoginController extends Controller
             if ($hydrator->isFormValid([User::class], $request->get('sender'))) {
 
                 $user = $manager->getRepository(User::class)->findOneBy([
-                    'username' => $request->request->get('username')
+                    'username' => $request->get('username')
                 ]);
 
-                if (is_null($user)) {
+                if (null === $user) {
                     return new JsonResponse("Le nom d'utilisateur n'existe pas.");
                 }
 
-                if (password_verify($request->request->get('password'), $user->getPassword())) {
+                if (password_verify($request->get('password'), $user->getPassword())) {
                     $token = hash('sha256', time() . $user->getUsername());
 
                     $this->get('session')->set('token', $token);

@@ -5,18 +5,16 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
 use AppBundle\Entity\Statistic;
-use AppBundle\Service\AppTools;
 use AppBundle\Service\DataSaver;
 use AppBundle\Service\Hydrator;
 use AppBundle\Service\MetaService;
-use AppBundle\Service\Serializor;
 use Doctrine\Common\Persistence\ObjectManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -174,7 +172,7 @@ class DefaultController extends Controller
             $email = htmlspecialchars($request->request->get('email'));
 
             if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
-                $newsletter = (new Newsletter())->setEmail($email)->setToken(md5(uniqid()));
+                $newsletter = (new Newsletter())->setDate(new \DateTime())->setEmail($email)->setToken(md5(uniqid()));
                 $metaService->persistAndFlush([$newsletter]);
                 return new JsonResponse('Votre abonnement a bien été pris en compte.');
             }
@@ -257,5 +255,24 @@ class DefaultController extends Controller
         }
 
         return new JsonResponse("L'utilisateur n'existe pas !");
+    }
+
+    /**
+     * @Route("/contact", name="user_contact")
+     *
+     */
+    public function contactAction(Request $request, Hydrator $hydrator, MetaService $metaService)
+    {
+        if ($request->isXmlHttpRequest()) {
+            if ($hydrator->isFormValid([Contact::class], $request->get('sender'))) {
+                $contact = $hydrator->hydrateObject(Contact::class);
+                $contact->setDate(new \DateTime());
+                $metaService->persistAndFlush([$contact]);
+
+                return new JsonResponse("Votre demande a bien été envoyée.", Response::HTTP_CREATED);
+            }
+        }
+
+        return new Response("Méthode non autorisée.", Response::HTTP_METHOD_NOT_ALLOWED);
     }
 }

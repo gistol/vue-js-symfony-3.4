@@ -2,7 +2,7 @@ export default {
     data() {
         return {
             smallDevice: undefined,
-            menuIsDisplayed: undefined
+            menuIsDisplayed: false
         }
     },
 
@@ -19,6 +19,5 @@ export default {
 
     created() {
         this.smallDevice = window.innerWidth < 1024;
-        this.menuIsDisplayed = false;
     }
 }

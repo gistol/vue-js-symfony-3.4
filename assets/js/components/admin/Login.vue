@@ -1,6 +1,6 @@
 <template>
     <div class="container w40 w95sm">
-        <form name='login' class='tile' autocomplete="off" v-on:submit.prevent="handleSubmit" enctype="multipart/form-data" :style="style">
+        <form name='login' class='tile' autocomplete="off" v-on:submit.prevent="handleSubmit" :style="style">
             <label for="username">Nom d'utilisateur</label>
             <input type="text" id="username" name="username" v-model="username"/>
 
@@ -43,17 +43,16 @@
 
         methods: {
 
-            handleSubmit() {
+            handleSubmit(e) {
 
                 this.$store.commit('displaySendingRequest');
 
-                const formData = new FormData(this.$el.querySelector('form'));
+                const formData = new FormData(e.target);
                 formData.append('sender', 'login');
 
                 this.$store.dispatch('postData', {
                     url: '/login',
-                    value: formData,
-                    contentType: false
+                    value: formData
 
                 }).then(data => {
 

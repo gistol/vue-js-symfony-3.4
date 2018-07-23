@@ -18,7 +18,8 @@ const Store = new Vuex.Store({
         login_csrf_token: undefined,
         create_edit_article_csrf_token: undefined,
         statistic_csrf_token: undefined,
-        legal_csrf_token: undefined
+        legal_csrf_token: undefined,
+        contact_csrf_token: undefined
     },
 
     mutations: {
@@ -93,22 +94,20 @@ const Store = new Vuex.Store({
             req.send('sender=' + sender);
         },
 
-        postData(context, data) {
+        postData({commit}, data) {
 
-            return new Promise((resolve, reject) => {
+            return new Promise(resolve => {
 
                 const req = getRequestObject("POST", data.url);
 
-                req.onload = () => {
+                req.addEventListener('load', () => {
                     const response = req.responseText;
                     if (req.status >= 200 && req.status < 400) {
                         resolve(JSON.parse(response));
-                    } else {
-                        reject(response);
                     }
-                };
+                });
 
-                if (data.contentType) {
+                if (undefined !== data.contentType) {
                     req.setRequestHeader("Content-Type", data.contentType);
                 }
 

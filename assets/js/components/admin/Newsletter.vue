@@ -18,7 +18,7 @@
                 </tbody>
             </table>
         </div>
-        <div v-else>
+        <div class="tile" v-else>
             <p>Aucun abonné.</p>
         </div>
     </div>

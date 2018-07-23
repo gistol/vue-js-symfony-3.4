@@ -131,7 +131,9 @@ class Hydrator
                 if ($object instanceof Article && $field === "newsletter") {
                     $object->setNewsletter($value === "on");
                 } else {
-                    $object->$method(htmlspecialchars($value));
+                    if ($field !== 'date') {
+                        $object->$method(htmlspecialchars($value));
+                    }
                 }
             }
         }
