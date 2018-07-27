@@ -3,7 +3,7 @@
         <h2 v-if="articlesCount.length > 0">{{ articlesCount }} article(s)</h2>
         <div class="tile" style='margin: 30px 0;' v-for="article in articles">
             <p>{{ article.title }}</p>
-            <img class='image' v-for="(image, key) in article.images" v-if='typeof image !== undefined && key === 0' :src="'./images/' + image.src"/>
+            <img class='image' v-bind:src="'./images/' + article.image_src"/>
             <div class="button-group">
                 <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
                     <button class="button-default w150"><font-awesome-icon v-bind:icon="editIcon"/>&nbsp;&nbsp;Editer</button>

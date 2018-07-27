@@ -23,7 +23,6 @@
                 .then(legal => {
                     if (legal instanceof Object) {
                         this.content = legal.content;
-                        this.$parent.cancelAnimation();
                         this.$parent.loaded = true;
                     }
                 })

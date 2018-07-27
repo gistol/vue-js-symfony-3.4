@@ -23,7 +23,6 @@ Vue.use(VueRouter);
 
 /* Registering the app routes */
 const Router = new VueRouter({
-
     routes: [
         {
             path: '/',

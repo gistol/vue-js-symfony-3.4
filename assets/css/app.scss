@@ -445,13 +445,13 @@ form[name='search'] {
 
     li {
       display: block;
+      width: auto;
       height: auto;
-      padding: 5px 0;
+      padding: 5px;
       line-height: inherit;
       background: #fff;
       margin: 0;
       text-align: left;
-      text-indent: 5px;
     }
 
     li:hover{
@@ -479,61 +479,15 @@ form[name='search'] {
 
 #loader{
   margin: 0 auto;
-  height: 50px;
-  width: 65px;
-  position: relative;
-}
-
-#loader2,
-#loader3,
-#loader4,
-#loader5{
-  position: absolute;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  height: 10px;
-  width: 10px;
-  bottom: 0;
-}
-
-#loader2{
-  left: 5px;
-  background: red;
-}
-
-#loader3{
-  left: 20px;
-  background: #1e90ff;
-}
-
-#loader4{
-  left: 35px;
-  background: orange;
-}
-
-#loader5{
-  left: 50px;
-  background: green;
 }
 
 #loaderContainer {
-  position: fixed;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  top: 0;
-  background: rgb(255,255,255);
   @extend %flex;
   @extend %column;
   @extend %align-center;
   @extend %justify-center;
   z-index: 2;
-
-  p {
-    margin-top: 20px;
-    text-align: center;
-  }
+  margin-bottom: 150px;
 }
 
 .fade-enter-active, .fade-leave-active {

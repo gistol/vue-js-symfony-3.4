@@ -68,7 +68,7 @@ class DefaultController extends Controller
     {
         $articles = $manager->getRepository(Article::class)->myFindBy($id);
 
-        return $this->getJson($articles);
+        return new JsonResponse($articles);
     }
 
     /**
@@ -118,7 +118,7 @@ class DefaultController extends Controller
      */
     public function getArticlesByCategory($category, ObjectManager $manager)
     {
-        return $this->getJson($manager->getRepository(Category::class)->findOneBy(['category' => $category])->getArticles());
+        return new JsonResponse($manager->getRepository(Category::class)->myFindArticleByCategory($category));
     }
 
     /**

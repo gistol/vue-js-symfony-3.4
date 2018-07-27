@@ -9,7 +9,7 @@
             </ul>
             <form name='search' v-on:submit.prevent="handleSearchSubmit" v-on:keyup="handleSearchSubmit">
                 <input type="search" name="search" autocomplete="off" placeholder="Rechercher"/>
-                <font-awesome-icon :icon="spinnerIcon" style="color: #fff;" v-show="showSpinner"/>
+                <font-awesome-icon v-bind:icon="spinnerIcon" class="search-form-spinner" style="color: #fff;" v-show="showSpinner"/>
                 <ul v-if="showSuggestionList">
                    <li v-for="title in searchResult" v-on:click="addSuggestion">{{ title.title }}</li>
                 </ul>
@@ -18,14 +18,10 @@
             </form>
         </nav>
         <router-view></router-view>
-        <div id="loaderContainer" v-show="this.loading">
+        <div id="loaderContainer" v-show="loading">
             <div id="loader">
-                <div id="loader2"></div>
-                <div id="loader3"></div>
-                <div id="loader4"></div>
-                <div id="loader5"></div>
+                <font-awesome-icon v-bind:icon="spinnerIcon" class="fa-2x loading-page-spinner"/>
             </div>
-            <p>Chargement en cours</p>
         </div>
         <footer>
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
@@ -37,7 +33,7 @@
                 &copy; 2018 Côté Desserts |  &nbsp;<router-link v-bind:to="{name: 'legal'}">Mentions légales</router-link>
             </div>
         </footer>
-        <server-message :displayMessage="displayMessage">{{ message }}</server-message>
+        <server-message v-bind:displayMessage="displayMessage">{{ message }}</server-message>
     </div>
 </template>
 
@@ -82,67 +78,6 @@
                     this.$el.querySelector("input[name='search']").value = e.target.innerText;
                 }
                 this.showSuggestionList = false;
-            },
-
-            moveToTop() {
-                this.counter += 5;
-
-                if(this.counter <= 40){
-                    this.loaders[this.index].style.bottom = "" + this.counter + "px";
-                    this.animation = requestAnimationFrame(this.moveToTop);
-                }
-                else{
-                    ++this.index;
-                    this.animation2 = requestAnimationFrame(this.moveToBottom);
-                }
-            },
-
-            moveToBottom() {
-                this.counter -= 5;
-
-                if(this.counter >= 0){
-                    this.loaders[this.index-1].style.bottom = "" + this.counter + "px";
-                    this.animation2 = requestAnimationFrame(this.moveToBottom);
-                } else{
-                    if(this.index === 4){
-                        this.index = 0
-                    }
-                    this.animation = requestAnimationFrame(this.moveToTop);
-                }
-            },
-
-            loadAnimation() {
-
-                this.loading = true;
-
-                let requestAnimationFrame =
-                    window.requestAnimationFrame ||
-                    window.webkitRequestAnimationFrame;
-
-                /* Elements inside the loader square */
-                for(let i = 2; i < 6; ++i){
-                    this.loaders.push(document.getElementById("loader" + i + ""));
-                }
-
-                this.animation = requestAnimationFrame(this.moveToTop);
-            },
-
-            cancelAnimation() {
-                let cancelAnimationFrame =
-                    window.cancelAnimationFrame ||
-                    window.webkitCancelAnimationFrame;
-
-                cancelAnimationFrame(this.animation);
-                cancelAnimationFrame(this.animation2);
-
-                /* For next request */
-                this.loaded = true;
-                this.loading = false;
-                this.index = 0;
-
-                this.loaders.forEach((loader) => {
-                    loader.style.bottom = '0';
-                });
             },
         },
 

@@ -7,8 +7,8 @@
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         height: '225px',
-                        backgroundImage: 'url('+'./images/' + image.src +')'
-                     }" v-if="index === 0" v-for="(image, index) in article.images" v-bind:alt="image.title">
+                        backgroundImage: 'url('+'./images/' + article.image_src +')'
+                     }" v-bind:alt="article.slug">
                     </div>
                 </router-link>
                 <h2>{{ article.title }}</h2>
@@ -44,7 +44,7 @@
             getArticles() {
                 this.$store.dispatch('getArticles')
                     .then(() => {
-                        this.$parent.cancelAnimation();
+                        this.cancelSpinnerAnimation();
                     })
                     .catch(err => {
                         console.log('Erreur : ' + err);
@@ -52,11 +52,11 @@
             },
 
             addArticles() {
-                this.$parent.loadAnimation();
+                this.launchSpinnerAnimation();
                 this.getArticles();
 
                 setTimeout(() => {
-                    window.scrollTo(0, document.body.scrollHeight + 500);
+                    window.scrollTo(0, document.body.scrollHeight + 200);
                 }, 200);
             }
         },
@@ -67,16 +67,14 @@
         },
 
         mounted() {
-
+            if (this.nbArticles === 0) {
+                this.launchSpinnerAnimation();
+            }
+            
             this.$store.dispatch('saveData', {
                 data: this.$route.fullPath,
                 type: 'navigation'
             });
-            
-            /* No animation launch if already cached articles */
-            if (this.articles.length === 0) {
-                this.$parent.loadAnimation();
-            }
         }
     }
 </script>

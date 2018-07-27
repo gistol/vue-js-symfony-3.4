@@ -29,12 +29,14 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
      */
     public function myFindBy($id)
     {
-        $qb = $this->createQueryBuilder('a')
-        ->where('a.id > :id')
-        ->setParameter('id', $id)
-        ->setMaxResults(9);
+        $query ="SELECT a.id, a.slug, a.title,
+                  (SELECT i.src FROM image i WHERE i.article_id = a.id ORDER BY i.id LIMIT 1) as image_src
+                 FROM article a
+                 WHERE a.id > '$id'
+                 LIMIT 9
+        ";
 
-        return $qb->getQuery()->getResult();
+        return $this->_em->getConnection()->fetchAll($query);
     }
 
     /**

@@ -16,8 +16,8 @@
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             height: '225px',
-                            backgroundImage: 'url('+'./images/' + image.src +')'
-                         }" v-if="index === 0" v-for="(image, index) in article.images" v-bind:alt="image.title">
+                            backgroundImage: 'url('+'./images/' + article.image_src +')'
+                         }" v-bind:alt="article.title">
                     </div>
                 </router-link>
                 <h2>{{ article.title }}</h2>
@@ -52,18 +52,18 @@
 
         methods: {
             handleSubmit(e) {
+                this.launchSpinnerAnimation();
+
                 const category = e.target.elements.category.value;
 
                 /* If no category selected */
                 if (category === '') return;
-                
-                this.$parent.loadAnimation();
 
                 const req = this.ajaxRequest('GET', '/category/' + category);
 
                 req.onload = () => {
                     if (req.status >= 200 && req.status < 400) {
-                        this.$parent.cancelAnimation();
+                        this.cancelSpinnerAnimation();
                         this.articles = JSON.parse(req.responseText);
                     }
                 };
@@ -86,6 +86,7 @@
 
                 req.onload = () => {
                     if (req.status >= 200 && req.status < 400) {
+                        this.cancelSpinnerAnimation();
                         this.articles = JSON.parse(req.responseText);
                     }
                 };
@@ -98,17 +99,16 @@
 
             req.onload = () => {
                 if (req.status >= 200 && req.status < 400) {
+                    this.cancelSpinnerAnimation();
                     this.allCategories = Object.values(JSON.parse(req.responseText))
                         .map(cat => Object.assign(cat, {category: cat.category.slice(0, 1).toUpperCase() + cat.category.slice(1)}));
-                    this.$parent.cancelAnimation();
                 }
             };
 
             req.send();
 
-            /* If not aready cached */
             if (this.allCategories.length === 0) {
-                this.$parent.loadAnimation();
+                this.launchSpinnerAnimation();
             }
         }
     }

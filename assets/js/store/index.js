@@ -195,4 +195,4 @@ function getRequestObject(method, url) {
     return req;
 }
 
-export default Store;
+export { Store };

@@ -17,17 +17,17 @@ class StatisticRepository extends \Doctrine\ORM\EntityRepository
             ->setParameter('type', $type);
 
         if ('' !== $bot) {
-            $qb->andWhere('bot = :bot')
+            $qb->andWhere('s.bot = :bot')
                 ->setParameter('bot', $bot);
         }
 
         if ('' !== $start) {
-            $qb->andWhere('date >= :start')
+            $qb->andWhere('s.date >= :start')
                 ->setParameter('start', "$start 00:00:00");
         }
 
         if ('' !== $end) {
-            $qb->andWhere('date <= :end')->setParameter('end', "$end 23:59:59");
+            $qb->andWhere('s.date <= :end')->setParameter('end', "$end 23:59:59");
         }
 
         return $qb->getQuery()->getArrayResult();

@@ -198,7 +198,7 @@ const Mixins = {
                     this.showSuggestionList = true;
 
                     this.showSpinner = false;
-                    this.$el.querySelector("svg[data-icon='spinner']").classList.remove("fa-spin");
+                    this.$el.querySelector(".search-form-spinner").classList.remove("fa-spin");
                 } else {
                     this.$store.commit('displayServerMessage', data);
                 }
@@ -218,23 +218,34 @@ const Mixins = {
             let email = e.target.elements.email.value;
 
             if(message === '') {
-                this.message_error = "Veuillez saisir un message."
+                this.message_error = "Veuillez saisir un message.";
             } else {
                 this.message_error = undefined;
             }
 
             if(!this.checkEmail(email)) {
-                this.email_error = "Veuillez saisir une adresse email valide."
+                this.email_error = "Veuillez saisir une adresse email valide.";
             } else {
                 this.email_error = undefined;
             }
 
-            if(message === '' || !this.checkEmail(email)) {
+            if (!this.isValueValid) {
+                this.robot_error = "Le code saisi n'est pas correct.";
+            } else {
+                this.robot_error = undefined;
+            }
+
+            if(message === '' || !this.checkEmail(email) || !this.isValueValid) {
                 return;
             }
 
             setTimeout(() => {
                 e.target.reset();
+                this.email = '';
+                this.message = '';
+                this.robot = '';
+                this.style = '';
+                this.random();
             }, 5000);
 
             this.handleSubmit('/contact', 'contact');
@@ -289,8 +300,7 @@ const Mixins = {
                 if (this.$el.querySelector('input[type="search"]').value.length > 0) {
                     this.handleSubmit('/search', 'search');
                     this.showSpinner = true;
-                    this.$el.querySelector("svg[data-icon='spinner']").classList.add("fa-spin");
-
+                    this.$el.querySelector(".search-form-spinner").classList.add("fa-spin");
                     /* Stats */
                     this.$store.dispatch('saveData', {
                         data: this.$el.querySelector('input[type="search"]').value,
@@ -304,6 +314,17 @@ const Mixins = {
                     this.showSuggestionList = false;
                 }
             });
+        },
+
+        launchSpinnerAnimation() {
+            this.$parent.loading = true;
+            document.querySelector(".loading-page-spinner").classList.add("fa-spin");
+        },
+
+        cancelSpinnerAnimation() {
+            this.$parent.loaded = true;
+            this.$parent.loading = false;
+            document.querySelector(".loading-page-spinner").classList.remove("fa-spin");
         },
 
         addToNewsletter(e) {

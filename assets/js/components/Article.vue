@@ -88,6 +88,7 @@
                 username_error: undefined,
                 email_error: undefined,
                 comment_error: undefined,
+                loaded: false
             }
         },
 
@@ -108,10 +109,6 @@
                 }
             },
 
-            loaded() {
-                return this.$parent.loaded
-            },
-
             csrf_token() {
                 return this.$store.state.comment_article_csrf_token
             },
@@ -130,13 +127,13 @@
             this.$store.dispatch('getArticle', '/article/' + this.$route.params.slug)
                 .then(data => {
                     this.article = data;
-                    this.$parent.cancelAnimation();
-                    this.$parent.loaded = true;
+                    this.loaded = true;
+                    this.cancelSpinnerAnimation();
                 })
         },
 
         mounted() {
-            this.$parent.loadAnimation();
+            this.launchSpinnerAnimation();
             this.$store.dispatch('getCsrfToken', 'comment_article');
             this.$store.dispatch('saveData', {
                 data: this.$route.fullPath,

@@ -14,8 +14,23 @@ class CategoryRepository extends \Doctrine\ORM\EntityRepository
     public function myFindAllCategories()
     {
         return $this->createQueryBuilder('a')
+            ->select('a.category')
             ->innerJoin("a.articles", "articles")
             ->where("articles.id is not null")
-            ->getQuery()->getResult();
+            ->groupBy('a.category')
+            ->getQuery()->getArrayResult();
+    }
+
+    public function myFindArticleByCategory($category)
+    {
+        $query = "SELECT a.id, a.slug, a.title, 
+                   (SELECT i.src FROM image i WHERE i.article_id = a.id ORDER BY i.id LIMIT 1) as image_src
+                   FROM article a 
+                   JOIN article_category ac ON ac.article_id = a.id
+                   JOIN category c ON c.id = ac.category_id
+                   WHERE c.category = '$category'  
+        ";
+
+        return $this->_em->getConnection()->fetchAll($query);
     }
 }
