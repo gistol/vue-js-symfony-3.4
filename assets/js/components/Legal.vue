@@ -30,7 +30,6 @@
                     console.log("Erreur : " + err);
                 });
 
-            this.$parent.loadAnimation();
             this.$store.dispatch('saveData', {
                 data: this.$route.fullPath,
                 type: 'navigation'
