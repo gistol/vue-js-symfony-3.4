@@ -18,9 +18,8 @@
 
             <div class="tile-comment" v-if='loaded' v-on:click="displayComment = !displayComment">
                 <font-awesome-icon v-bind:icon="plusIcon" v-if='!displayComment' />
-                <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' />
-                Commentaires
-                <p v-if="displayComment && article.comments.length === 0">Aucun commentaire.</p>
+                <font-awesome-icon v-bind:icon="minusIcon" v-if='displayComment' /> Commentaires
+                <p v-if="displayComment && noCommentToDisplay">Aucun commentaire.</p>
                 <div class="comment" v-if="displayComment && comment.published && article.comments.length > 0" v-for="comment in article.comments">
                     <p>{{ comment.username }}, le {{ comment.date|formatShortDate }}</p>
                     <p class="white_space">
@@ -49,7 +48,9 @@
             </form>
         </div>
         <div v-if="loaded" class='container'>
-            <button @click="showForm" class="button-default mauto"><font-awesome-icon v-bind:icon="commentIcon"></font-awesome-icon> Commenter</button>
+            <button @click="showForm" class="button-default mauto">
+                <font-awesome-icon v-bind:icon="commentIcon"/> Commenter
+            </button>
         </div>
     </div>
 </template>
@@ -78,6 +79,7 @@
                 comment: undefined,
                 show: false, /* Modal */
                 displayComment: false,
+                noCommentToDisplay: true,
                 plusIcon: faPlusCircle,
                 minusIcon: faMinusCircle,
                 commentIcon: faComment,
@@ -88,7 +90,7 @@
                 username_error: undefined,
                 email_error: undefined,
                 comment_error: undefined,
-                loaded: false
+                loaded: false,
             }
         },
 
@@ -124,21 +126,33 @@
         },
 
         created() {
-            this.$store.dispatch('getArticle', '/article/' + this.$route.params.slug)
-                .then(data => {
-                    this.article = data;
-                    this.loaded = true;
-                    this.cancelSpinnerAnimation();
-                })
-        },
-
-        mounted() {
-            this.launchSpinnerAnimation();
             this.$store.dispatch('getCsrfToken', 'comment_article');
+
             this.$store.dispatch('saveData', {
                 data: this.$route.fullPath,
                 type: 'navigation'
             });
+
+            let url = '/article/' + this.$route.params.slug;
+
+            this.$store.dispatch('getArticle', url)
+                .then(article => {
+                    this.article = article;
+                    this.loaded = true;
+                    this.cancelSpinnerAnimation();
+
+                    if(this.article.comments.length !== 0) {
+                        this.article.comments.map(comment => {
+                            if (comment.published) this.noCommentToDisplay = false;
+                        });
+                    } else {
+                        this.noCommentToDisplay = true;
+                    }
+                });
+        },
+
+        mounted() {
+            this.launchSpinnerAnimation();
         },
     }
 </script>
