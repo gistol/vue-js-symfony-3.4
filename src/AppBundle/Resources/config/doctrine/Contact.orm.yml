@@ -17,4 +17,8 @@ AppBundle\Entity\Contact:
             nullable: false
         date:
             type: datetime
+        token:
+            type: string
+            length: 255
+            nullable: false
     lifecycleCallbacks: {  }

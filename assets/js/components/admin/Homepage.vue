@@ -1,14 +1,14 @@
 <template>
     <div class='container w40 w95sm'>
-        <h2 v-if="articlesCount.length > 0">{{ articlesCount }} article(s)</h2>
+        <h2 v-if="articlesCount > 0">{{ articlesCount }} article(s)</h2>
         <div class="tile" style='margin: 30px 0;' v-for="article in articles">
             <p>{{ article.title }}</p>
             <img class='image' v-bind:src="'./images/' + article.image_src"/>
             <div class="button-group">
-                <router-link  v-bind:to="{name: 'editArticle', params: {id: article.id}}">
+                <router-link v-bind:to="{name: 'editArticle', params: {token: article.token}}">
                     <button class="button-default w150"><font-awesome-icon v-bind:icon="editIcon"/>&nbsp;&nbsp;Editer</button>
                 </router-link>
-                <button class="button-delete w150" v-on:click="deleteArticle" v-bind:data-id="article.id"><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button>
+                <button class="button-delete w150" v-on:click="deleteArticle" v-bind:data-token="article.token"><font-awesome-icon v-bind:icon="trashIcon"></font-awesome-icon> Supprimer</button>
             </div>
         </div>
         <button v-if="articlesCount > nbArticles" v-on:click="addArticles" class="button-default m10"><font-awesome-icon v-bind:icon="plusIcon"></font-awesome-icon> Plus d'articles</button>
@@ -54,7 +54,7 @@
 
                 if (confirm("Voulez-vous supprimer cet article ?")) {
                     this.$store.dispatch('postData', {
-                        url: '/admin/articles/delete/' + e.target.getAttribute('data-id')
+                        url: '/admin/articles/delete/' + e.target.getAttribute('data-token')
                     })
                         .then(data => {
                             this.$store.commit('displayServerMessage', data);

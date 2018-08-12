@@ -21,6 +21,10 @@ AppBundle\Entity\Comment:
             type: datetimetz
         published:
             type: boolean
+        token:
+            type: string
+            length: 255
+            nullable: false
 
     manyToOne:
         article:

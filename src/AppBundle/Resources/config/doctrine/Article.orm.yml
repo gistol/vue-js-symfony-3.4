@@ -23,7 +23,10 @@ AppBundle\Entity\Article:
         pdf:
             type: string
             nullable: true
-
+        token:
+            type: string
+            length: 255
+            nullable: false
     oneToMany:
         images:
             targetEntity: AppBundle\Entity\Image
