@@ -4,10 +4,11 @@
             <img v-if='smallDevice' v-on:click='showMenu' id="burger" src="images/threelines.png" />
             <ul id="menu">
                 <router-link v-bind:to="{name: 'createArticle'}" tag="li">Créer un article</router-link>
-                <router-link v-bind:to="{name: 'listArticle'}" tag="li">Liste des articles</router-link>
+                <router-link v-bind:to="{name: 'homepageAdmin'}" tag="li">Liste des articles</router-link>
                 <router-link v-bind:to="{name: 'comments'}" tag="li">Commentaires</router-link>
                 <router-link v-bind:to="{name: 'newsletter'}" tag="li">Newsletter</router-link>
                 <router-link v-bind:to="{name: 'statistic'}" tag="li">Statistiques</router-link>
+                <router-link v-bind:to="{name: 'contacts'}" tag="li">Contacts</router-link>
                 <router-link v-bind:to="{name: 'legal-admin'}" tag="li">Mentions légales</router-link>
                 <router-link v-bind:to="{name: 'logout'}" tag="li">Déconnexion</router-link>
             </ul>
