@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\Image;
 use AppBundle\Entity\Legal;
 use AppBundle\Entity\Newsletter;
@@ -58,16 +59,16 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/articles/delete/{id}", name="delete_article")
-     * @param int $id
+     * @Route("/admin/articles/delete/{token}", name="delete_article")
+     * @param $token
      * @param ObjectManager $manager
      * @param Request $request
      * @return JsonResponse
      */
-    public function deleteArticleAction($id, ObjectManager $manager, Request $request)
+    public function deleteArticleAction($token, ObjectManager $manager, Request $request)
     {
         if ($request->isXmlHttpRequest()) {
-            $ret = $this->getArticle($id);
+            $ret = $this->getArticle($token);
 
             if ($ret instanceof Article) {
                 $manager->remove($ret);
@@ -82,17 +83,17 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/articles/edit/{id}", name="edit_article")
-     * @param int $id
+     * @Route("/admin/articles/edit/{$token}", name="edit_article")
+     * @param string $token
      * @param Request $request
      * @param Hydrator $hydrator
      * @return JsonResponse
      */
-    public function editArticleAction($id, Request $request, Hydrator $hydrator)
+    public function editArticleAction($token, Request $request, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
             if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
-                $ret = $this->getArticle($id);
+                $ret = $this->getArticle($token);
 
                 if ($ret instanceof Article) {
                     $hydrator->updateObject($ret);
@@ -105,7 +106,7 @@ class AdminController extends Controller
             return new JsonResponse('Formulaire invalide');
         }
 
-        return $this->get('app.serializor')->serialize($this->getArticle($id));
+        return $this->get('app.serializor')->serialize($this->getArticle($token));
     }
 
     /**
@@ -117,8 +118,9 @@ class AdminController extends Controller
     public function changeCommentStatus(Request $request, ObjectManager $manager)
     {
         if ($request->isXmlHttpRequest()) {
+
             $comment = $manager->getRepository(Comment::class)->findOneBy([
-                "id" => $request->get('id')
+                "token" => $request->get('token')
             ]);
 
             $comment->setPublished("true" === $request->get('published'));
@@ -224,23 +226,44 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/comment/delete/{id}", name="delete_comment")
+     * @Route("/admin/comment/delete/{token}", name="delete_comment")
      */
-    public function deleteCommentAction(Comment $comment, ObjectManager $manager)
+    public function deleteCommentAction($token, ObjectManager $manager)
     {
-        $manager->remove($comment);
-        $manager->flush();
+        if (!is_null($comment = $manager->getRepository(Comment::class)->findOneBy(["token" => $token]))) {
 
-        return new Response('Le commentaire a bien été supprimé.');
+            $manager->remove($comment);
+            $manager->flush();
+
+            return new Response('Le commentaire a bien été supprimé.');
+        }
+
+        return new Response("Le commentaire n'existe pas.");
     }
 
     /**
-     * @param int $id
+     * @Route("/admin/contact/delete/{token}", name="delete_contact")
+     */
+    public function deleteContactAction($token, ObjectManager $manager)
+    {
+        if (!is_null($contact = $manager->getRepository(Contact::class)->findOneBy(["token" => $token]))) {
+
+            $manager->remove($contact);
+            $manager->flush();
+
+            return new Response('Le commentaire a bien été supprimé.');
+        }
+
+        return new Response("Le commentaire n'existe pas.");
+    }
+
+    /**
+     * @param string $token
      * @return Article|null|object|JsonResponse
      */
-    private function getArticle($id)
+    private function getArticle($token)
     {
-        if(!is_null($article = $this->getDoctrine()->getRepository(Article::class)->find($id))) {
+        if(!is_null($article = $this->getDoctrine()->getRepository(Article::class)->findOneBy(['token' => $token]))) {
             return $article;
         }
 
@@ -270,5 +293,15 @@ class AdminController extends Controller
         }
 
         return new JsonResponse("Formulaire invalide.");
+    }
+
+    /**
+     * @Route("/admin/contacts", name="admin_contacts")
+     */
+    public function contactAction(ObjectManager $manager)
+    {
+        $contact = $manager->getRepository(Contact::class)->findAll();
+
+        return $this->get("app.serializor")->serialize($contact);
     }
 }
