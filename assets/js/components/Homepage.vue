@@ -58,23 +58,24 @@
                 setTimeout(() => {
                     window.scrollTo(0, document.body.scrollHeight + 200);
                 }, 200);
-            }
+            },
         },
 
         created() {
             this.getArticles();
             this.$store.dispatch('getNumberOfArticles');
-        },
 
-        mounted() {
-            if (this.nbArticles === 0) {
-                this.launchSpinnerAnimation();
-            }
-            
             this.$store.dispatch('saveData', {
                 data: this.$route.fullPath,
                 type: 'navigation'
             });
+        },
+
+        mounted() {
+
+            if (this.nbArticles === 0) {
+                this.launchSpinnerAnimation();
+            }
         }
     }
 </script>
