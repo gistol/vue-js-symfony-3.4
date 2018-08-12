@@ -100,7 +100,6 @@ class DefaultController extends Controller
         $statistic = (new Statistic())
             ->setData(substr($request->getRequestUri(), 7))
             ->setType('newsletter')
-            ->setDate(new \DateTime())
             ->setBot(false);
 
         $manager->persist($statistic);
@@ -172,7 +171,7 @@ class DefaultController extends Controller
             $email = htmlspecialchars($request->request->get('email'));
 
             if (is_null($this->getDoctrine()->getRepository(Newsletter::class)->findOneBy(["email" => $email]))) {
-                $newsletter = (new Newsletter())->setDate(new \DateTime())->setEmail($email)->setToken(md5(uniqid()));
+                $newsletter = $hydrator->hydrateObject(Newsletter::class);
                 $metaService->persistAndFlush([$newsletter]);
                 return new JsonResponse('Votre abonnement a bien été pris en compte.');
             }
@@ -266,7 +265,6 @@ class DefaultController extends Controller
         if ($request->isXmlHttpRequest()) {
             if ($hydrator->isFormValid([Contact::class], $request->get('sender'))) {
                 $contact = $hydrator->hydrateObject(Contact::class);
-                $contact->setDate(new \DateTime());
                 $metaService->persistAndFlush([$contact]);
 
                 return new JsonResponse("Votre demande a bien été envoyée.", Response::HTTP_CREATED);
