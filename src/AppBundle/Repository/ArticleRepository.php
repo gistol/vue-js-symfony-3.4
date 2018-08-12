@@ -29,7 +29,7 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
      */
     public function myFindBy($id)
     {
-        $query ="SELECT a.id, a.slug, a.title,
+        $query ="SELECT a.id, a.slug, a.title, a.token,
                   (SELECT i.src FROM image i WHERE i.article_id = a.id ORDER BY i.id LIMIT 1) as image_src
                  FROM article a
                  WHERE a.id > '$id'
