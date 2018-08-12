@@ -5,7 +5,9 @@ namespace AppBundle\Service;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Category;
 use AppBundle\Entity\Comment;
+use AppBundle\Entity\Contact;
 use AppBundle\Entity\Image;
+use AppBundle\Entity\Newsletter;
 
 class Hydrator
 {
@@ -86,8 +88,17 @@ class Hydrator
         /* All entities */
         $object = $this->hydrator(new $class);
 
-        if ($object instanceof Article) {
+        if ($object instanceof Contact ||
+            $object instanceof Newsletter ||
+            $object instanceof Article ||
+            $object instanceof Comment) {
+
             $object->setDate(new \DateTime());
+            $object->setToken(md5(uniqid()));
+        }
+
+        if ($object instanceof Article) {
+
             $this->imageCreator($object);
             $this->categoryCreator($object);
             $this->addPDF($object);
