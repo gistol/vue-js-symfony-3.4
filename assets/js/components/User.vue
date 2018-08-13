@@ -1,10 +1,12 @@
 <template>
     <div id="app_user">
         <nav>
-            <img v-if='smallDevice' v-on:click="showMenu" id="burger" src="images/threelines.png" />
-            <ul id="menu">
-                <router-link v-bind:to="{name: 'home_user'}" tag="li">Accueil</router-link>
-                <router-link v-bind:to="{name: 'categories'}" tag="li">Catégories</router-link>
+            <div id="burger" v-if='smallDevice' v-on:click="showMenu">
+                <font-awesome-icon style="color: #fff;" v-bind:icon="barsIcon" size="lg"/>
+            </div>
+            <ul id="menu" v-on:click="resetMenu()">
+                <router-link v-bind:to="{name: 'home_user'}" tag="li" >Accueil</router-link>
+                <router-link v-bind:to="{name: 'categories'}" tag="li" >Catégories</router-link>
                 <router-link v-bind:to="{name: 'contact'}" tag="li">Contact</router-link>
             </ul>
             <form name='search' v-on:submit.prevent="handleSearchSubmit" v-on:keyup="handleSearchSubmit">
@@ -14,7 +16,7 @@
                    <li v-for="title in searchResult" v-on:click="addSuggestion">{{ title.title }}</li>
                 </ul>
                 <input type="hidden" name="csrf_token" v-bind:value="search_csrf_token"/>
-                <button type="submit"><font-awesome-icon v-bind:icon="searchIcon" style="color: #fff;"/></button>
+                <button v-if="!showSpinner" type="submit"><font-awesome-icon v-bind:icon="searchIcon" style="color: #fff;"/></button>
             </form>
         </nav>
         <router-view></router-view>
@@ -27,7 +29,7 @@
             <form autocomplete="off" name='newsletter' v-on:submit.prevent="addToNewsletter" :enctype="enctype">
                 <input type="email" v-model="newsletter" name="email" id="email" placeholder="Votre email"/>
                 <input type="hidden" name="csrf_token" v-bind:value="newsletter_csrf_token"/>
-                <input type="submit" value="Je m'abonne" class="button-submit mauto"/>
+                <input type="submit" value="Je m'abonne" class="button-submit"/>
             </form>
             <div id="legal_mentions">
                 &copy; 2018 Côté Desserts |  &nbsp;<router-link v-bind:to="{name: 'legal'}">Mentions légales</router-link>
@@ -45,6 +47,7 @@
     import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
     import faSearch from '@fortawesome/fontawesome-free-solid/faSearch'
     import faSpinner from '@fortawesome/fontawesome-free-solid/faSpinner'
+    import faBars from '@fortawesome/fontawesome-free-solid/faBars'
 
     export default {
 
@@ -54,6 +57,7 @@
             return {
                 searchIcon: faSearch,
                 spinnerIcon: faSpinner,
+                barsIcon: faBars,
                 showSuggestionList: false,
                 showSpinner: false,
                 animation: undefined,
