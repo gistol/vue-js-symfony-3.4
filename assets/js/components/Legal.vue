@@ -8,6 +8,7 @@
 </template>
 
 <script>
+
     export default {
         name: 'legal-user',
 
@@ -18,6 +19,7 @@
         },
 
         mounted() {
+
             fetch('/legal')
                 .then(data => data.json())
                 .then(legal => {
@@ -25,9 +27,6 @@
                         this.content = legal.content;
                         this.$parent.loaded = true;
                     }
-                })
-                .catch(err => {
-                    console.log("Erreur : " + err);
                 });
 
             this.$store.dispatch('saveData', {

@@ -45,10 +45,7 @@
                 this.$store.dispatch('getArticles')
                     .then(() => {
                         this.cancelSpinnerAnimation();
-                    })
-                    .catch(err => {
-                        console.log('Erreur : ' + err);
-                    })
+                    });
             },
 
             addArticles() {
