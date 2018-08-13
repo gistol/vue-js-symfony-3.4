@@ -48,8 +48,9 @@ nav ul li {
 }
 
 nav ul li:hover {
-  background: $hovered-grey;
+  background: darkslategray;
   color: #fff;
+  transition: .4s;
 }
 
 .container *, footer *{
@@ -195,6 +196,7 @@ form {
   @include loopItem($array, 'padding', 7px);
   @include loopItem($array, 'color', #76838f);
   @include loopItem($array, 'border', 'none');
+  @include loopItem($array, 'transition', '.4s');
   @include loopItem('select', 'border', '1px solid lightgrey');
   @include loopItem('select', 'margin', '15px auto');
   @include loopItem('input[type="text"]', 'border-bottom', 1px solid lightgrey);
@@ -248,6 +250,7 @@ form * {
   @extend %pointer;
   @include padding(7px);
   color: white;
+  transition: .2s;
 }
 
 .button-default {
@@ -345,18 +348,18 @@ form * {
 
 #burger,
 #cross {
-  height: 20px;
-  margin: 15px 0 15px 4%;
+  width: 50px;
   padding: 0;
   cursor: pointer;
+  text-align: center;
 }
 
 @media all and (max-width: 1024px) {
   nav ul {
     position: absolute;
     top: 50px;
-    left: -50vw;
-    width: 50vw;
+    left: -80vw;
+    width: 80vw;
     height: 100vh;
     flex-direction: column;
     -webkit-flex-direction: column;
@@ -366,7 +369,7 @@ form * {
   nav ul li {
     width: 100%;
     text-align: left;
-    text-indent: 8%;
+    text-indent: 15px;
   }
 
   .tile{
@@ -427,56 +430,6 @@ form * {
   color: dodgerblue;
 }
 
-form[name='search'] {
-  margin-right: 20px;
-  height: 25px;
-
-  ul {
-    height: auto;
-    top: 28px;
-    left: 0;
-    position: absolute;
-    width: 200px;
-    flex-direction: column;
-    -webkit-flex-direction: column;
-    box-shadow: 0 2px 3px rgb(163, 175, 183);
-    background: #fff;
-    align-items: flex-start;
-
-    li {
-      display: block;
-      width: auto;
-      height: auto;
-      padding: 5px;
-      line-height: inherit;
-      background: #fff;
-      margin: 0;
-      text-align: left;
-    }
-
-    li:hover{
-      color: dodgerblue;
-    }
-  }
-
-  input {
-    width: 200px;
-    border: none;
-    height: 100%;
-    text-indent: 5px;
-  }
-
-  button {
-    background: transparent;
-    border: none;
-    height: 100%;
-  }
-
-  button:hover{
-    cursor: pointer;
-  }
-}
-
 #loader{
   margin: 0 auto;
 }
@@ -524,4 +477,82 @@ form[name='search'] {
 .error {
   color: $dark-red;
   font-size: .9em;
+}
+
+form[name='search'] {
+  height: 25px;
+  width: 25%;
+
+  ul {
+    height: auto;
+    top: 28px;
+    position: absolute;
+    left: 0;
+    width: 80%;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    box-shadow: 0 2px 3px rgb(163, 175, 183);
+    background: #fff;
+    align-items: flex-start;
+
+    li {
+      display: block;
+      width: 100%;
+      height: auto;
+      padding: 5px 0;
+      line-height: inherit;
+      background: #fff;
+      margin: 0;
+      text-align: left;
+      text-indent: 5px;
+    }
+
+    li:hover{
+      color: dodgerblue;
+    }
+  }
+
+  input {
+    width: 80%;
+    border: none;
+    height: 100%;
+    text-indent: 5px;
+    transition: .4s;
+  }
+
+  @media all and (max-width: 1024px) and (min-width: 769px) {
+    width: 50%;
+
+    input, ul{
+      width: calc(100% - 40px);
+    }
+  }
+
+  @media all and (max-width: 768px) {
+    width: calc(100% - 50px);
+
+    input, ul{
+      width: calc(100% - 40px);
+    }
+  }
+
+  button {
+    background: transparent;
+    text-align: center;
+    border: none;
+    width: 30px;
+    padding: 0;
+  }
+
+  button:hover{
+    cursor: pointer;
+  }
+}
+
+.display_menu {
+  left: 0;
+}
+
+.text-centered{
+  text-align: center;
 }
