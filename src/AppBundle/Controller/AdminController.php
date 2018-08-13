@@ -83,8 +83,8 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/articles/edit/{$token}", name="edit_article")
-     * @param string $token
+     * @Route("/admin/articles/edit/{token}", name="edit_article")
+     * @param $token
      * @param Request $request
      * @param Hydrator $hydrator
      * @return JsonResponse
@@ -92,21 +92,25 @@ class AdminController extends Controller
     public function editArticleAction($token, Request $request, Hydrator $hydrator)
     {
         if ($request->isXmlHttpRequest()) {
-            if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
-                $ret = $this->getArticle($token);
+            if ($request->isMethod(Request::METHOD_POST)) {
+                if ($hydrator->isFormValid([Article::class, Image::class, Category::class], $request->get('sender'))) {
+                    $ret = $this->getArticle($token);
 
-                if ($ret instanceof Article) {
-                    $hydrator->updateObject($ret);
-                    return new JsonResponse("L'article a été mis à jour.");
-                } else {
-                    return $ret;
+                    if ($ret instanceof Article) {
+                        $hydrator->updateObject($ret);
+                        return new JsonResponse("L'article a été mis à jour.");
+                    } else {
+                        return $ret;
+                    }
                 }
+
+                return new JsonResponse('Formulaire invalide');
             }
 
-            return new JsonResponse('Formulaire invalide');
+            return $this->get('app.serializor')->serialize($this->getArticle($token));
         }
 
-        return $this->get('app.serializor')->serialize($this->getArticle($token));
+        return new JsonResponse('Requête invalide', Response::HTTP_BAD_REQUEST);
     }
 
     /**
