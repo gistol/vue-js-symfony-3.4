@@ -6,7 +6,7 @@ Vue.use(Vuex);
 const Store = new Vuex.Store({
     state: {
         articles: [],
-        articlesCount: undefined,
+        articlesCount: 0,
         lastId: 0,
         displayMessage: false,
         message: '',
@@ -19,7 +19,7 @@ const Store = new Vuex.Store({
         create_edit_article_csrf_token: undefined,
         statistic_csrf_token: undefined,
         legal_csrf_token: undefined,
-        contact_csrf_token: undefined
+        contact_csrf_token: undefined,
     },
 
     mutations: {
@@ -64,12 +64,12 @@ const Store = new Vuex.Store({
 
         setCsrfToken(state, data) {
             state[data.prop] = data.csrf_token;
-        }
+        },
     },
 
     actions: {
 
-        getCsrfToken({commit}, sender) {
+        getCsrfToken(context, sender) {
 
             const req = getRequestObject("POST", '/csrf_token');
 
@@ -77,7 +77,7 @@ const Store = new Vuex.Store({
 
                 if (req.status >= 200 && req.status < 400) {
 
-                    commit("setCsrfToken", {
+                    context.commit("setCsrfToken", {
                         prop: sender.concat('_csrf_token'), /* E.g : comment_article_csrf_token */
                         csrf_token: JSON.parse(req.responseText).csrf_token
                     });
@@ -135,19 +135,21 @@ const Store = new Vuex.Store({
             });
         },
 
-        getArticles({commit}) {
+        getArticles(context) {
             return new Promise((resolve, reject) => {
 
-                const req = getRequestObject("GET", '/articles/' + this.lastId);
+                let articlesUrl = '/articles/' + this.lastId;
+
+                const req = getRequestObject("GET", articlesUrl);
 
                 req.onload = () => {
                     if (req.status >= 200 && req.status < 400) {
-                        commit('hideMessage');
+                        context.commit('hideMessage');
 
                         let data = JSON.parse(req.responseText);
 
                         if (data.length > 0) {
-                            commit('addArticles', data);
+                            context.commit('addArticles', data);
                         }
 
                         resolve();
@@ -160,13 +162,13 @@ const Store = new Vuex.Store({
             });
         },
 
-        getNumberOfArticles({commit}) {
+        getNumberOfArticles(context) {
 
             const req = getRequestObject("GET", '/articlesCount');
 
             req.onload = () => {
                 if (req.status >= 200 && req.status < 400) {
-                    commit('setNumberOfArticles', req.responseText);
+                    context.commit('setNumberOfArticles', req.responseText);
                 }
             };
 
@@ -174,11 +176,12 @@ const Store = new Vuex.Store({
         },
 
         saveData(context, data) {
+
             const formData = new FormData();
             formData.append("data", data.data);
             formData.append("type", data.type);
-            getRequestObject("POST", "/statistics").send(formData);
-        }
+            getRequestObject("POST", '/statistics').send(formData);
+        },
     }
 
 });
