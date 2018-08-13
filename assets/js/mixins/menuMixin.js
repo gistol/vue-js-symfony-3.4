@@ -2,22 +2,34 @@ export default {
     data() {
         return {
             smallDevice: undefined,
-            menuIsDisplayed: false
+            menuIsDisplayed: undefined
         }
     },
 
     methods: {
         showMenu() {
             if (this.smallDevice) {
-                this.$el.querySelector('#menu').style.left =
-                    this.menuIsDisplayed ? '-50vw' : 0;
+
+                if (this.menuIsDisplayed) {
+                    document.querySelector('#menu').classList.remove('display_menu');
+                } else {
+                    document.querySelector('#menu').classList.add('display_menu');
+                }
 
                 this.menuIsDisplayed = !this.menuIsDisplayed;
+            }
+        },
+
+        resetMenu() {
+            let sel = document.querySelector('#menu');
+            if (null !== sel) {
+                document.querySelector('#menu').classList.remove('display_menu');
+                this.menuIsDisplayed = false;
             }
         }
     },
 
     created() {
         this.smallDevice = window.innerWidth < 1024;
-    }
+    },
 }
