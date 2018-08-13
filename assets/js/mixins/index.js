@@ -210,7 +210,7 @@ const Mixins = {
         },
 
         handleEdition() {
-            this.handleSubmit('/admin/articles/edit/' + this.$route.params.id, 'create_edit_article');
+            this.handleSubmit('/admin/articles/edit/' + this.$route.params.token, 'create_edit_article');
         },
 
         handleContact(e) {
