@@ -6,7 +6,7 @@
                 <input type="text" id="title" name="title" v-model="title"/>
             </div>
 
-            <child-form v-for="(image, i) in images" :item="i" v-bind:image="image"></child-form>
+            <child-form v-for="(image, i) in images" v-bind:item="i" v-bind:image="image"></child-form>
             <category-form v-for="(category, index) in categories" v-bind:index="index" :category="category"></category-form>
 
             <div class="field">
@@ -80,29 +80,34 @@
         },
 
         created() {
-            fetch('/admin/articles/edit/' + this.$route.params.id)
-                .then(data => data.json())
-                .then(data => {
-                    this.title = data.title;
-                    if (null !== data.pdf) {
-                        this.pdf = data.pdf;
-                    }
-                    data.images.forEach((image) => {
+
+            const req = this.ajaxRequest("GET", '/admin/articles/edit/' + this.$route.params.token);
+
+            req.onload = () => {
+                if (req.status >= 200 && req.status < 400) {
+
+                    let article = JSON.parse(req.responseText);
+
+                    this.title = article.title;
+
+                    if (null !== article.pdf) this.pdf = article.pdf;
+
+                    article.images.map(image => {
                         this.images.push(image);
                     });
 
-                    data.categories.forEach(category => {
+                    article.categories.map(category => {
                         this.categories.push(category);
                     });
 
                     /* Display an empty form if no form filled before */
-                    if (this.images.length === 0) {
-                        this.addForm();
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+                    if (this.images.length === 0) this.addForm();
+                } else {
+                    console.log('Error : ' + req.responseText);
+                }
+            };
+
+            req.send();
         },
 
         mounted() {
