@@ -7,9 +7,10 @@ import Homepage from '../components/Homepage';
 import Article from '../components/Article';
 import Category from '../components/Category';
 import LegalUser from '../components/Legal';
+import Contact from '../components/Contact';
 import Admin from '../components/admin/Admin';
 import CreateArticle from '../components/admin/CreateArticle';
-import ListArticles from '../components/admin/ListArticles';
+import HomepageAdmin from '../components/admin/Homepage';
 import EditArticle from '../components/admin/EditArticle';
 import Comment from '../components/admin/Comment';
 import Newsletter from '../components/admin/Newsletter';
@@ -17,13 +18,75 @@ import Statistic from '../components/admin/Statistic';
 import LegalAdmin from '../components/admin/Legal';
 import PageNotFound from '../components/PageNotFound';
 import Login from '../components/admin/Login';
-import Contact from '../components/Contact';
+import AdminContact from '../components/admin/Contact';
 
 Vue.use(VueRouter);
 
 /* Registering the app routes */
 const Router = new VueRouter({
+
     routes: [
+        {
+            path: '/admin',
+            name: 'home_admin',
+            component: Admin,
+            children: [
+                {
+                    path: 'create',
+                    name: 'createArticle',
+                    component: CreateArticle,
+                },
+                {
+                    path: 'articles',
+                    name: 'homepageAdmin',
+                    component: HomepageAdmin,
+                    props: true
+                },
+                {
+                    path: 'articles/edit/:token',
+                    name: 'editArticle',
+                    component: EditArticle,
+                    props: true
+                },
+                {
+                    path: 'newsletter',
+                    name: 'newsletter',
+                    component: Newsletter
+                },
+                {
+                    path: 'statistic',
+                    name: 'statistic',
+                    component: Statistic
+                },
+                {
+                    path: 'legal',
+                    name: 'legal-admin',
+                    component: LegalAdmin
+                },
+                {
+                    path: 'comments',
+                    name: 'comments',
+                    component: Comment
+                },
+                {
+                    path: 'contacts',
+                    name: 'contacts',
+                    component: AdminContact
+                },
+                {
+                    path: 'logout',
+                    name: 'logout'
+                }
+            ],
+            meta: {
+                requiresAuth: true,
+            }
+        },
+        {
+            path: '/login',
+            name: 'login',
+            component: Login,
+        },
         {
             path: '/',
             component: User,
@@ -32,6 +95,7 @@ const Router = new VueRouter({
                     path: '',
                     name: 'home_user',
                     component: Homepage,
+                    props: {default: true}
                 },
                 {
                     path: '/article/:slug',
@@ -61,67 +125,11 @@ const Router = new VueRouter({
                     name: 'contact',
                     component: Contact
                 },
-            ]
-        },
-        {
-            path: '/admin',
-            name: 'home_admin',
-            component: Admin,
-            children: [
                 {
-                    path: 'create',
-                    name: 'createArticle',
-                    component: CreateArticle,
-                },
-                {
-                    path: 'articles',
-                    name: 'listArticle',
-                    component: ListArticles,
-                    props: true
-                },
-                {
-                    path: 'articles/edit/:id',
-                    name: 'editArticle',
-                    component: EditArticle,
-                    props: true
-                },
-                {
-                    path: 'newsletter',
-                    name: 'newsletter',
-                    component: Newsletter
-                },
-                {
-                    path: 'statistic',
-                    name: 'statistic',
-                    component: Statistic
-                },
-                {
-                    path: 'legal',
-                    name: 'legal-admin',
-                    component: LegalAdmin
-                },
-                {
-                    path: 'comments',
-                    name: 'comments',
-                    component: Comment
-                },
-                {
-                    path: 'logout',
-                    name: 'logout'
+                    path: '*',
+                    component: PageNotFound
                 }
-            ],
-            meta: {
-                requiresAuth: true,
-            }
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: Login,
-        },
-        {
-            path: '*',
-            component: PageNotFound
+            ]
         }
     ]
 });
@@ -138,10 +146,8 @@ Router.beforeEach((to, from, next) => {
     if(requiresAuth) {
 
         userAuthenticated().then(data => {
-            console.log('Succès : ' + data);
             next();
         }).catch(err => {
-            console.log('Erreur : ' + err);
             next('/login');
         });
 
